@@ -1,0 +1,45 @@
+int vis[10000+9];
+vector< vector<int> > v;
+int dist[10000+9];
+int dfs(int n)
+{
+    vis[n]=1;
+    for(int i=0;i<sz(v[n]);i++)
+    {
+        if(vis[v[n][i]])
+            continue;
+        dist[v[n][i]]=1+dist[n];
+        dfs(v[n][i]);
+    }
+}
+int treediameter(int n)
+{
+    clr(vis,0);
+    clr(dist,0);
+    dfs(1);
+
+  int id= max_element(dist+1,dist+n+1)-dist;
+    clr(vis,0);
+    clr(dist,0);
+
+    dfs(id);
+
+  return (*max_element(dist+1,dist+n+1));
+
+}
+int main()
+{
+    
+        int n;
+        cin>>n;
+        int m,no;
+        for(int i=1;i<=n;i++)
+        {
+                cin>>from>>to;
+                v[from].pb(to);
+        }
+        
+         lengthofpath=treediameter(n);
+
+}
+
