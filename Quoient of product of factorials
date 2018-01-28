@@ -1,0 +1,42 @@
+ll fact(vector<ll> up,vector<ll> down)
+{
+    ll ans=1;
+     for(int i=0;i<sz(down);i++)
+     {
+         for(int j=0;j<sz(up);j++)
+         {
+            ll g=__gcd(down[i],up[j]);
+             up[j]/=g;
+             down[i]/=g;
+         }
+     }
+     for(int i=0;i<sz(up);i++)
+     {
+         ans*=up[i];
+     }
+    return ans;
+}
+int main()
+{
+    string st;
+      cin>>st
+        ll vis[27];
+        clr(vis,0);
+        for(int i=0;i<sz(st);i++)
+        {
+            vis[st[i]-'a']++;
+        }
+        
+        
+        vector<ll> up,down;
+        for(int i=0;i<26;i++)
+        {
+            for(int j=2;j<=vis[i];j++)
+                down.pb(j);
+        }
+        
+         for(int i=2;i<=sz(st);i++)
+                up.pb(i);
+                
+       double f= fact(up,down);
+ }
