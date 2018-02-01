@@ -1,0 +1,24 @@
+void dfs_EdgeClassification(int node)
+{
+	start[node] = timer++;
+
+	rep(i, adj[node])
+	{
+		int child = adj[node][i];
+		if (start[child] == -1)	// Not visited Before. Treed Edge
+			dfs_EdgeClassification(child);
+		else {
+			if(finish[child] == -1)// then this is ancestor that called us and waiting us to finish. Then Cycle. Back Edge
+				anyCycle = 1;
+			else if(start[node] < start[child])	// then you are my descendant
+				;	// Forward Edge
+			else
+				;	// Cross Edge
+		}
+	}
+
+	finish[node] = timer++;
+}
+
+
+// if graph if not directed so dfs and if i visit some node again so there is a cycle
