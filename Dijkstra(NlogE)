@@ -22,13 +22,16 @@ void dijkstra(vector<vector<node> > v,ll s,ll tar)
     pq.push(node(s,0));
     pre[s]=-1;
     pth[1]=1;
-    vis[1]=1;
     dist[1]=0;
     while(!pq.empty())
     {
 
        node cur=pq.top();
        pq.pop();
+      if(vis[cur.no])
+      continue;
+      
+      vis[cur.no]=1;
 
       ll add=dist[cur.no];
       for(int i=0;i<sz(v[cur.no]);i++)
@@ -36,9 +39,9 @@ void dijkstra(vector<vector<node> > v,ll s,ll tar)
 
           node nw=v[cur.no][i];
 
-          if(dist[nw.no]> add+nw.w&&!vis[nw.no])
+          if(dist[nw.no]> add+nw.w)
           {
-              vis[nw.no]=1;
+              
              pq.push(node(nw.no,add+nw.w));
              pre[nw.no]=cur.no;
              dist[nw.no]=add+nw.w;
