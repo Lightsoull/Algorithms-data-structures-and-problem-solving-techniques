@@ -1,0 +1,28 @@
+/*
+explanation : 
+
+topolgical sort is a sorted list, sorted according to my periority of having things done for example, or 
+the periority of taking the courses, this list may have different answers, so first build the graph you
+wanted for your periority then do dfs, the list will be in the stack  .
+
+/*
+
+void topol(int n)
+{
+
+    vis[n]=1;
+    for(int i=0;i<sz(v[n]);i++)
+    {
+
+       int c= v[n][i] ;
+
+        if(vis[c])
+            continue;
+
+        topol(v[n][i]);
+
+    }
+
+    st.push(n);
+
+}
