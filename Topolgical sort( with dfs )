@@ -1,5 +1,5 @@
 /*
-explanation : 
+explanation
 
 topolgical sort is a sorted list, sorted according to my periority of having things done for example, or 
 the periority of taking the courses, this list may have different answers, so first build the graph you
