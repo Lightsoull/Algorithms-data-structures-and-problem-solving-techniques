@@ -1,0 +1,39 @@
+/*
+
+explanation :
+
+here is another way of doing topological sort which is imagine i have a graph of nodes edges the first one i can do it is the one
+that doesn't depend on other nodes right which means its out degree is zero if there is no such node of outdegree equals to zero so there
+must be a cycle in the graph i will check that at the end if count of nodes i visited equals to total nodes in the graph or not, okay know
+back to our problem if i take one node that its out degree equals to zero so all the nodes depending on it their out degree of them will
+be reduced by one as one of the nodes they depends on has already achieved if when i reduced one it will have out degrees equal to zero so
+i will push it in the queue , know if i want the topological order but in from top to buttom so i will so the opposite i will calculate
+the indegree not the out degree and start with nodes that its in degree equals to zero then reduced its children indegrees by one and so on
+
+/*
+code
+
+  queue<string> q;
+    for(auto i=lst.begin();i!=lst.end();i++)
+    {
+        string cd=(*i).first;
+        if(indeg[cd]==0)
+            q.push(cd);
+    }
+    vector<string> topolg;
+    while(!q.empty())
+    {
+        string cur=q.front();
+        q.pop();
+        topolg.pb(cur);                        // vector stores the topological sort from last to first periority
+        vector<string> v=lst[cur].first;
+        for(int i=0;i<sz(v);i++)
+        {
+            string ss=v[i];
+            indeg[ss]--;
+            if(indeg[ss]==0)
+            {
+                q.push(ss);
+            }
+        }
+    }
