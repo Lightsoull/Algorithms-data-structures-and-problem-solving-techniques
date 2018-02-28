@@ -1,0 +1,32 @@
+/*
+explantion :
+
+1- here KMP is for finding a pattern( substring ) in a string in an efficient way.
+2- if you tried to do so using brude force approach it will cost n*m (n is the length of string and m is the length of the pattern) which
+is bad complexity.
+3- some helpful terminalogy
+
+     1- Proper Prefix List (PPL): eg for the string " abcdr " is "a" , "ab", "abc" ,"abcd" only not containing the whole string but the 
+     normal prefix is the previous plus "abcdr" containing the whole string.
+   
+     2- Proper Suffix List (PSL): eg for the string " abcdr " is "r" , "dr", "cdr" ,"bcdr" only not containing the whole string but the 
+     normal suffix is the previous plus "abcdr" containing the whole string.
+     
+ 4- Failure Function OR Prefix function : it expresses the longest common proper prefix and suffix for eg " aabaab "
+ 
+ F[0] always equals to zero
+ F[1]=1 prefix 'a'  and suffix 'a'
+ F[2]=0
+ F[3]=1 prefix 'a'  and suffix 'a'
+ F[4]=2 prefix 'aa'  and suffix 'aa'
+ F[5]=3 prefix 'aab'  and suffix 'aab'
+ 
+ 5- KMP algorithsm based on 
+ 
+ the fact that when i brudeforce i will start from each index in the main string and check for the length of the pattern and once i fail
+ i will go back and start from the next index so there is kind of repition, I can start from the next index only if my pattern is for eg
+ like this aaaa so Failture function equals to 3 here y3ny from here its idea comes.
+ 
+ code for KMP
+ 
+ 
