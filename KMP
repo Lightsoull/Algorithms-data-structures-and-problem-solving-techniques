@@ -27,6 +27,10 @@ is bad complexity.
  i will go back and start from the next index so there is kind of repition, I can start from the next index only if my pattern is for eg
  like this aaaa so Failture function equals to 3 here y3ny from here its idea comes.
  
- code for KMP
+6- Complexity for KMP is O(n) n is size of main string and failture function is O(m) m is the length of the pattern so total is O( n+m )
+
+7- Failture function implementation :
+  the same idea of KMP i will try to match the prefix of the pattern with the pattern itself.
+  
  
  
