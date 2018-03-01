@@ -80,9 +80,146 @@ void computeprefix(string pat)
 }
   
 ----------------------------------------------------------------------------------------------------------------------------------------
+ Some Applictions on KMP and failture Function
+ ---------------------------------------------
+ 
+ 1- knowing the longest palindrome prefix or the longest palindrome suffix in a string S
+ lets assume char @ and lets construct   (S)@(reverse of S) and get normally F[size of S -1] ,  F is the Failure array
+ 
+ 2- Repition and Failutre Function 
+ 
+   if i have a certain string concatenated N times and i want to know the len of its block that is concatented okay here the 
+   Failure function will get the prefix but couldn't take from the last block so simply len-F[len-1] will be the size of the block, 
+   But Take care if the length of the block you get it doesn't len doesn't divisible by it so there is no concatenation. 
+   
+ Another Way to do it
+ conactentate the string with itself and get the second match of the orginal string in the  concatenated string its index of begining
+ will be the len of the block from the zero to index-1.
+ 
+ 3- Given a string P for each prefix count its frequency So we will make use of KMP Failure Function again
+    the repetition of prefix will be as a suffix of a substring in it.
+    
+    CODE
+  --------
+  
+ vector<int> F=computeprefix(pat);
+
+int n=sz(F);
+
+vector<int> freq(n+1);
+
+for(int i=0;i<n;i++)
+    freq[F[i]]++;
+
+for(int i=n-1;i>0;i--)
+   freq[F[i-1]]+=freq[i];
+
+freq.erase(freq.begin());
+
+-----------------------------------------
+4- Given a string P for each prefix count its frequency in string S So we will make use of KMP Failure Function again
+   
+   1-Hint : Make use of pervious problem.
+   2- make P@S
+   
+5- The unique Prefixes By Failure Function
+
+CODE
+------
+
+vector<int> F=computeprefix(pat);
+
+vector<bool> v(sz(F));
+
+
+for(int i=0;i<sz(F);i++)
+{
+    
+    int k=F[i];
+    
+    
+    if(k)
+        v[k]=1;
+    
+}
+for(int i=0;i<sz(v);i++)
+{
+    if(!v[i])
+        cout<<pat.substr(0,i+1)<<endl;
+}
+-------------------------------------------------------------------------------
+6- The distinct Substrings in a given string
+
+okay imagine if i have a the dinstict substrings in the string "aab" okay now if i add char 'a' to the string the strings that this char
+add are four strings which are the suffixes of the new string "aaba" so from the pervious problems you already can know the distinct
+prefixes right so why not i reverse the string and the suffixes and get the count of the unique prefixes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
  
  
- 
+   
+   
  
  
  
