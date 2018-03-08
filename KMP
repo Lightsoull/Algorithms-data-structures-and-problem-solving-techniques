@@ -59,12 +59,12 @@ is bad complexity.
 
 ---------------------Failure Function------------------------------
 
-void computeprefix(string pat)
+vector<int> computeprefix(string pat)
 {
     int m=sz(pat);
     vector<int> longestprefix(m);
 
-    for(int i=1,k=0;i<n;i++)   // i from 1 bec F[0]=0
+    for(int i=1,k=0;i<m;i++)   // i from 1 bec F[0]=0
     {
         while(k>0&&pat[k]!=pat[i])
             k=longestprefix[k-1];
