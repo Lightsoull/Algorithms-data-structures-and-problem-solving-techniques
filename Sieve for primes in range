@@ -12,3 +12,4 @@ void primes(int n)
     }
 }
 // what is not vis finally is prime
+// works in O(n)
