@@ -1,0 +1,75 @@
+int par(int n)
+{
+    if(parent[n]==n)
+        return n;
+    return parent[n]=par(parent[n]);
+}
+struct edge
+{
+    int f,t,w;
+    edge(int f,int t,int w) : f(f),t(t),w(w) {}
+    bool operator < (const edge &e) const
+    {
+        return w>e.w;
+    }
+};
+void intil(int n)
+{
+    for(int i=0;i<=n;i++)
+    {
+        parent[i]=i;
+        rnk[i]=1;
+    }
+}
+bool unon(int f,int t)
+{
+    int ff=par(f);
+    int tt=par(t);
+    if(ff==tt)
+    {
+        return 0;
+    }
+    if(rnk[ff]>rnk[tt])
+    {
+        rnk[ff]+=rnk[tt];
+        parent[tt]=ff;
+    }
+    else
+    {
+        rnk[tt]+=rnk[ff];
+        parent[ff]=tt;
+    }
+    return 1;
+}
+pair<int,vector<edge>> mst(vector<edge> v,int n,edge e)
+{
+    intil(n);
+    vector< edge > edges;
+    int mi=0;
+    priority_queue < edge > q;
+        int f=0;
+        for(int i=0;i<sz(v);i++)
+        {
+            if((v[i].f==e.f&&v[i].t==e.t&&v[i].w==e.w&&f<2)||(v[i].f==e.t&&v[i].t==e.f&&v[i].w==e.w&&f<2))
+            {
+                f++;
+                continue;
+            }
+            q.push(v[i]);
+        }
+       while(!q.empty())
+       {
+           edge cur=q.top();
+           q.pop();
+           if( unon(cur.f,cur.t))
+           {
+               mi+=cur.w;
+               edges.pb(cur);
+           }
+       }
+       if(sz(edges)!=n-1)
+       {
+           return mp(oo,edges);
+       }
+    return mp(mi,edges);
+}
