@@ -3,6 +3,8 @@ Segment tree + Lazy Propagation
 //#define mid ((st + en) >> 1)
 //Sum segment tree
 
+
+
 inline void build(int st = 0, int en = n - 1, int root = 1)
 {
 if(st == en)
@@ -18,6 +20,9 @@ tree[root] = tree[root << 1] + tree[(root << 1) |1];
 }
 //Update by idx and changes value (not addition)
 
+
+
+
 void update(int idx, int val, int st, int en, int root)
 {
   if(idx < st || idx > en)
@@ -31,6 +36,10 @@ update(idx, val, st, mid, root << 1);
 update(idx, val, mid + 1, en, (root << 1) | 1);
 tree[root] = tree[root << 1] + tree[(root << 1) |1];
 }
+
+
+
+
 //Query on range (Not LAZY)
 
 int query(int L, int R, int st, int en, int root)
@@ -41,7 +50,11 @@ int query(int L, int R, int st, int en, int root)
    return tree[root];
    return query(L, R, st, mid, root << 1) + query(L,R, mid + 1, en, (root << 1) | 1);
 }
-//Lazy Propagation
+
+
+
+
+//Lazy Propagation----------------------------------------------------------------------------------------
 
 inline void build(int st = 0, int en = n - 1, int root = 1)
 {
@@ -54,27 +67,34 @@ int mid = (st + en) >> 1;
 build(st, mid, root << 1);
 build(mid + 1, en, (root << 1)|1);
 }
+
+---------------------------------------------------------------------
+// general lazy
+
 inline void apply(int root)
 {
   if(lazy[root] == -1)
    return;
-int L = root << 1;
-int R = (root << 1) | 1;
-lazy[L] = lazy[R] = tree[L] = tree[R] = lazy[root];
-lazy[root] = -1;
+    int L = root << 1;
+    int R = (root << 1) | 1;
+    lazy[L] = lazy[R] = tree[L] = tree[R] = lazy[root];
+    lazy[root] = -1;
 }
+
+------------------------------------------------------------------
 //Query By idx
 
 inline int query(int idx, int st, int en, int root)
 {
-if(idx < st || idx > en)
- return 0;
-if(st == en)
-return tree[root];
-apply(root);
-return query(idx , st, mid, root << 1) + query(idx, mid + 1, en, (root << 1) | 1);
+    if(idx < st || idx > en)
+      return 0;
+    if(st == en)
+     return tree[root];
+     apply(root);
+      return query(idx , st, mid, root << 1) + query(idx, mid + 1, en, (root << 1) | 1);
 }
-//Query on Range , Like without Lazy Propagation but add apply function
+//   query with lazy
+-------------------------------------------------------------------------------------
 
 inline void update(int val, int L, int R, int st,int en, int root)
 {
@@ -91,6 +111,8 @@ apply(root);
 update(val, L, R, st, mid, root << 1);
 update(val, L, R, mid + 1, en, (root << 1) | 1);
 }
+// update with lazy
+-------------------------------------------------------------------------------------------------
 //Lazy Sum
 
 void apply(int root, int st, int mid , int en)
@@ -103,6 +125,9 @@ tree[r] += lazy[root] * (en - (mid + 1) + 1);
 tree[l] += lazy[root] * (mid - st + 1);
 lazy[root] = 0;
 }
+----------------------------------------------------------------------------------------------------
+//  update with lazy RSQ
+
 void update(int L, int R, int val, int st = 0, int en = n - 1, int root = 1){
 if(L > en || R < st)
 return;
@@ -112,12 +137,18 @@ tree[root] += 1LL * val * (en - st + 1);
 lazy[root] += val;    // Children are to beupdated
 return;
 }
+
 int mid = (st + en) >> 1; //Query not in the current range
 apply(root, st, mid, en);
 update(L, R, val, st, mid, root * 2);
 update(L, R, val, mid + 1, en, root * 2 + 1);
 tree[root] = tree[root * 2] + tree[root * 2 + 1];
 }
+
+--------------------------------------------------------------------------------------------------------
+
+// query with lazy RSQ
+
 ll query(int L, int R, int st = 0, int en = n - 1,int root = 1)
 {
 if(L > en || R < st)
@@ -132,7 +163,7 @@ return query(L, R, st, mid, root * 2) + query(L,R, mid + 1, en, root * 2 + 1);
 
 }
 
-
+----------------------------------------------------------------------------------------------------------------
 
 
 
