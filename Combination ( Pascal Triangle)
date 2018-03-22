@@ -1,0 +1,16 @@
+1-if you want to calculate n choose k is c[n][k]
+2- the idea based on (n choose k) = (n-1 choose k-1 ) + (n-1 choose k )
+proof 
+imagine 6 students and i want to chooose k student but the first one is choosen anyway so it is n-1 choose k-1
++
+imagine that the first student is not allowed to be choosen at all so its n-1 choose k
+-------------------------------------------------------------------------------------------------------
+code
+// don't worry it works if k is > n 
+void fun()
+{
+    for(int i=0;i<65;i++)
+        for(int j=0;j<65;j++)
+         comb[i][j]= (j==0 ? 1 : i==0 ? 0 : comb[i-1][j-1]+comb[i-1][j]);
+}
+--------------------------------------------------------------------------------------------------------
