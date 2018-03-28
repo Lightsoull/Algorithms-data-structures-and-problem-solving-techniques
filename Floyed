@@ -4,6 +4,7 @@ code for floyed
 1- intialize all dist array to inf as there is no path
 2- put the diagonal to zero 
 3- put in the dist array the edges you get 
+4- if there are multiple edges just minmize
 
 for(int k=1;k<=n;k++)
    for(int i=1;i<=n;i++)
