@@ -1,0 +1,25 @@
+graph terms
+
+1- distance : is the distance between node A and node B for example
+2- Eccentricity : E(v) of vertex v means that from v we can reach any other node in max X cost , X is the E(v).
+3- Diameter of a graph : is the max among all the Eccentricities among all vertexes in the graph.
+2- radius : is the min among all the Eccentricities among all vertexes in the graph.
+
+How to get the graph diameter
+
+ 
+int graphDiameter()
+{ 
+    floyd();
+ 
+    int mx = 0;
+    lp(i, n) 
+     lp(j, n) 
+      if(adj[i][j] < OO)
+        mx = max(mx, adj[i][j]);
+ 
+    return mx;
+}
+-------------------------------------------------------------------------------------------------------------------------
+ 
+ 
