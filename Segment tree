@@ -164,6 +164,48 @@ return query(L, R, st, mid, root * 2) + query(L,R, mid + 1, en, root * 2 + 1);
 }
 
 ----------------------------------------------------------------------------------------------------------------
+The above query may TL , here is more optimal code for query 
+
+int query(int a,int b,int s=1,int e=n,int root=1)
+{
+
+    if(a<=s&&e<=b)
+    {
+        return tree1[root];
+    }
+    int mid=(s+e)>>1;
+    if(b<=mid)
+      return query1(a,b,s,mid,root*2);
+   else if(a>mid)
+      return  query1(a,b,mid+1,e,root*2+1);
+
+
+   return max(query1(a,b,s,mid,root*2),query1(a,b,mid+1,e,root*2+1));
+}
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
