@@ -1,0 +1,137 @@
+typedef vector< double > row;
+typedef vector< row > matrix;
+-----------------------------------------------------------------------------------------------
+// all of it zero
+matrix Zero( int n,int m)
+{
+    return matrix(n,row(m,0));
+}
+---------------------------------------------------------------------------------------------------
+// all of it zero except for the diagonal it is equal to one, must be a square matrix
+// identitiy matrix is like a one when it is multiplied by a matrix it doesn't affect and 
+//when its added to a matrix it affects
+matrix Idenditiy(int n)
+{
+    matrix I=Zero(n,n);
+    
+    for(int i=0;i<n;i++)
+        I[i][i]=1;
+    return I;
+}
+------------------------------------------------------------------------------------------------------
+// matrix trace is the sum of the diagonal of the matrix ( to have a diagonal it must be square matrix
+int matrixtrace(matrix m)
+{
+    double ret=0;
+    for(int i=0;i<sz(m);i++)
+       ret+= m[i][i];
+    return ret;
+     
+}     
+-------------------------------------------------------------------------------------------------
+// matrix clockwise rotation 
+matrix matrixrotateCW(matrix m)
+{
+    
+    matrix ret=Zero(sz(m[0]),sz(m));
+    
+    for(int i=0;i<sz(m);i++)
+        for(int j=0;j<sz(m[0]);j++)
+         ret[j][sz(m)-1-i]=m[i][j];
+    
+    return ret;
+}
+----------------------------------------------------------------------------------------------------
+// matrix reflection 
+matrix matrixreflection(matrix m)
+{
+    matrix ret=Zero(sz(m),sz(m[0]));
+    
+    for(int i=0;i<sz(m);i++)
+        for(int j=0;j<sz(m[0]);j++)
+         ret[i][sz(m[0])-1-j]=m[i][j];
+    
+    return ret;
+}
+--------------------------------------------------------------------------------------------------------
+// addition of two matrixes
+// but they must have the same number of rows and columns
+matrix matrixaddition(matrix a,matrix b)
+{
+    
+    matrix res=Zero(sz(a),sz(a[0]));
+    
+    for(int i=0;i<sz(a);i++)
+        for(int j=0;j<sz(a[0]);j++)
+         res[i][j]=a[i][j]+b[i][j];
+    
+    return res;
+}
+--------------------------------------------------------------------------------------------------------------
+// addition of identity matrix to a matrix 
+// like matrix + 1
+
+matrix addIdentity(matrix m)
+{
+    matrix ret=m;
+    
+    for(int i=0;i<sz(m);i++)
+        ret[i][i]+=1;
+    
+    return ret;
+}
+----------------------------------------------------------------------------------------------------------------
+// matrix multiplication 
+// there are rules to do so
+// 1- the first matrix columns must be equal to second matrix rows
+// the resultant matrix will have the first matrix rows as rows and second matrix column as a column
+// cell (i,j) will be the sum of mutiplication of first matrix ith row and second matrix jth column
+// O( n^3 )
+// there are 2 tricks to optimaize the complexity
+// 1- if a most of it zeros so do if condition before the last loop to check if ( a[i][k] ==0) continue;
+//    and if b most of it zeros so swap the last 2 loops and do the check but on b[k][j].
+matrix multiplication(matrix a,matrix b)
+{
+    matrix res=Zero(sz(a),sz(b[0]));
+    
+    for(int i=0;i<sz(a);i++)
+    {
+        for(int k=0;k<sz(a[0]);k++)
+        {
+            for(int j=0;j<sz(b[0]);j++)
+             res[i][j]+= a[i][k]*b[k][j];
+            
+        }
+    }
+    
+    return res;
+}
+--------------------------------------------------------------------------------------------------------------------
+// power of matrix
+matrix powermatrix(matrix a , k)
+{
+    if(k==0)
+        return Idenditiy(sz(a));
+    if(k%2!=0)
+        return multiplication(a,powermatrix(a,k-1));
+        
+    return powermatrix(multiplication(a,a),k/2);
+}
+----------------------------------------------------------------------------------------------------------------------
+// matrix power sum 
+// Ex:  a^1+a^2+....+a^n
+//
+//  a^1+a^2+a^3+a^4 = a^1+a^2+ ( a^1*a^2 + a^2*a^2) = a^1+a^2+ a^2( a^1+a^2) =  (a^1+a^2)*(I + a^2)
+// if n is odd take a^1 common factor to be even  
+
+matrix matrixpowersum( matrix a,int k)
+{
+    if(k==0)
+        return Zero(sz(a),sz(a));
+    if(k!=0)
+        return multiplication(a,addIdentity(matrixpowersum(a,k-1)));
+        
+        return multiplication(matrixpowersum(a,k/2),addIdentity(power(a,k/2)));
+}
+------------------------------------------------------------------------------------------------------------------------
+
