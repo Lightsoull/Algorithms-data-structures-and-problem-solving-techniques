@@ -1,0 +1,31 @@
+// To convert from any base to any base convert first to decimal then to the other base
+
+string letters="0123456789ABCDEF"
+int toInT(char c)
+{
+   return letters.find(c);
+}
+
+int FromAnyBaseToDecimal(string in,int base)
+{
+    int res=0;
+    for(int i=0;i<sz(in);i++)
+    {
+        res*=base;
+        res+= toINT(in[i]);
+    }
+    return res;
+}
+
+string FromDecimalToAnyBase(int Num,int base)
+{
+    if(Num==0)
+        return "0";
+    string res="";
+    for(;Num;Num/=base)
+    {
+        res= letters[Num%base]+res;
+    }
+    
+    return res;
+}
