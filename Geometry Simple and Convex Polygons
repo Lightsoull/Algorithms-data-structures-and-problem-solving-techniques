@@ -1,0 +1,107 @@
+/*
+- Polygon is a sequence of n points or corners ( n>=3 )
+---------------------------------------------------------------------------------------------------------------------
+Regular polygon
+- all its sides are equal 
+- all its angles are equal  ( ((n-2)*180)/n )
+-----------------------------------------------------------------------------------------------------------------------
+- The total sum of angles of a polygon of n sides is (n-2)*180
+- Polygon Implementation 
+Don't forget the relation between the last point and the first point
+------------------------------------------------------------------------------------------------------------------------
+Simple Polygon   VS    Non-Simple Polygon
+-----------------------------------------
+- Simple Polygon
+Don't have any intersections between the sides except for the neighbours sides which intersects at the courner
+-Non-Simple Polygon
+have any intersections between the sides and not for the neighbours sides which intersects at the courner
+
+To know whether the polygon is simple or not 
+1- brudeforce in O(n^2)
+2- Line sweep in O( nlogn ) ( in Future yu will know it )
+
+TakeCare
+1- Don't check conscutive edges and the last edge and the first edge are conscutive
+2- use CCW to test intersection
+
+CODE
+
+// assume that the first point is added to the end of vector of points so i have (n+1) points
+
+bool isPolygonSimple(vector<point> &p)
+{
+    for(int i=0;i< sz(p)-1;i++)
+    {
+        for(int j=i+2;j< sz(p)-1;j++)
+        {
+            if(intersect(p[i],p[i+1],p[j],p[j+1])&&(i!=0||j!=sz(p)-2))
+                return false;
+        }
+    }
+    
+    return true;
+}
+-----------------------------------------------------------------------------------------------------------------------
+Diagonals
+-The number of diagonals in n sides polygon is n(n-3)/2
+-----------------------------------------------------------------------------------------------------------------------
+Convex Polygon VS Concave Polygon
+-Convex Polygon 
+All interior angles are <=180 
+A line drawn in the convex will intersect in at most 2 points
+all its diagonals lies completely inside it
+
+-Concave polygon 
+No restriction on the interior angles
+A line drawn in the concave may intersect in many points
+all its diagonals lies completely inside it or not
+
+Check for Convex Polygon BY CCW
+
+// isConcave = !isConvex
+// isConcave = 2 different signs
+// here i assumed that there is no multiple points and there is no collinear points 
+// there may be a case in which there is 100 points but all are collinear so there must be at least 3 points non-collinear
+// all must have the same sign or zero
+bool isConvexPolygon(vector<point> &p) 
+{
+        // all polygon 3 consecutive points must have same sign (ccw or cw)
+        p.push_back(p[0]), p.push_back(p[1]); // wrap points for simplicity
+
+        int sign = ccw(p[0], p[1], p[2]);
+        bool ok = true;
+        for (int i = 1; ok && i < sz(p) - 2; i++) 
+        {
+          if (ccw(p[i], p[i + 1], p[i + 2]) != sign)
+            ok = false;
+        }
+        p.pop_back(), p.pop_back();
+        return ok;
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
