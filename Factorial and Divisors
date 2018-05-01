@@ -1,0 +1,45 @@
+vectorll generate_divisors(ll n)     O( sqrt(n) )
+{
+    vector<ll> v;
+    ll i;
+    for(i = 1 ; i*i < n  ;++i)
+        if(n%i == 0)
+            v.push_back(i), v.push_back(n/i);
+ 
+    if(i*i == n)
+        v.push_back(i);
+ 
+    return v;    Not sorted
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+// wilson's theroem 
+   
+   -(p-1)! % p = p-1   IFF p is prime
+   -the only prime factorial is 2!
+---------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
