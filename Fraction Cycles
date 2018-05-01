@@ -1,6 +1,7 @@
 //How to know the number of digits before the fraction cycle
 
 // CODE
+// i am doing mod at begining to get the first digit needed to multiplied by 10 to put the point up and get the after point digits
 
 int main() {
 	int a, b;
@@ -16,7 +17,7 @@ int main() {
 		result = a / b;
 		remainder = a % b;
 		while (!remainderIndex.count(remainder)) 
-    {
+               {
               
 			remainderIndex[remainder] = index++;
 			result = remainder * 10 / b;
