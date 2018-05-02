@@ -116,8 +116,8 @@ bool intersectSegments(point a, point b, point c, point d, point & intersect)
   double t1 = d2 / d1, t2 = d3 / d1;
   intersect = a + (b - a) * t1;
 
-  if (t1 < -EPS || t2 < -EPS || t2 > 1 + EPS)
-    return false;  //e.g ab is ray, cd is segment ... change to whatever
+  if (t2 < -EPS || t2 > 1 + EPS)
+    return false;                //e.g ab is ray, cd is segment ... change to whatever
   return true;
 }
 
