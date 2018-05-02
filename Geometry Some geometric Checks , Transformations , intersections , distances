@@ -106,7 +106,7 @@ bool intersecttest (point p1, point p2, point p3, point p4) {
     return  ccw(p1, p2, p3) * ccw(p1, p2, p4) <= 0  &&
         ccw(p3, p4, p1) * ccw(p3, p4, p2) <= 0;
   }
-
+----------------------------------------------------------------------------------------------------------------------------------------
 bool intersectSegments(point a, point b, point c, point d, point & intersect) 
 {
   double d1 = cp(a - b, d - c), d2 = cp(a - c, d - c), d3 = cp(a - b, a - c);
@@ -116,11 +116,17 @@ bool intersectSegments(point a, point b, point c, point d, point & intersect)
   double t1 = d2 / d1, t2 = d3 / d1;
   intersect = a + (b - a) * t1;
 
-  if (t2 < -EPS || t2 > 1 + EPS)
-    return false;                //e.g ab is ray, cd is segment ... change to whatever
+  if (t1<-EPS||t2 < -EPS || t2 > 1 + EPS)
+    return false;                //here ab is ray, cd is segment ... change to whatever
+                                 // this check is to grantee that the point of intersection lies in ab and cd 
   return true;
 }
 
+if you want the vector ab to be unlimited from the positive side which means that it may exceed its length don't check for t1>1+EPS
+and if you want the vector ab to be unlimited from the negative side don't check for t1<-EPS .
+and the same for t2.
+
+----------------------------------------------------------------------------------------------------------------------------------------
 // Where is c relative to segment a-b?
 // ccw = +1 => angle > 0 or collinear after p1
 // cw = -1 => angle < 0 or collinear after p0
