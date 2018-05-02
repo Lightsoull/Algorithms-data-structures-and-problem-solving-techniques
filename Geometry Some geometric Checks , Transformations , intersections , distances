@@ -34,14 +34,14 @@ Eps is very small
 ----------------------------------------------------------------------------------------
 // if you have a line ab and point c and you want to know if point c is above line or below if or on it
 
-bool ispointupordown(point a,point b,point c)
-{
-    if( cp(vec(a,c),vec(a,b)) > 0)
-        // up
-    else if(cp(vec(a,c),vec(a,b))<0)
-      // down
-    else if(cp(vec(a,c),vec(a,b))==0)
-      // on
+bool ispointupordown(point a,point b,point c)                                                                 b
+{                                                     /                                                  \    |  /
+    if( cp(vec(a,c),vec(a,b)) > 0)                   /                                                    \   | /   this is <0
+        // up                                       /   this angle is >0                                    \ |/
+    else if(cp(vec(a,c),vec(a,b))<0)                a-----------b     this if its == 0                        a
+      // down                                       \                                                this is >0
+    else if(cp(vec(a,c),vec(a,b))==0)                \   this is <0 
+      // on                                           \
 }
 ------------------------------------------------------------------------------------------
 to know if the point p2 on the ray p0p1 or not
