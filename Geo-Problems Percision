@@ -1,0 +1,36 @@
+At Geometry problems think alot if you can work in integer domain or not
+To represent point in integer domain
+
+struct point
+{
+	int x, y;
+	point(int x = 0, int y = 0) :x(x), y(y) {}
+	point operator -(point &other) 
+  {
+		return point(x - other.x, y - other.y);
+	}
+	bool operator ==(point &other) 
+  {
+		return x == other.x&&y == other.y;
+	}
+
+};
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+-norm of a vector is sqrt( x^2 + y^2 ) ( you can compare with it squared )
+long long norm(point &v1) 
+{
+	return 1ll * v1.x*v1.x + 1ll * v1.y*v1.y;
+}
+------------------------------------------------------------------------------------------------------------------------------------------
+- Cross product of 2 vectors is x1 y1  x1*x2 - y1*x2
+                                x2 y2
+long long cross(point &v1, point &v2) 
+{
+	return 1ll * v1.x*v2.y - 1ll * v1.y*v2.x;
+}
+------------------------------------------------------------------------------------------------------------------------------------------
+To Check whether a point C in on segement AB there is another way with integer domain
+if (ccw(A, B, C) == 0)
+   return 1;
+-------------------------------------------------------------------------------------------------------------------------------------------
