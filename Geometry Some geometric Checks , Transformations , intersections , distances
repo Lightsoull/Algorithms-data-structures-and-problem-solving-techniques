@@ -148,6 +148,56 @@ int ccw(point a, point b, point c) {
 }
 
 -------------------------------------------------------------------------------------------------------
+The angle between two vectors can be obtained by
+1- dot product
+dp( A,B)= |A|*|B|*cos( theta ) this theta is the angle between them not angle from first to second
+2-Cross product 
+cp(A,B)= |A|*|B|*sin( theta ) this theta is the angle from first vector(A) to second vector(B)
+
+But Take Care   -1 <= cos(angle) <=1 so you have to fix angle before using acos() function to not return nan
+
+CODE
+----
+
+double fixangle(double A)
+{
+    return (A>1 ? 1: (A<-1 ? -1: A));
+}
+
+double angle0(point a,point O,point c)   // point O is the point from it vector a goes and vector c goes
+{
+   point v1=vec(O,a); point v2=vec(O,c);
+   return acos(fixangle(dp(v1,v2)/length(v1)/length(v2)));   
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
