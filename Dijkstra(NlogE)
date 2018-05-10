@@ -70,14 +70,101 @@ int main()
     dijkstra(v,1,n);
    printf("%I64d\n",dist[n] );
 }
-/*
-1 2 5
-1 4 10
-2 3 2
-2 4 5
-3 4 3
-0
-0
-0
-0
-*/
+
+------------------------------------------------------------------------------------------------------------------------------------
+Notes:
+if you only need the min path from a source to a destination value you can not use the vis array but at the condition of relaxtation
+if(dist[nw.no]> add+nw.w) it must be greater than not greater than or equal, but take care this may take longer time.
+-------------------------------------------------------------------------------------------------------------------------------------
+if the edges are only binary zeros and ones so there is more efficient way to do dijkstra, i will use deque instead of priority queue
+as the edges are only zeros and ones so if i am in a certain node and edge is zero put it at front else put it at end so this will
+make the deque sorted as the priority queue and it takes less complexity
+
+CODE
+
+typedef struct edge
+{
+    int no,w;
+    edge(int no,int w) : no(no),w(w) {}
+}e;
+int dijk(int sr,int des)
+{
+    for(int i=0;i<N;i++)
+        dist[i]=inf;
+    clr(vis,0);
+    dist[sr]=0;
+    deque< e> dq;
+    dq.push_back(e(sr,0));
+
+    while(!dq.empty())
+   {
+       e cur=dq.front();
+       dq.pop_front();
+
+      if(vis[cur.no])
+      continue;
+      
+      vis[cur.no]=1;
+      
+       int add=cur.w;
+
+       for(int i=0;i<sz(v[cur.no]);i++)
+      {
+          e nw= v[cur.no][i];
+
+
+            if(dist[nw.no]>nw.w+add)
+            {
+                dist[nr][nc]=nw.w+add;
+                if(nw.w==0)
+                dq.push_front(e(nw.no,nw.w+add));
+                else
+                dq.push_back(e(nw.no,nw.w+add));
+            }
+       }
+   }
+   return dist[des];
+}
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
