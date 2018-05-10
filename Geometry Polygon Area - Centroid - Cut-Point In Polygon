@@ -162,7 +162,7 @@ int isInsidePoly(vector<point> p, point p0)
   {
 	point cur = p[i], nxt = p[(i + 1) % sz(p)];
 	
-	if (isPointOnSegment(cur, nxt, p0))
+	if (isPointOnSegment(cur, nxt, p0))    // instead you can make this check if (ccw(cur, nxt, pt) == 0)return 1;
 	  return true;
 	if (cur.Y <= p0.Y) 
 	{                                                 // Upward edge
