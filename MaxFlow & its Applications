@@ -1,0 +1,233 @@
+/*
+Max flow
+- we are talking a bout a directed graph each edge represent a road with a certain capicity ( imagine it like a pipe ).
+- we have a source(S) and a desitination called sink.
+- the difference between path and flow that the flow consists of one or more paths from source to destination.
+- MaxFlow means the max flow of water for example from a source to the destination through the edges(pipes), In other words the max
+amount of water to reach the destination from the source.
+
+Min Cut
+- its like if i have a directed graph and i need sepreate all the ways from the Source to the destination by breaking some edges and 
+every edge have a cost to be breaked and i want to do that with the min cost.
+
+- the Min Cut problem is the same as the Maxflow problem problem, bec the if there is a edge from 1 to 2 with weight 4 and from 2 to 3 
+with weight 10 the water that will pass is the min between them which is 4 and the min cut is also 4.
+
+Implementation
+By Ford-Fulkerson's method
+Steps
+-find a path from source to destination then all the edges used in that path subtract them from the min of that path edges and add
+this min edge cost to the reverse edge.
+Explanation
+it is like moving in a path and the reverse edge represents the cancelation of a certain move and taking other move instead.
+
+CODE
+#define MAXN 700     		//maximum number of nodes
+int cap[MAXN][MAXN]; 		//capacity
+int n;						//number of nodes
+int path[MAXN];
+int pathLength;
+bool visited[MAXN];
+
+// Implement in anyway that get a path: DFS, BFS, Dijkstra...whatever
+int getPath(int StartNode,int TargetNode,int curLen,int maxcap)
+{
+	path[curLen]=StartNode;
+	if (StartNode==TargetNode) 
+	{
+		pathLength=curLen+1;
+		return maxcap;
+	}
+	
+	int ret = 0;
+	visited[StartNode]=true;
+	
+	for(int i=0;i<n;i++)
+	{		
+		if (visited[i] || cap[StartNode][i]<=0) continue;
+		
+		ret = getPath(i, TargetNode,curLen+1, min(maxcap,cap[StartNode][i]));
+		
+		if (ret>0) break;	// We found a path with flow
+	}
+	return ret;
+}
+
+int maxFlow(int src, int sink)
+{
+	int total_flow = 0;
+
+	while(1)
+	{
+		memset(visited,0,sizeof(visited));
+		int newflow=getPath(src,sink,0,INT_MAX);
+		
+		if (!newflow) break;	// once no more paths, STOP
+		
+		for(int i=1;i<pathLength;i++)
+		{
+			int m=path[i-1],n=path[i];
+			
+			cap[m][n]-=newflow;
+			cap[n][m]+=newflow;		// Add reversed edge
+		}
+		total_flow+=newflow;
+	}
+	
+	return total_flow;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Max Flow Applications
+
+1- MaxEdgeDisjointPath ( the max number of paths from source to destination that doesn't share any edges )
+To solve it, put all the weights with 1 then run MaxFlow and the amount of flows is the amount of paths 
+
+2-MaxEdgeAndVertexDisjointPath ( the max number of paths from source to destination that doesn't share any edges and any vertexes )
+To solve it,first put all the weights with 1 and mark all the vertexes with one then run MaxFlow but don't go through node which is 
+marked with zero or edge marked with zero and the amount of flows is the amount of paths 
+
+3- What if the Capicity is on the vertexes
+Simply split each vertex i to i and V+i ( V is the number of vertexes ) and put an edge between them with the cost that on the vertex 
+so any edge to that vertex will be directly to it but each vertex that is out from it will be out from V+i vertex then run MaxFlow 
+normally.
+
+3-MultiSourceMultiSink 
+simpily take a fake Supersource vertex and connect it to all the sources you have with weight on edges inf and take a fake Supersink 
+vertex and connect it to all the sinks you have with weight on edges inf, then run MaxFlow normally
+------------------------------------------------------------------------------
+MaxFlow with Bipartite graph
+-A Tree is always can be expressed as a Bipartite graph 
+-At the chess board the kight move in 2 steps in direction A then 1 step in direction B where A and B must be perpendicular 
+to each other, so it always attack the colour which is the opposite to it so all the edges from it goes to the other colour and never 
+goes to the same colour So the knight graph is a bipartite where the black cells are in a side and the white ones in the other side.
+--------------------------------------------------------------------------------
+4- MaxBipartiteMatching ( means i want the max pair-wise relations between the 2 parts of the bipartite graph )
+Simpily,its like multiSourceMultiSink idea.
+
+5-MinPathCoverage in DAG ( means the min paths that not sharing any edges to cover all the graph nodes at least one time )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
