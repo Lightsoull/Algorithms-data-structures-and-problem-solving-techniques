@@ -81,20 +81,20 @@ Max Flow Applications
 
 1- MaxEdgeDisjointPath ( the max number of paths from source to destination that doesn't share any edges )
 To solve it, put all the weights with 1 then run MaxFlow and the amount of flows is the amount of paths 
-
+---------------------------------------------------------------------------------------------------------------------------------------
 2-MaxEdgeAndVertexDisjointPath ( the max number of paths from source to destination that doesn't share any edges and any vertexes )
 To solve it,first put all the weights with 1 and mark all the vertexes with one then run MaxFlow but don't go through node which is 
 marked with zero or edge marked with zero and the amount of flows is the amount of paths 
-
+---------------------------------------------------------------------------------------------------------------------------------------
 3- What if the Capicity is on the vertexes
 Simply split each vertex i to i and V+i ( V is the number of vertexes ) and put an edge between them with the cost that on the vertex 
 so any edge to that vertex will be directly to it but each vertex that is out from it will be out from V+i vertex then run MaxFlow 
 normally.
-
+---------------------------------------------------------------------------------------------------------------------------------------
 3-MultiSourceMultiSink 
 simpily take a fake Supersource vertex and connect it to all the sources you have with weight on edges inf and take a fake Supersink 
 vertex and connect it to all the sinks you have with weight on edges inf, then run MaxFlow normally
-------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
 MaxFlow with Bipartite graph
 -A Tree is always can be expressed as a Bipartite graph 
 -At the chess board the kight move in 2 steps in direction A then 1 step in direction B where A and B must be perpendicular 
@@ -105,6 +105,145 @@ goes to the same colour So the knight graph is a bipartite where the black cells
 Simpily,its like multiSourceMultiSink idea.
 
 5-MinPathCoverage in DAG ( means the min paths that not sharing any edges to cover all the graph nodes at least one time )
+its idea based on konig's theroem which states that set all the nodes in a side and all the nodes again in the opposite side and 
+start to match between both sides according to the directed edges given and start with a node and go to its end of its path and count
+for the paths.
+CODE
+vector< vector<int> > v ;
+vector< pair<int, int> > matches;
+bool canMatch(vector< vector<int> > & adjMax, vector<int> & vis, vector<int> & L, vector<int> & R, int i) // O(m*n)
+{
+	for(int j=0;j<sz(adjMax[i]);j++)
+	{
+
+        if(adjMax[i][j] && !vis[j])
+        {
+		 vis[j] = 1;
+		  if( L[j] < 0 || canMatch(adjMax, vis, L, R, L[j]) )
+		  {
+			L[j] = i, R[i] = j;
+			return true;
+		   }
+	     }
+	}
+	return false;
+}
+
+int bipartiteMatching(vector< vector<int> > adjMax)
+{	// Return two lists of maximum matching indices in O(m*n^2).
+	int maxFlow = 0, n = sz(adjMax), m = sz(adjMax[0]);
+	vector<int> vis, L(n, -1), R(m, -1);
+	for(int i=0;i< n;i++)
+       {
+		vis = vector<int>(n, 0);
+		if( canMatch(adjMax, vis, L, R, i)  )
+			maxFlow++;
+	}
+	// Construct the matching, 0-based.
+
+	lp(i, n) if(R[i] != -1)
+		matches.push_back( make_pair(i, R[i]) );
+
+	return n-maxFlow;
+}
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+   int x,y;
+   v.resize(n);
+    for(int i=0;i<n;i++)
+    v[i].resize(n);
+    for(int i=0;i<m;i++)
+     {
+         cin>>x>>y;
+        x--; y--;
+        v[x][y]=1;
+     }
+   cout<< bipartiteMatching(v) <<endl;
+
+   for(int i=0;i<sz(matches);i++)
+    cout<<matches[i].first<<" "<<matches[i].second<<endl;
+}
+---------------------------------------------------------------------------------------------------------------------------------------
+5-FindMinCutEdges ( means the edges that i will sepreate by it between the source and sink )
+idea off course at the end those edges will be equal to zero after running the max flow so first i will run max flow then i will run
+dfs entering only the edges which is not zero.
+CODE
+void flood_fill(int src)
+{
+	visited[src] = 1;
+	for (int i = 0; i < n; i++)
+		if (!visited[i] && cap[src][i]>0)
+			flood_fill(i);
+}
+
+struct edge
+{
+	int from, to;
+	edge(){}
+	edge(int f, int t)
+	{
+		from = f, to = t;
+	}
+};
+edge e[501];
+void main()
+{
+	int i, j, links;
+	   cin>>n>>links ;
+		for(i=0;i<links;i++)
+		{
+			int a,b,c;
+			cin>>a>>b>>c;
+			cap[a-1][b-1] = cap[b-1][a-1] =  c;
+			e[i] = edge(a-1, b-1);
+		}
+		int max_ = maxFlow();
+		//cout<<max_<<"\n";
+
+		memset(visited, 0, sizeof(bool)*n);
+
+		/* find all nodes reachable from src */
+		flood_fill(src);
+		for (i = 0; i < links; i++)
+		{	/* any edge that is reachable from u but not v is mincut edge */
+			if( visited[ e[i].from ] && !visited[ e[i].to ])
+				cout<<e[i].from+1<<" "<<e[i].to+1<<"\n";
+			else if( visited[ e[i].to ] && !visited[ e[i].from ] )
+				cout<<e[i].from+1<<" "<<e[i].to+1<<"\n";
+		}
+		cout<<"\n";
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
