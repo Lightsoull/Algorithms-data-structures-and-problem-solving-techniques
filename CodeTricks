@@ -1,0 +1,527 @@
+if i want to get the number of elements less than certain value i can construct an array and if my i get number let it be no i 
+will increment the position of the number greater than it with one ( i men by that there is a number less than the cureent position
+then after all accumulate . 
+code                                                                                                                                                                                                                                                                    
+     for(int i=0;i<n;i++)
+    {
+        cin>>no;
+        v.pb(no);
+        lessthan[no+1]++;
+    }
+    for(int i=1;i<=1000;i++)
+        lessthan[i]+=lessthan[i-1];
+------------------------------------------------------------------------------------------------------------------------------------------
+At DSU when you want to access each subtree or partion just loop an all the nodes and 
+record the parent of each one and store the parents at a set .
+    for(int i=1;i<=n;i++)
+     {
+         int w=par(i);
+         s.insert(w);
+         v[w].pb(i);
+     }
+----------------------------------------------------------------------------------------------------------------------------------------
+The accumulation idea for eg the accumulated sum can be also on sum with a certain mod.
+code                                                                                                                                                                                                 
+         for(int i=1;i<N;i++)
+         {
+             arr[i]=(arr[i]+arr[i-1])%M;
+         }
+----------------------------------------------------------------------------------------------------------------------------------------
+  If you have a tree with N nodes and N-1 edges and you want to get  sigma distance(u,v)  such that u!=v  so there is a trick which is 
+  void dfs(int id,int p)
+{
+
+    arr[id]=1;
+
+    for(int i=0;i<sz(v[id]);i++)
+    {
+        int no=v[id][i].first;
+        int ed=v[id][i].second;
+
+        if(no==p)
+            continue;
+
+        dfs(no,id);
+
+        arr[id]+= arr[no];
+        dep[ed]= arr[no]*(N-arr[no]);
+
+
+    }
+}
+int main()
+{
+
+    cin>>N;
+    int f,t,w;
+    for(int i=1;i<N;i++)
+    {
+        cin>>f>>t>>w;
+        v[f].pb(mp(t,i));
+        v[t].pb(mp(f,i));
+        W[i]=w;
+    }
+
+    dfs(1,-1);
+    double ans=0.0;
+    for(int i=1;i<N;i++)
+        ans+= dep[i]*W[i];
+
+    ans*=2;
+}
+--------------------------------------------------------------------------------------------------------------------------------------
+At iterative topological sort you can put the periority reversed so that you will not need to reverse the answer vector at the end 
+and the iterative topological sort allow you to know the possible ways of the sorted result array but dfs not
+--------------------------------------------------------------------------------------------------------------------------------------
+if you want to print in the format where if  the result is 8 the out put will be 08  and if its in 2 digits it out normally so
+just   printf("%.2d",res); 
+---------------------------------------------------------------------------------------------------------------------------------------
+at the dp with out put if there is 2 searios whether you choose to take a thing or to not take it and you want to print what i 
+take it So to array called it next where it points to the next state and another array called it print if you choose it so put the 
+answer in it and if you don't choose it so mark it with -1 for example so at the main if the print equals to -1 so go to next else 
+print and go to next 
+----------------------------------------------------------------------------------------------------------------------------------------
+if you use a class and want to sort according to some thing .
+class Job
+{
+    public:
+        int input_id,subject_id;
+        int profit,deadline;
+    bool operator < (const Job &with) const
+    {
+        if (deadline != with.deadline)return deadline < with.deadline;
+        return input_id < with.input_id;
+    }
+}
+and with is the the element2 for example and deadline is element1 
+---------------------------------------------------------------------------------------------------------------------------------------
+If you Play and there is turns first player turn and second player turn and there is number of rounds from the number of rounds passed
+till know you can know the current turn belongs to which player .
+---------------------------------------------------------------------------------------------------------------------------------------
+if you want to use clr( mem,-1) with double arrays okay but the inside mem will be nan and nan will not equal to itself so write in dp
+double &ret=mem[i][j];
+
+if(ret==ret)
+    return ret;
+----------------------------------------------------------------------------------------------------------------------------------------
+nan not equal itself 
+----------------------------------------------------------------------------------------------------------------------------------------
+At Games With Dp if there is a turns so you can just swap between the players that the first one in the state is the one that this
+turn belongs to him 
+Another note if you store two scores for example in your state one for the first and the other for the second and you care about 
+the difference between them so you can just store the difference between them for each express the difference between it and the 
+other player.
+code
+"newdiff= mydiffbetmeandhim + myaddedval; 
+p+= solve(rounds-1,-newdiff);  // -ve bec if the diff bet me and him is newdiff then the diff between him and me is -newdiff"
+But take care at the state the diff may be with -ve so shift it
+----------------------------------------------------------------------------------------------------------------------------------------
+Dp with masks i can represent 0s and 1s state by converting binary (base 2 numbers)  to decimal okay what if i need to represent some 
+thing by 0s 1s and 2s so you can use base 3 numbers 
+"decnum=0;
+decnum= decnum*(base of number)+the cell of number   // from number of any base to decimal
+
+while(decnum>0)   // from decimal to base of number
+{
+    int v= decnum%base of num ;
+    decnum/=base of num;
+}
+
+but in will be in (base of num)^(num of cells)"
+----------------------------------------------------------------------------------------------------------------------------------------
+Note if you can use mask  you can use mask you can use vector also .
+you may use helper parameters at the state that you don't memorize on but it can reduce the complexity of the code
+if your base case is in time which is not O(1) so this line must be before it 
+int &ret=mem[i];
+if(ret==ret)
+    return ret;
+----------------------------------------------------------------------------------------------------------------------------------------
+If at recursion you want a vector to be global on all the sub functions so just intialize it by reference vector< int > &v  but after 
+returning from your call just reset every thing as it is with the same order.
+----------------------------------------------------------------------------------------------------------------------------------------
+At Dp ( Games ) if you want to max or min on diff between 2 players scores 
+"int solve(int st,int en)
+    {
+         if(en-st+1<=0)
+            return 0;
+            
+         int &ret=mem[st][en];
+         
+         if(ret!=-1)
+            return ret;
+            
+         int p1= v[st] - solve(st+1,en);
+         int p2= v[en] - solve(st,en-1);
+
+         ret=max(p1,p2);
+
+         return ret;
+    }
+"
+----------------------------------------------------------------------------------------------------------------------------------------
+To define a struct node and do a vector of it globally so you must do typedef of it first
+"typedef struct N
+{
+    int n,l,p;
+    N(int n,int l,int p) : n(n),l(l),p(p) {}
+}  node ;
+vector<node> > v;"
+----------------------------------------------------------------------------------------------------------------------------------------
+At Dp if there is over lab but there is an element change each time so you can clear the mem[ index of element that will be updated ] 
+only and the rest will be as it is offcourse if updating the element doesn't affect the rest
+---------------------------------------------------------------------------------------------------------------------------------------
+At Dp if you want to indicate a cycle there is a good trick which is first assign the value to the dp as it is a cycle -1 for
+example then if you return and visit node you visited before before returning so the dp will be with -1 and returns -1 but if i 
+returned it will be assigned to a new value .
+code
+"ll solve(int id,int f)
+{
+    if(id<=0||id>n)
+        return 0;     if(vis[id][f])
+        return arr[id][f];     vis[id][f]=1;
+     arr[id][f]=-1;
+    if(f)
+    {
+      ll res=solve(id+v[id],!f);
+      if(res==-1)
+          arr[id][f]=-1;
+      else
+        arr[id][f]=v[id]+res;
+    }
+    else
+    {
+     ll res=solve(id-v[id],!f);      if(res==-1)
+          arr[id][f]=-1;
+      else
+        arr[id][f]=v[id]+res;
+    }
+    return arr[id][f];
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+AT DP if the state meaning is there is an answer indicationg by 1 or not indicating by zero and want to print what you take if there is an answer  
+the print function look like that
+void print(int id,int s)
+{
+if(id==n+1)
+return ;
+
+if(mem[id+1][s]==1)
+print(id+1,s);
+else
+{
+sol.pb(id);
+print(id+1,(s+arr[id])%k);
+}
+}
+---------------------------------------------------------------------------------------------------------------------------------------
+At iterative topological sort you can put the periority reversed so that you will not need to reverse the answer vector at the end 
+and the iterative topological sort allow you to know the possible ways of the sorted result array but dfs not
+----------------------------------------------------------------------------------------------------------------------------------------
+At segement tree with lazy propagation the lazy[root] i need it for all the ranges down the root but above it i already stored it in the tree array 
+code
+"void update(int idx, int val, int st, int en, int root)
+{
+  if(idx < st || idx > en)
+   return;
+  if(st == en)
+  {
+    tree[root] = val;
+    return;
+   }
+update(idx, val, st, mid, root << 1);
+update(idx, val, mid + 1, en, (root << 1) | 1);
+tree[root] = tree[root << 1] + tree[(root << 1) |1];
+}"
+----------------------------------------------------------------------------------------------------------------------------------------
+At BFS Don't write vis[n]=1; before the for loop bec it may cause TL or MLE so write it like that
+"int BFS1(int sr,int sc,int er,int ec)
+{
+    q.push(mp(sr,mp(sc,0)));
+
+    while(!q.empty())
+    {
+
+      pair<int,pair<int,int> >  cur= q.front();
+        q.pop();
+
+        if(cur.first==er&&cur.second.first==ec)
+            return cur.second.second;
+        vis[cur.first][cur.c]=1;
+
+        for(int i=0;i<=3;i++)
+        {
+          int  nwr=dr[i]+cur.first; int nwc=dc[i]+cur.second.first;
+
+            if(nwr<0||nwc<0||nwr>=n||nwc>=m||vis[nwr][nwc]||v[nwr][nwc]=='T')
+             continue;
+
+             q.push(N(nwr,nwc,cur.cost+1));
+
+        }
+    }
+}"
+---------------------------------------------------------------------------------------------------------------------------------------
+Precision, If in a problem he gave you the number of decimal digits after the point , So you can work in an integer domain
+--------------------------------------------------------------------------------------------------------------------------------------
+You can scan what before the precision point and what after it by   scanf("%d.%d",&bef,&aft);
+--------------------------------------------------------------------------------------------------------------------------------------
+At dp with memorization if yu throw a certain flag and it may be added to some value and you want it to be not added so minize
+code
+int ret = min(50000, n + solve(a, b));   // 50000 is the flag
+---------------------------------------------------------------------------------------------------------------------------------------
+If you are getting the distance between two points and you are just comparing so get it squared To avoid percision errors
+---------------------------------------------------------------------------------------------------------------------------------------
+Using the lower bound and the upper bound 
+to use them the vector must be sorted ascendingly 
+the upper bound ---------------->  get the first number that is greater than the val
+the lower bound ---------------->  get the first number that is equal or greater than the val
+IF you sort the vector decsendingly 
+the upper bound ---------------->  get the first number that is smaller than the val
+the lower bound ---------------->  get the first number that is equal or smaller than the val
+----------------------------------------------------------------------------------------------------------------------------------------
+Sending a vector to a function 
+by value   if you are updating in it and don't want this to happen in the orginal vector but time wise and memory wise it is a cost
+eg   void fun(vector<int> v)
+by refernece but here you are updating in the orginal vector
+eg  void fun(vector<int> &v)
+----------------------------------------------------------------------------------------------------------------------------------------
+MOD is very expensive tool if you can without it it would be better
+---------------------------------------------------------------------------------------------------------------------------------------
+Zero is stored in The computer zero or very small -ve value or very small +ve value that's why when you are comparing a double value 
+less than zero or not compare with -ve eps and when are comparing greater than zero or not compare with eps
+---------------------------------------------------------------------------------------------------------------------------------------
+IF i have a undirected graph you can turn it to a directed graph by splitting each vertex V-V' and set a directed edge from V to V'
+So if you have a an edge in the undirected graph V-U it will be V'-U and U'-V.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
