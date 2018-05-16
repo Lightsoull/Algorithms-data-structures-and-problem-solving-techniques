@@ -97,6 +97,7 @@ simpily take a fake Supersource vertex and connect it to all the sources you hav
 vertex and connect it to all the sinks you have with weight on edges inf, then run MaxFlow normally
 ---------------------------------------------------------------------------------------------------------------------------------------
 MaxFlow with Bipartite graph
+- The edges between the bipartite graph is a relation is not directed or not 
 -A Tree is always can be expressed as a Bipartite graph 
 -At the chess board the kight move in 2 steps in direction A then 1 step in direction B where A and B must be perpendicular 
 to each other, so it always attack the colour which is the opposite to it so all the edges from it goes to the other colour and never 
@@ -104,11 +105,19 @@ goes to the same colour So the knight graph is a bipartite where the black cells
 --------------------------------------------------------------------------------
 4- MaxBipartiteMatching ( means i want the max pair-wise relations between the 2 parts of the bipartite graph )
 Simpily,its like multiSourceMultiSink idea.
-
+----------------------------------------------------------------------------------------------------------------------------------------
 5-MinPathCoverage in DAG ( means the min paths that not sharing any edges to cover all the graph nodes at least one time )
-its idea based on konig's theroem which states that set all the nodes in a side and all the nodes again in the opposite side and 
-start to match between both sides according to the directed edges given and start with a node and go to its end of its path and count
-for the paths.
+its idea based on konig's theroem.
+Konig's theroem
+states that In a bipartite graph the minminum number of nodes covering all the edges Equals to the number of the Indepentant edges in
+the graph.
+
+-The coming CODE gets the number of min nodes covering all the edges which is equal to the number of the Indepentant edges in the graph.
+-But to get the MinPathCoverag
+let the Indepentant edges E each one  definintely connects two unique nodes so the nodes covered by them is E*2 and let all the nodes 
+exist on both sides N so there is N-E*2 nodes not covered and each will cost a seprate extra path to be covered so all the paths will
+be N-E*2+E = N-E.
+
 CODE
 vector< vector<int> > v ;
 vector< pair<int, int> > matches;
@@ -145,7 +154,7 @@ int bipartiteMatching(vector< vector<int> > adjMax)
 	lp(i, n) if(R[i] != -1)
 		matches.push_back( make_pair(i, R[i]) );
 
-	return n-maxFlow;
+	return maxFlow;    // is the E
 }
 int main()
 {
@@ -161,7 +170,7 @@ int main()
         x--; y--;
         v[x][y]=1;
      }
-   cout<< bipartiteMatching(v) <<endl;
+   cout<< N-bipartiteMatching(v) <<endl;     // N represents all the nodes in both sides of the bipartite graph
 
    for(int i=0;i<sz(matches);i++)
     cout<<matches[i].first<<" "<<matches[i].second<<endl;
