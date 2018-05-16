@@ -1,5 +1,6 @@
 /*
 Max flow
+- augmenting path means a pathin the flow.
 - we are talking a bout a directed graph each edge represent a road with a certain capicity ( imagine it like a pipe ).
 - we have a source(S) and a desitination called sink.
 - the difference between path and flow that the flow consists of one or more paths from source to destination.
