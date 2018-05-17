@@ -109,8 +109,8 @@ Simpily,its like multiSourceMultiSink idea.
 5-MinPathCoverage in DAG ( means the min paths that not sharing any edges to cover all the graph nodes at least one time )
 its idea based on konig's theroem.
 Konig's theroem
-states that In a bipartite graph the minminum number of nodes covering all the edges Equals to the number of the Indepentant edges in
-the graph.
+states that In a bipartite graph the minminum number of nodes covering all the edges(Known as MCBM (Max Cardinality Bipartite Matching)
+Equals to the number of the Indepentant edges in the graph.
 
 -The coming CODE gets the number of min nodes covering all the edges which is equal to the number of the Indepentant edges in the graph.
 -But to get the MinPathCoverag
