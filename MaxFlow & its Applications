@@ -97,7 +97,7 @@ simpily take a fake Supersource vertex and connect it to all the sources you hav
 vertex and connect it to all the sinks you have with weight on edges inf, then run MaxFlow normally
 ---------------------------------------------------------------------------------------------------------------------------------------
 MaxFlow with Bipartite graph
-- The edges between the bipartite graph is a relation is not directed or not 
+- The edges between the bipartite graph is a relation so it is undirected
 -A Tree is always can be expressed as a Bipartite graph 
 -At the chess board the kight move in 2 steps in direction A then 1 step in direction B where A and B must be perpendicular 
 to each other, so it always attack the colour which is the opposite to it so all the edges from it goes to the other colour and never 
