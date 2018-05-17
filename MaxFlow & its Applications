@@ -118,6 +118,11 @@ let the Indepentant edges E each one  definintely connects two unique nodes so t
 exist on both sides N so there is N-E*2 nodes not covered and each will cost a seprate extra path to be covered so all the paths will
 be N-E*2+E = N-E.
 
+Notes
+- it doesn't matter which side is your left side
+- put the edges as it is even if it is undirected
+
+
 CODE
 vector< vector<int> > v ;
 vector< pair<int, int> > matches;
