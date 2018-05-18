@@ -121,6 +121,7 @@ be N-E*2+E = N-E.
 Notes
 - it doesn't matter which side is your left side
 - put the edges as it is even if it is undirected
+- Make Sure first that the graph is bipartite and you are working on one of its sides
 
 
 CODE
