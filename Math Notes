@@ -1,1 +1,79 @@
+Sigma which mean summation is distributed linearly over equation  Z=X*Y      
+so      Sigma Z =  ( Sigma X )*( Sigma Y )  and you can put sigma with a condition and  distribute it normally
+------------------------------------------------------------------------------------------------------------------------------------------
+if the angle exceeds 90 degree the cosine of angle turns to -ve value 
+if the angle exceeds 180 degree the sine of angle turns to -ve value 
+-------------------------------------------------------------------------------------------------------------------------------------------
+Note if you want to do combination from a given set of N elements the combination set starting from 1 element up to N elements will be as 
+if you are doing bitmasking from 1 to (1<<N)  in time 2^N
+------------------------------------------------------------------------------------------------------------------------------------------
+The symmetric of a number is if i have an array of n elements and i have a value V then its symetric value is n-V    
+Properties of the symmetric 
+1- any number plus its symetric equals to n 
+------------------------------------------------------------------------------------------------------------------------------------------
+zero power zero is math error
+-----------------------------------------------------------------------------------------------------------------------------------------
+First degree equation is the strightline equation
+-----------------------------------------------------------------------------------------------------------------------------------------
+There is a theorm states that for any even number greater than 2 can be expressed as sum of two primes .
+------------------------------------------------------------------------------------------------------------------------------------------
+the distance or the difference between any number and the first prime after it or the last prime before it is very small
+------------------------------------------------------------------------------------------------------------------------------------------
+Note if you have the decimal of this binary 00101 and i want to update decimal for this binary 00111 so just make 00010 and add it to 
+the decimal of the 00101 binary 
+----------------------------------------------------------------------------------------------------------------------------------------
+If i want b-a  is equal to a-(b+1)+1
+----------------------------------------------------------------------------------------------------------------------------------------
+To maximize the product of a set of numbers increase the smaller first and if you want to decrease the product decrease the smaller 
+number first
+-----------------------------------------------------------------------------------------------------------------------------------------
+How to Know if the following 3 sides can form a triangle so there is the answer   check if the smaller two sides if their sum is greater 
+than the largest side so it can form a triangle else NO
+----------------------------------------------------------------------------------------------------------------------------------------
+Any circle with 3 sides forming a triangle inside it , it must be a right angled triangle 
+----------------------------------------------------------------------------------------------------------------------------------------
+By linearity of expectation you can think of the equation of the result without expectation then distribute the expectation
+----------------------------------------------------------------------------------------------------------------------------------------
+Way to calculate the probability is to know the  ( the number of choices that lead to the answer / the total number of choices )
+----------------------------------------------------------------------------------------------------------------------------------------
+If you are comparing between two numbers and you want to reduce the power so multiply both sides to log
+----------------------------------------------------------------------------------------------------------------------------------------
+If i have two numbers x and y and i am wondering x^y or y^x gives larger value there is nothing can tell, i will need to calculate both
+values and know
+----------------------------------------------------------------------------------------------------------------------------------------
+About probability if you have a set contining diifferent families and you want the probability of choosing a pair of persons one from
+familiy A and the other from familiy B 
+Wrong answer is to consider that i will choose one from A then one from B OR  i will choose one from B then one from A bec i don't said
+that 
+The true answer is probability of having 2 persons from those two families are   
+(number of pairs of two families) / (total number of pairs)  =  ( number of members of A * number of members of B ) / (  total number 
+of pairs )
+----------------------------------------------------------------------------------------------------------------------------------------
+Geometric series : sigma from i=0 to inf   r^i  = 1/(1-r)
+---------------------------------------------------------------------------------------------------------------------------------------
+if    X / Y   and Y>X   if you add the amount M to X and to Y the result will be larger   ( X+M ) / (Y+M)
+proof
+X / Y  -   ( X+M ) / (Y+M)  =( Y(X+M) - X(Y+M) ) / ( Y(Y+M) )  = (MY-XM) / (Y^2+YM)       
+so if Y>X  it will increase but else it will decrease
+----------------------------------------------------------------------------------------------------------------------------------------
+If you want to know the bigger value just subtract and see whether the difference is +ve or -ve
+----------------------------------------------------------------------------------------------------------------------------------------
+To know whether a four points make a square not nessasary parallel to co-ordinates or not check that   
+1- the four sides are equal
+2- get the distances of the two diagonals and check that they are equal and equal to that distance by bythagorth 
+( to make sure that it has 90 degree angle )
+----------------------------------------------------------------------------------------------------------------------------------------
+When you hit a ball to the floor there is a normal which is at the middle of the floor a line makes 90 degree with both 
+sides of the floor the angle of incidence with the normal equals to the angle of reflection with the normal
+link --------->   http://scienceworld.wolfram.com/physics/AngleofReflection.html
+----------------------------------------------------------------------------------------------------------------------------------------
+nPr   P is permuation the n is the amount of numbers and r is the size of the set
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 
