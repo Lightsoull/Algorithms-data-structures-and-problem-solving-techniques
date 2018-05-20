@@ -75,19 +75,19 @@ bool isPointOnSegment(point a, point b, point c)
 
 -------------------------------------------------------------------------------------
 distance of point p2 to line p0-p1 strightline distance
-
+// this is if the point p2 lies in the range of of line p0-p1 so there is a prependicular distance.
 double distToLine( point p0, point p1, point p2 ) 
 {
 	return fabs(cp(p1-p0, p2-p0)/length(p0-p1));      // area = 0.5*b*h
 }
 -------------------------------------------------------------------------------------
 //distance from point p2 to segment p0-p1
-
+// its the min distance prependicular if it can be
 double distToSegment( point p0, point p1, point p2 ) 
 {
 	double d1, d2;
 	point v1 = p1-p0, v2 = p2-p0;
-	if( (d1 = dp(v1, v2) ) <= 0)	return length(p2-p0);
+	if( (d1 = dp(v1, v2) ) <= 0)	return length(p2-p0);   
 	if( (d2 = dp(v1, v1) ) <= d1)	return length(p2-p1);
 	double t = d1/d2;
   
