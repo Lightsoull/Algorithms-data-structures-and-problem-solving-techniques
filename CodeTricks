@@ -293,8 +293,8 @@ less than zero or not compare with -ve eps and when are comparing greater than z
 IF i have a undirected graph you can turn it to a directed graph by splitting each vertex V-V' and set a directed edge from V to V'
 So if you have a an edge in the undirected graph V-U it will be V'-U and U'-V.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
+Any Tree can be seprated in to two disjoint partions by breaking an edge
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
