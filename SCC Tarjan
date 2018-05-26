@@ -1,0 +1,71 @@
+Some definations
+
+-SCC ( Strongly connected components )
+a SC component means that each pair of nodes in it can reach each other.
+
+-SCG ( Strongly connected graph )
+if all the graph nodes are part of SCC ( in other words all the graph represents one SCC )
+to Test SCG 
+run dfs from a certain node if it get all the nodes run dfs again from the same node but on the transpose of the graph if it gets all the
+nodes so its SCG
+
+-Graph Transpose
+graph transpose of a certain graph is by inverting the direction of all the edges in that graph
+Note
+the graph and its transpose have the same number of SCCs
+
+-DFS Number
+is when you traverse the graph with dfs when you entering a new node put a number to it 
+
+-Lowest Link Number
+it is the dfs number of the farest ancestor of my current node
+----------------------------------------------------------------------------------------------------------------------------------------
+-SCC In  undirected graph
+so simpliy start dfs from each unvisited node and count
+CODE
+for(int i=1;i<=nodes;i++)
+{
+    if(!vis[i])
+    {
+        dfs(i);
+        cnt++;
+    }
+}
+// cnt is the number of the connected compontents.
+// to get the nodes in each compontent just put the nodes you visited in each dfs call 
+-------------------------------------------------------------------------------------------------------------------------------------------
+-SCC In directed graph
+-it can be with floyed at complexity ( n^3 )
+-OR with Tarjan with complexity (nlogn)
+
+Tarjan algorithsm 
+he put the dfs number to each new node he visits and if it is an already visited node so it may be one of 2 cases whether it is one of
+my ancestors in my tree or it belongs to an old other tree if its my ancestor so i will minmize my lowest link number with its dfs 
+number intially i will set the dfs number equal to the lowest link number else ignore it.
+
+CODE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
