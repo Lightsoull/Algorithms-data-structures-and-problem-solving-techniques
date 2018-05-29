@@ -89,6 +89,39 @@ void dfs(int n)
     }
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
+SCCs Applications
+
+1-getting the disjoint subgraphs : this can be done by running SCC and then if there is an edge between one component and other so the 
+number of disjoint graphs decreases by one
+
+CODE
+
+        ans=sz(comp);
+        for(int i=0;i<sz(e);i++)
+        {
+            int fr=e[i].first; int to=e[i].second;
+            if(com[fr]!=com[to]&&vis[com[to]]==0)
+            {
+               
+                vis[com[to]]=1;
+                ans--;
+            }
+        }
+ ---------------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+        
 
 
 
