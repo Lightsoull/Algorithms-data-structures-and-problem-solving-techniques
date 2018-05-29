@@ -69,6 +69,28 @@ link --------->   http://scienceworld.wolfram.com/physics/AngleofReflection.html
 ----------------------------------------------------------------------------------------------------------------------------------------
 nPr   P is permuation the n is the amount of numbers and r is the size of the set
 ----------------------------------------------------------------------------------------------------------------------------------------
+Math Note if i have a Average= (x+y)/2 to add another value z so minmize the Average it must be less than the (x+y)/2 ( previous average)
+(x+y+z)/3.
+
+proof 
+-----
+(x+y+((x+y)/2))/3 = x/3+y/3+x/6+y/6 = x/2+y/2 so if z is less than (x+y)/2 so it will be less than x/2+y/2
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
