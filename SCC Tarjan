@@ -108,8 +108,35 @@ CODE
             }
         }
  ---------------------------------------------------------------------------------------------------------------------------------------
- 
- 
+ 2- Creating a DAG where the nodes are the SCCs
+ void dfs2(int n)      // n is the component number
+{
+
+    vis[n]=1;
+for(int i=0;i<sz(comp[n]);i++)
+{
+        int no=comp[n][i];
+
+    for(int j=0;j<sz(v[no]);j++)
+    {
+
+        int n2=v[no][j];
+
+        if(com[n2]==com[no])
+            continue;
+
+        if(!vis[com[n2]])
+            dfs2(com[n2]);
+    }
+}
+// at main
+   for(int i=0;i<sz(comp);i++)
+   {
+       if(!vis[i])
+        dfs2(i);
+   }
+----------------------------------------------------------------------------------------------------------------------------------------
+
  
  
  
