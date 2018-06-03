@@ -22,7 +22,7 @@ Steps
 this min edge cost to the reverse edge.
 Explanation
 it is like moving in a path and the reverse edge represents the cancelation of a certain move and taking other move instead.
-Complexity O( maxflow*Edges )
+Complexity : it works to edges up to 10^4 and edge cost 10^5 and nodes 800.
 CODE
 #define MAXN 700     		//maximum number of nodes
 int cap[MAXN][MAXN]; 		//capacity
