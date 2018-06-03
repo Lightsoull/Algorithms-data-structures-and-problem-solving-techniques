@@ -2,6 +2,7 @@
 Max flow
 - augmenting path means a pathin the flow.
 - we are talking a bout a directed graph each edge represent a road with a certain capicity ( imagine it like a pipe ).
+- if its undirected graph there is no problem put the edges as it is.
 - we have a source(S) and a desitination called sink.
 - the difference between path and flow that the flow consists of one or more paths from source to destination.
 - MaxFlow means the max flow of water for example from a source to the destination through the edges(pipes), In other words the max
