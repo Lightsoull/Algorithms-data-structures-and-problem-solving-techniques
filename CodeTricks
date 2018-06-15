@@ -295,7 +295,10 @@ So if you have a an edge in the undirected graph V-U it will be V'-U and U'-V.
 ----------------------------------------------------------------------------------------------------------------------------------------
 Any Tree can be seprated in to two disjoint partions by breaking an edge
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+To get the longest path you can invert all the weights on the edges to -ve then get the shortest path.
+----------------------------------------------------------------------------------------------------------------------------------------
+The meaning of a weighted edge is that whenever you pass throught it ypu will but its cost again and a gain...
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
