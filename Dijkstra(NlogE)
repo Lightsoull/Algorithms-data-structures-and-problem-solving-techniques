@@ -1,3 +1,7 @@
+Notes
+the logic of Dijkstra algorithsm can't be updated to run dijkstra to get the longest path
+
+
 struct node
 {
     ll no,w;
