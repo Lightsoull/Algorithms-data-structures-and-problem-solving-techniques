@@ -76,7 +76,10 @@ proof
 -----
 (x+y+((x+y)/2))/3 = x/3+y/3+x/6+y/6 = x/2+y/2 so if z is less than (x+y)/2 so it will be less than x/2+y/2
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+The Labeled Tree is a tree where every node in it have a path to a certer node let it be node one for example in different ways the 
+number of the ways is n^(n-2).
+link  http://mathworld.wolfram.com/LabeledTree.html
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
