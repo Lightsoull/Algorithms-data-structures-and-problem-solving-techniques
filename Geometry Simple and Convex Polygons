@@ -1,4 +1,7 @@
 /*
+Note
+all equilateral polygons are convex but not all convex polygons are equilateral
+--------------------------------------------------------------------------------------------------------------------------------------
 First of all if in the problem he don't state the type of polygon so this means it can be any thing
 ---------------------------------------------------------------------------------------------------------------------------------------
 - Polygon is a sequence of n points or corners ( n>=3 )
