@@ -1,3 +1,105 @@
+-Permitive Roots and how to get them
+For a prime number p, r is a primitive root if and only if it's exponents r, r2, r3, ... , rp-1 are distinct (mod p). ( r<P )
+
+how to solve the problem easily?
+Some terms
+
+Φ(n) : Euler's totient function counts the positive integers up to a given integer n that are relatively prime to n.
+Multiplicative order : In number theory, given an integer a and a positive integer n with gcd(a,n) = 1, the multiplicative order of a 
+modulo n is the smallest positive integer k with  a^k = 1 (mod n).
+
+As far as I know, there is no simple formula known yet to find primitive roots, however, there is a faster way to test whether a
+number is a primitive root rather than simply trying out all candidates. This technique can be derived from the definition 
+of primitive roots. From its alternate definition, we know, if the multiplicative order of a number g modulo n is equal to 
+φ(n), then g is a primitive root. In fact, the converse is also true, g is a primitive root modulo n if the multiplicative order of g 
+is φ(n). From this axiom, we get a way to test whether, for any given g and n, g is a primitive root modulo n, as follows:
+
+First we compute φ(n), [ In case n is a prime p, φ(n) = p-1 ]
+Factorize φ(n), let it has k different prime factors p1, p2, ... , pk, [ Even if m is as large as 231, k will be around 32 ]
+Compute gφ(n)/pi mod n; { for i = 1, 2, 3, ... ,k }. Using a successive squaring algorithm, this can be done very easily and fast. 
+If all the k results are different than 1, then g is a primitive root modulo n.
+
+CODE
+const int MAXN=70000;
+int flag[MAXN];
+ll prime[MAXN];
+ll total;
+void seive(){
+    flag[0]=flag[1]=1;
+    for(ll i=2; i<MAXN; i++)
+    {
+        if(flag[i]==1) continue;
+        prime[total++]=i;
+        for(ll j=i*i; j<MAXN; j+=i)
+        {
+            flag[j]=1;
+        }
+
+    }
+
+}
+ll mypow(ll r, ll n, ll mod){
+
+    if(n==0) return 1;
+    if(n==1) return r%mod;
+
+    if(n%2==1){
+        return (r*mypow(r,n-1,mod))%mod;
+    }else{
+        ll ret=mypow(r,n/2,mod);
+        return (ret*ret)%mod;
+    }
+}
+ll primefactor[MAXN];
+ll pfc;
+void primefactorize(ll n)
+{
+   ll temp=n;
+    pfc=0;
+    for(ll i=0; i<total; i++)
+    {
+        if(prime[i]*prime[i]> temp) break;
+        while(n%prime[i]==0){
+            n/=prime[i];
+            primefactor[pfc++]=prime[i];
+        }
+    }
+    if(n!=1)
+        primefactor[pfc++]=n;
+}
+bool checkprim(ll r, ll n)
+{
+    ll phin=n-1;
+    primefactorize(phin);
+    for(ll i=0; i<pfc; i++)
+    {
+        if(mypow(r,phin/primefactor[i],n)%n ==1)
+          return 0;
+    }
+    return 1;
+}
+int main()
+{
+    seive();
+    int p,t;
+   while( scanf("%d%d",&p,&t)==2)
+    {
+    if(!p && !t) return 0;
+    while(t--)
+    {
+        int r;
+        scanf("%d",&r);
+        if(checkprim(r,p))
+        {
+            printf("YES\n");
+        }else
+        {
+            printf("NO\n");
+        }
+    }
+   }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
 void primefact(int n)
 -{ 
 -   if(n<=1)
@@ -17,6 +119,10 @@ void primefact(int n)
 -       }
 -    }
 - }
+
+- there is a trick that may fast the primefact instead of looping on all the numbers at for loop, loop only on the prime numbers in the
+range from 2 to squrt(n).
+
 - // works in squrt(n)
 -------------------------------------------------------------------------------------------------------------------------------------------
 works in o(N) mostly or a bit larger
