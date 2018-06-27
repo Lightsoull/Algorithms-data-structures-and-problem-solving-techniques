@@ -80,7 +80,9 @@ The Labeled Tree is a tree where every node in it have a path to a certer node l
 number of the ways is n^(n-2).
 link  http://mathworld.wolfram.com/LabeledTree.html
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Little Fermand theorem
+if n is prime then a^n % n = a % n
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
