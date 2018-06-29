@@ -299,7 +299,8 @@ To get the longest path you can invert all the weights on the edges to -ve then 
 ----------------------------------------------------------------------------------------------------------------------------------------
 The meaning of a weighted edge is that whenever you pass throught it ypu will but its cost again and a gain...
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Learn to use priority queue instead of set as it has better complexity
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
