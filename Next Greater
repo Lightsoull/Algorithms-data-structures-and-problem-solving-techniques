@@ -8,14 +8,14 @@ CODE
 
 priority_queue< pair<int,int>, vector< pair<int,int> >, std::greater< pair<int,int> > > pq;
 clr(NextGreater,-1);
-      for(int i=0;i<n;i++)
+                        for(int i=0;i<n;i++)
 			{
 				while (!pq.empty() && arr[i] > pq.top().first)
-        {
+                               {
 					NextGreater[pq.top().second] = i ;
 					pq.pop();
 				}
-                pq.push(make_pair(arr[i], i));
+                                 pq.push(make_pair(arr[i], i));
 			}
 ------------------------------------------------------------------------------------------------------------------------------------------
 2- by segemnet tree
