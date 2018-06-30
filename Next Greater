@@ -59,6 +59,13 @@ int upperBound(int s, int e, int p,int from,int to,int bound)
 		return a;
 	return upperBound((s + e) / 2 + 1, e, 2 * p + 1);
 }
+
+at main
+                 for (int i = 1; i <= n; ++i) 
+		 {
+			from = i + 1, to = 2 * n, bound = seq[i];
+			NextGreater[i] = upperBound(1, 2 * n, 1,from,to,bound);
+		  }
 ----------------------------------------------------------------------------------------------------------------------------------------
 
 
