@@ -1,0 +1,77 @@
+- To get the next greater element in an vector there is 2 ways.
+
+1- by using priority queue 
+CODE
+// the array has n elements
+// the priority queue is of a pair< element , its index >
+// NextGreater[i] represents the position which is next to the ith position
+
+priority_queue< pair<int,int>, vector< pair<int,int> >, std::greater< pair<int,int> > > pq;
+clr(NextGreater,-1);
+      for(int i=0;i<n;i++)
+			{
+				while (!pq.empty() && arr[i] > pq.top().first)
+        {
+					NextGreater[pq.top().second] = i ;
+					pq.pop();
+				}
+                pq.push(make_pair(arr[i], i));
+			}
+------------------------------------------------------------------------------------------------------------------------------------------
+2- by segemnet tree
+CODE
+// seq array is the array that stores the value
+
+int build(int s, int e, int p) 
+{
+	if (s == e)
+		return tree[p] = s;
+
+	int a = build(s, (s + e) / 2, 2 * p);
+	int b = build((s + e) / 2 + 1, e, 2 * p + 1);
+
+	return tree[p] = seq[a] > seq[b] ? a : b;
+}
+// To get the first element greater than bound value
+// In range from-to
+
+int upperBound(int s, int e, int p,int from,int to,int bound)  
+{
+	if (from <= s && to >= e)
+  {
+		if (bound >= seq[interval[p]])
+			return -1; // bad interval
+	}
+
+	if (s == e)
+		return interval[p];
+
+	int mid = (s + e) / 2;
+
+	if (to <= mid)
+		return upperBound(s, (s + e) / 2, 2 * p);
+    
+	if (from > mid)
+		return upperBound((s + e) / 2 + 1, e, 2 * p + 1);
+
+	int a = upperBound(s, (s + e) / 2, 2 * p);
+	if (a != -1)
+		return a;
+	return upperBound((s + e) / 2 + 1, e, 2 * p + 1);
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
