@@ -301,7 +301,17 @@ The meaning of a weighted edge is that whenever you pass throught it ypu will bu
 ----------------------------------------------------------------------------------------------------------------------------------------
 Learn to use priority queue instead of set as it has better complexity
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Time Obtimizations
+1- if there is a value which is zero or one only define it as boolean, which take less time at memory reg
+2- Try to obtimize in constant time of code.
+3- there is some obtimizations that affect the averge complexity time not worest case do it sometimes it helps to AC the problem
+4- use scanf/printf instead of cin/cout
+----------------------------------------------------------------------------------------------------------------------------------------
+DP obtimization : there is sometimes things in the Dp recurrance can get the problem AC eg
+1- like if i am searching on a certain length, if exceeds return
+2- At Dp if you are searching for a result or not and you want the min answer just traverse a sorted array and once you find a result 
+return.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
