@@ -24,13 +24,16 @@ const int MAXN=70000;
 int flag[MAXN];
 ll prime[MAXN];
 ll total;
+
+// works in O(N) or abit larger
+
 void seive(){
     flag[0]=flag[1]=1;
-    for(ll i=2; i<MAXN; i++)
+    for(ll i=2; i*i<=MAXN; i++)
     {
         if(flag[i]==1) continue;
-        prime[total++]=i;
-        for(ll j=i*i; j<MAXN; j+=i)
+       
+        for(ll j=i*i; j<=MAXN; j+=i)
         {
             flag[j]=1;
         }
@@ -38,116 +41,50 @@ void seive(){
     }
 
 }
-ll mypow(ll r, ll n, ll mod){
-
-    if(n==0) return 1;
-    if(n==1) return r%mod;
-
-    if(n%2==1){
-        return (r*mypow(r,n-1,mod))%mod;
-    }else{
-        ll ret=mypow(r,n/2,mod);
-        return (ret*ret)%mod;
-    }
-}
-ll primefactor[MAXN];
-ll pfc;
-void primefactorize(ll n)
+----------------------------------------------------------------------------------------------------------------------------------------
+int mypow(int b,int p)
 {
-   ll temp=n;
-    pfc=0;
-    for(ll i=0; i<total; i++)
-    {
-        if(prime[i]*prime[i]> temp) break;
-        while(n%prime[i]==0){
-            n/=prime[i];
-            primefactor[pfc++]=prime[i];
-        }
-    }
-    if(n!=1)
-        primefactor[pfc++]=n;
-}
-bool checkprim(ll r, ll n)
-{
-    ll phin=n-1;
-    primefactorize(phin);
-    for(ll i=0; i<pfc; i++)
-    {
-        if(mypow(r,phin/primefactor[i],n)%n ==1)
-          return 0;
-    }
-    return 1;
-}
-int main()
-{
-    seive();
-    int p,t;
-   while( scanf("%d%d",&p,&t)==2)
-    {
-    if(!p && !t) return 0;
-    while(t--)
-    {
-        int r;
-        scanf("%d",&r);
-        if(checkprim(r,p))
-        {
-            printf("YES\n");
-        }else
-        {
-            printf("NO\n");
-        }
-    }
-   }
+     if(p==0)
+     return 1;
+     
+     if(p&1)
+     return b*mypow(b*b,p/2);
+     else
+     return mypow(b*b,p/2);
+     
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
-void primefact(int n)
--{ 
--   if(n<=1)
--    return;
--   
--   for(int i=2;i*i<=n;i++)
--   {
--      while(n%i==0)
--      {
--         primef.pb(i);
--         n/=i;
--         }
--         }
--         
--         if(n>1)
--         primef.pb(n);
--       }
--    }
-- }
+void theprimefactors(int n)
+{
+    int N=n;
 
+    for(int i=0;i<sz(pr);i++)  // put all the prime numbers you will need using sieve
+    {
+        int pm=pr[i];
+        if(pm*pm>n)
+            break;
+        if(n==1)
+            break;
+        while(n%pr[i]==0)
+        {
+            n/=pr[i];
+            primefactors.pb(pr[i]);
+        }
+
+    }
+
+    if(n>1)
+    {
+       primefactors.pb(n);
+
+    }
+
+}
 - there is a trick that may fast the primefact instead of looping on all the numbers at for loop, loop only on the prime numbers in the
 range from 2 to squrt(n).
 
 - // works in squrt(n)
 -------------------------------------------------------------------------------------------------------------------------------------------
-works in o(N) mostly or a bit larger
-
-int countPrimesInRange_sieve(int n) 
-{
-    vector<bool> isPrime(n+1, true);  // set all of them to primes
-    isPrime[0] = isPrime[1] = 0;        // 0, 1 are not primes
- 
-    for (ll i = 2; i*i <= n; ++i) {
-        if (isPrime[i]) {
-            for (int j = i * 2; j <= n; j += i)
-                isPrime[j] = 0;
-        }
-    }
- 
-    int cnt = 0;
- 
-    for (int i = 0; i < (int)isPrime.size(); ++i)
-        if(isPrime[i])
-            cnt++;
- 
-    return cnt;
-}
-----------------------------------------------------------------------------------------------------------------------------------------
 // i <= sqrt(n)      power 2 sides
 // i * i <= n        Integer version
 
