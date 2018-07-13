@@ -130,6 +130,8 @@ vector< vector<int> > v ;
 vector< pair<int, int> > matches;
 bool canMatch(vector< vector<int> > & adjMax, vector<int> & vis, vector<int> & L, vector<int> & R, int i) // O(m*n)
 {
+      // Don't do vis[i]=1 here it will Runtime error
+      
 	for(int j=0;j<sz(adjMax[i]);j++)
 	{
 
