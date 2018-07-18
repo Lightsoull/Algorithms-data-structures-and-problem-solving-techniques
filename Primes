@@ -106,6 +106,33 @@ bool isprime(ll n)
     return true;
 }
  ---------------------------------------------------------------------------------------------------------------------------------------
+ Notes on primes
+ 
+ 1- Fermat's little theorem
+ for any interger a and prime number p (a^p mod p)=(a mod p)
+ 
+ 2- a^(p-1) = 1 (mod p)
+ 
+ 3-The cancellation law
+ if u,x,y are integers and prime number p
+ ux = uy (mod p)
+ we can cancel u from both sides but iff u and p are relatively prime
+ 
+ ---------------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  
