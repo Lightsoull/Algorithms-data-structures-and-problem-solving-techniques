@@ -15,6 +15,11 @@ every edge have a cost to be breaked and i want to do that with the min cost.
 - the Min Cut problem is the same as the Maxflow problem problem, bec the if there is a edge from 1 to 2 with weight 4 and from 2 to 3 
 with weight 10 the water that will pass is the min between them which is 4 and the min cut is also 4.
 
+- Min Cut in an undirected graph with weights on nodes Will be 
+to set an edge between a node and another version of it with the weight and To put the undirected edge
+v[f+n][t]=w;
+v[t+n][f]=w;
+----------------------------------------------------------------------------------------------------------------------------------------
 Implementation
 By Ford-Fulkerson's method
 Steps
