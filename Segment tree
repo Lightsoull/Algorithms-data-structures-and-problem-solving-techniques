@@ -2,7 +2,11 @@ Segment tree + Lazy Propagation
 // Size of tree array  is 2^(t+1) - 1 , t=log(n)/log(2)
 //#define mid ((st + en) >> 1)
 //Sum segment tree
+----------------------------------------------------------------------------------------------------------------------------------------
+idea of lazy
 
+- lazy is like a flag i use it to know the value of the smaller sub ranges in the big range when i need that smaller range
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 inline void build(int st = 0, int en = n - 1, int root = 1)
