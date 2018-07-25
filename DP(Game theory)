@@ -1,4 +1,8 @@
 /*
+---------------------------------------------------------------------------------------------------------------------------------------
+Notes on Dp Game problems
+- if at problem its given some already played turns so you have to know by your self who will play first.
+----------------------------------------------------------------------------------------------------------------------------------------
 CF918-D2-D
 
 explanation : its a direct dp bec the graph is DAG  there is no cycles the logic of the dp [first player node postion]
