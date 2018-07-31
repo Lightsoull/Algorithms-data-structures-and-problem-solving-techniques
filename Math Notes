@@ -113,8 +113,17 @@ gcd(lcm(N1, M), lcm(N2, M), ..., lcm(Nk, M)) = lcm(gcd(N1, ..., Nk), M).
 
 Lcm is the union of the prime factors and gcd is the intersection of the prime factors.
 ----------------------------------------------------------------------------------------------------------------------------------------
+Permutations and Combinations  n is the numbers and r is the parts want to fill
 
-
+permutations with replacement(repition)
+n^r
+permutations without replacement 
+nPr
+combinations with replacement 
+( n-1+r )! / ( r! * (n-1)! )
+combination without replacemant 
+nCr = n!/((n-r)!*r!)
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
