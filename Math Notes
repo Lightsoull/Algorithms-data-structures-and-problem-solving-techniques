@@ -91,8 +91,28 @@ The square root function decreases in a big rate
 eg if i have x and sqrt(x) then sqrt( sqrt(x) ) and so on it decreases from 10^18 to 1 in few steps and when it reaches one it turns to 
 be contant.
 ----------------------------------------------------------------------------------------------------------------------------------------
+1-If X is unknown and i know X%Ci for some integers Ci for every 0<i<n then i can know  X % lcm(all Ci).
+2- Some mod properties
+  -a1=a2 (mod n) and b1=b2 (mod n), a1+b1=a2+b2 (mod n) and a1*b1 = a2*b2 (mod n) ans (a1-a2) is divisable by n
+3- Some Lcm and gcd properties
+  -gcd( P.N,P.M ) = P*gcd( N,M )  & lcm( P.N,P.M ) = P*lcm( N,M ).
+  
+  - If gcd( N,M ) = 1, then
+  gcd( N*M , Q) = gcd( N,Q ) * gcd( M,Q )
+  lcm( N*M,Q ) =( lcm(N,Q) * lcm(M,Q) ) / Q
+  
+  -gcd(gcd(N, M), P) = gcd(N, gcd(M, P))
+   lcm(lcm(N, M), P) = lcm(N, lcm(M, P)).
+  
+ -gcd(M, N, P) = gcd(gcd(M, N),P) = gcd(M, gcd(N, P))
+  lcm(M, N, P) = lcm(lcm(M, N),P) = lcm(M, lcm(N, P)).
+  
+  For integers N1, ..., Nk, k ≥ 2,
+lcm(gcd(N1, M), gcd(N2, M), ..., gcd(Nk, M)) = gcd(lcm(N1, ..., Nk), M)
+gcd(lcm(N1, M), lcm(N2, M), ..., lcm(Nk, M)) = lcm(gcd(N1, ..., Nk), M).
 
-
+Lcm is the union of the prime factors and gcd is the intersection of the prime factors.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
