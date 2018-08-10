@@ -1,0 +1,14 @@
+- The idea of the solution is that if i want the least common ancestor between two nodes let them be A and B 
+if you moved from A to B the min level node you will path by is the least common ancertor.
+-CODE
+make 3 arrays
+1- path array to store in it the dfs path ( note if you will return to a node you will store it a gain )
+2- level array to store in it the level of each node
+3- firstid array to store in it the first time you enter a node.
+
+we can get the RMQ by segment tree O(log n)
+                      sparse table O(1)
+
+CODE
+----
+
