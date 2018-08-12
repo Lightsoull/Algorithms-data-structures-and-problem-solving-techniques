@@ -1,3 +1,5 @@
+First way by RMQ
+- but you can get only the LCA and not the any kth ancestor.
 - The idea of the solution is that if i want the least common ancestor between two nodes let them be A and B 
 if you moved from A to B the min level node you will path by is the least common ancertor.
 -CODE
@@ -6,9 +8,81 @@ make 3 arrays
 2- level array to store in it the level of each node
 3- firstid array to store in it the first time you enter a node.
 
-we can get the RMQ by segment tree O(log n)
-                      sparse table O(1)
-
+we can get the RMQ by segment tree query in O(log n)
+                      sparse table query in O(1)
+----------------------------------------------------------------------------------------------------------------------------------------
+Second part by Dp
+- the idea is similar to sparse table idea, if i could get the ancestor number 2^(j-1) so i can get the ancestor number 2^j bec i can 
+from the ancestor number 2^(j-1) jump other 2^(j-1) so i will reach ancestor number 2^j.
+- this works bec any decimal number can be represented as a sum of 2^x numbers
 CODE
 ----
+void dfs(int cur,int lv)
+{
+
+   vis[cur]=1;
+   level[cur]=lv;
+   for(int i=0;i<sz(v[cur]);i++)
+   {
+       int nw=v[cur][i].first;
+       if(vis[nw])
+        continue;
+       par[nw]=cur;
+       dfs(nw,lv+1);
+   }
+}
+int LCA(int n)
+{
+    for(int i=0;i<n;i++)
+        p[i][0]=par[i];
+    for(int j=1;(1<<j)<n;j++)
+    {
+        for(int i=0;i<n;i++)
+        {
+            if(p[i][j-1]!=-1)
+            {
+                p[i][j]=p[p[i][j-1]][j-1];
+            }
+        }
+    }
+}
+int query(int a,int b)  // getting the lca between node a and b
+{
+    if(level[a]>level[b])
+    swap(a,b);
+    int mx=(int)log2(level[b]);
+    for(int i=mx;i>=0;i--)
+    {
+        if(level[b]-(1<<i)>=level[a])
+        {
+            b=p[b][i];
+        }
+    }
+    if(a==b)
+        return b;
+    for(int i=mx;i>=0;i--)
+    {
+        if(p[b][i]!=-1&&p[b][i]!=p[a][i])
+        {
+            b=p[b][i];
+            a=p[a][i];
+        }
+    }
+    return par[a];
+}
+int kth(int st,int k)    // k is the level of the kth ancestor from the tree root
+{
+    int mx= (int)log2(level[st]);
+    for(int i=mx;i>=0;i--)
+    {
+        if(level[st]-(1<<i)>=k)
+        {
+            st=p[st][i];
+        }
+    }
+    return st;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
 
