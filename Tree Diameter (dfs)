@@ -1,3 +1,7 @@
+Note 
+the longest path starting from a certain node must end at one of the two ends of the tree diameter.
+
+
 int vis[10000+9];
 vector< vector<int> > v;
 int dist[10000+9];
