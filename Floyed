@@ -52,6 +52,10 @@ for(int k=1;k<=n;k++)
 2- assign all the adj array to zeros
 3- the adj array if there is a path bet i to j so assign it to one
  
+// if you want to know if there is a path between i and i but contain at least one node in between then don't intialize
+the diagonal of the matrix by ones.
+ 
+
 void TransitiveClosure()
 {
   // assume matrix is 0 for disconnect, 1 is connect
