@@ -1,3 +1,6 @@
+If the weights of the graph are 0 or 1 only so you can use dequeue instead of priority queue and if the the weight is 0 push front
+and if the weight is 1 push back ( for better complexity )
+---------------------------------------------------------------------------------------------------------------------------------------
 Notes
 the logic of Dijkstra algorithsm can't be updated to run dijkstra to get the longest path
 
