@@ -18,7 +18,7 @@ Triangles by setting a point O which is orgin in the orgin of the Polygon ) and 
 // works with all kinds of Polygons 
 // works in case of multiple points or collinear points
 
-CODE
+CODE    it is idea named by sholace formula
 -----
 double polygonArea(vector<point>& points) 
 {
