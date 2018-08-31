@@ -1,3 +1,6 @@
+Note 
+the number of divisors of a number is very very small 
+
 vectorll generate_divisors(ll n)     O( sqrt(n) )
 {
     vector<ll> v;
