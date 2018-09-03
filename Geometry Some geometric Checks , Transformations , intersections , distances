@@ -170,7 +170,13 @@ double angle0(point a,point O,point c)   // point O is the point from it vector 
    return acos(fixangle(dp(v1,v2)/length(v1)/length(v2)));   
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
+Getting the Number of integer points thruogh a Stright Line.
+-solution
+let the stright line be AB where A(x1,y2) ,B(x2,y2) then get g= gcd( (x2-x1),(y2-y1) ) then g is the number of integer points on a line.
 
+-Application 
+If you need to get the distance between two cells on a grid its equal to the (x2-x1)+(y2-y1)-g.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
