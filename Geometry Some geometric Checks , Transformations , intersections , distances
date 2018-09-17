@@ -177,6 +177,38 @@ let the stright line be AB where A(x1,y2) ,B(x2,y2) then get g= gcd( (x2-x1),(y2
 -Application 
 If you need to get the distance between two cells on a grid its equal to the (x2-x1)+(y2-y1)-g.
 ----------------------------------------------------------------------------------------------------------------------------------------
+// function to check if three sider
+// form a triangle or not
+bool checkValidity(int a, int b, int c)
+{
+    // check condition
+    if (a + b <= c || a + c <= b || b + c <= a)
+        return false;
+    else
+        return true;
+}
+ 
+// Driver function
+int main()
+{
+    int a = 7, b = 10, c = 5;
+     
+    if (checkValidity(a, b, c))
+        cout << "Valid";
+    else
+        cout << "Invalid";    
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Cosine Law
+c^2 = a^2 + b^2 - 2*a*b*Cos(C)
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 
 
 
