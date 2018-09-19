@@ -181,8 +181,7 @@ int isInsidePoly(vector<point> p, point p0)
 Notes
 - in case there is much queries you can first create a rectangle around the polygon and check if its inside it so go and check 
 for polygon else don't check for the polygon.
----------------------------------------------------------------------------------------------------------------------------------------
-
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
