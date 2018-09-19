@@ -127,7 +127,8 @@ nCr = n!/((n-r)!*r!)
 Note if you have some numbers from 1 to n and you want to put a number in every of three packets but in sorted order so
 the number of ways to to do so is------> combinations with replacement ( n-1+r )! / ( r! * (n-1)! ).
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Sigma i=0 to i=K   i * (n choose i ) = K * 2^(K-1)
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
