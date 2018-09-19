@@ -1,0 +1,180 @@
+Faces of a planar graph
+let’t start with the definition of the planar graph, a planar graph is a graph that can be embedded in the plane.
+To make this simple, a planar graph is a graph that you can draw on a paper in such a way that no edges cross each other.
+The Faces of a planar graph are the different areas that the graph makes on the 2D plane (your paper).
+
+Using Euler’s Formula
+Euler’s formula states that if a finite, connected, planar graph is drawn in the plane without any edge intersections, and v is 
+the number of vertices, e is the number of edges and f is the number of faces (regions bounded by edges, including the outer, 
+infinitely large region), then
+v − e + f = 2.
+easy as a piece of cake, yet it states that the graph must be connected, what happens if the graph is not connected. 
+Utilizing the divide an conquer paradigm  we can divide the graph into n component each component is a connected component, 
+then we apply Euler’s formula on the n component and add the result. That’s right but we still missing something.
+
+We are counting the outer face with every component. To fix this simply the eqn becomes ∑ (#faces of every component) – n + 1. 
+Let’s verify this example first component; f = 2-V+E,  f = 2-3+3 = 2. Second component f = 2-4+4 = 2. Total #faces = (2+2) – 2 +1 = 3.
+to code this we can use BFS or DFS to obtain the #edges and the #nodes in every component. you can find the implementation here.
+
+CODE
+#define BLACK 1
+#define WHITE 0
+#define RED -1
+#define nNodes 58
+ 
+typedef pair<int, int> ii;
+typedef vector<int> vi;
+typedef vector<ii> vii;
+ 
+bool v[nNodes];
+//for the adjList used Pair<node, cost>
+vector <vii> adjList;
+int n;// # nodes in current graph
+ 
+int solve(){
+    //returns the number of faces using Euler Formula V − E + f = 2
+    // using BFS on a adjList
+    fill(v,v+n,WHITE);
+    queue<int> q;
+    int current, nEdge, nVertix, faces = 0;
+    ii t;
+ 
+    for (int i = 0 ; i < n; i++){
+        if (v[i] == WHITE){
+            q.push(i);
+            nEdge = 0 ;
+            nVertix = 0;
+            while (!q.empty()){
+                current = q.front() ;q.pop();
+                if (v[current] == BLACK) continue ;
+                for(int j = 0 ; j < (int)adjList[current].size() ;j++){
+                    t = adjList[current][j];
+                    if (v[t.first] == WHITE){
+                        q.push(t.first);
+                        nEdge++;
+                    }
+                }
+                v[current] = BLACK;
+                nVertix++;
+ 
+            }
+        faces +=  2+nEdge-nVertix-1;
+        }
+    }
+    return faces+1;
+}
+ 
+int main(){
+    for (int i = 0 ; i < nNodes ; i++)
+        adjList.push_back(vii());
+ 
+    int e,next;
+    char buffer[50];
+    map<char, int> m;
+ 
+    while (scanf ("%d %d",&n,&e) == 2){
+        gets(buffer);
+        next = 0;
+        m.clear();
+        for (int i = 0 ; i < n ; i++)
+            adjList[i].clear();
+ 
+        for (int i = 0 ; i < e ; i++){
+            gets(buffer);
+            if (m.find(buffer[0])==m.end())
+                m[buffer[0]]=next++;
+            if (m.find(buffer[2])==m.end())
+                m[buffer[2]]=next++;
+ 
+            adjList[m[buffer[0]]].push_back(ii(m[buffer[2]],1));
+            if (buffer[0]!=buffer[2])
+                adjList[m[buffer[2]]].push_back(ii(m[buffer[0]],1));
+        }
+ 
+        printf("%d\n",solve());
+    }
+}
+
+Using Disjoint Sets
+First, think about when do we add another face to the graph ? the answer is when we complete a cycle – recall from the definition 
+of planar graph no edges crossBuilding this graph, starting with 0 edges we have 1 face (outer face). Add edges AB, BF, FE still 
+we have 1 face. At the moment we add AE we complete a cycle increasing the #faces to 2. By the same manner adding the edges BC and
+CD increase the number of faces. The question is how can we use disjoint sets to implement this ? 
+the answer is very easy, for every edge if the edge is connecting 2 nodes that are on the same set increment #faces.– 
+
+CODE
+#define nNodes 58
+ 
+//disjoint Sets
+int parent[nNodes];
+ 
+void init(int n){
+    n++;
+    for (int i =0 ; i < n ; i ++)
+        parent[i] = i;
+}
+ 
+int find(int i){
+    return parent[i]==i?i:(parent[i] = find(parent[i]));
+}
+ 
+bool isSameSet(int i, int j){
+    return find(i)==find(j);
+}
+ 
+void unionSets(int i, int j){
+    parent[find(i)] = find(j);
+}
+ 
+//end of disjoint sets
+ 
+int main(){
+    int v,e,faces,next;
+    char buffer[50];
+    map<char, int> m;
+ 
+    while (scanf ("%d %d",&v,&e) == 2){
+        gets(buffer);
+        init(v);
+        faces = 0;
+        m.clear();
+        next = 0;
+ 
+        for (int i = 0 ; i < e ; i++){
+            gets(buffer);
+ 
+            if (m.find(buffer[0])==m.end())
+                m[buffer[0]]=next++;
+            if (m.find(buffer[2])==m.end())
+                m[buffer[2]]=next++;
+ 
+            if(isSameSet(m[buffer[0]],m[buffer[2]]))
+                faces++;
+            unionSets(m[buffer[0]],m[buffer[2]]);
+        }
+        printf("%d\n",faces+1);// the added one is the outer face
+    }
+}
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
