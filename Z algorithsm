@@ -1,4 +1,12 @@
-Complexity : O(n+m) , n is the length of the string and m is the length of the pattern.
+This algorithm finds all occurrences of a pattern in a text in linear time. Let length of text be n and of pattern be m, 
+then total time taken is O(m + n) with linear space complexity. 
+Now we can see that both time and space complexity is same as KMP algorithm but this algorithm is Simpler to understand.
+In this algorithm, we construct a Z array.
+What is Z Array?
+For a string str[0..n-1], Z array is of same length as string. An element Z[i] of Z array stores length of the longest 
+substring starting from str[i] which is also a prefix of str[0..n-1]. The first entry of Z array is meaning less as complete
+string is always prefix of itself.
+
 // A C++ program that implements Z algorithm for pattern searching 
 #include<iostream> 
 using namespace std; 
