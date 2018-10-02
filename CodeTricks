@@ -318,7 +318,8 @@ in the same sub tree else it will be out of its subtree.
 ----------------------------------------------------------------------------------------------------------------------------------------
 Instead of clearing a vis array every loop just put a value and make it the visited value only for every loop.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you want to make a frequencey array of large numbers map them first to smaller numbers and then do the vis array
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
