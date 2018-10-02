@@ -316,7 +316,8 @@ If you want to know if a certain node is in the subtree of a certain root put fo
 integer when you exist from it and then just check if the node st and en is between the range of the st and end of the root so it is
 in the same sub tree else it will be out of its subtree.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Instead of clearing a vis array every loop just put a value and make it the visited value only for every loop.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
