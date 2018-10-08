@@ -17,7 +17,7 @@
 	point m2 = (b+c)*0.5, v2 = b-c, pv2 = point(v2.Y, -v2.X);
 	point end1 = m1+pv1, end2 = m2+pv2, center;
 	intersectSegments(m1, end1, m2, end2, center);
-	return make_pair( length(a-center), center );  
+	return make_pair( length( (a-center) ), center );  
 }
  --------------------------------------------------------------------------------------------------------------------------------------
  Intersection between line and circle 
@@ -115,7 +115,7 @@ void MEC() {
 		ps--;
 		MEC();
 
-		if(length(pnts[ps]-cen) > rad) {
+		if(length( (pnts[ps]-cen) ) > rad) {
 			r[rs++] = pnts[ps];
 			MEC();
 			rs--;
