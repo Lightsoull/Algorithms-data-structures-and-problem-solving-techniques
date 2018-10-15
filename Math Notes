@@ -134,6 +134,32 @@ Any triangle with integer vertexes it is doubled area is integer.
 If A * B = C * D  this doesn't mean that A is equal to C or D and B is equal to C or D, this means that A*B and C*D have the same
 prime factors but not the same numbers.
 ----------------------------------------------------------------------------------------------------------------------------------------
+If you are dealing with equations and you want to write (num)/2 and num is not even and we want to get the ceiled value so 
+its written way is (num+1)/2.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
