@@ -320,7 +320,12 @@ Instead of clearing a vis array every loop just put a value and make it the visi
 ----------------------------------------------------------------------------------------------------------------------------------------
 If you want to make a frequencey array of large numbers map them first to smaller numbers and then do the vis array
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you want to get the number of paths in a tree so if there is an edge from U to V then (the number of nodes under the V sub tree) 
+multiplied by the (total number of nodes - the number of nodes under the V sub tree )
+----------------------------------------------------------------------------------------------------------------------------------------
+If you want to know the number of paths with odd edges then multiply the number of nodes at even level and the number of nodes at odd
+level assume we start from level zero.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
