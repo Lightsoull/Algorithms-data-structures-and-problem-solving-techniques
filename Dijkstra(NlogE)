@@ -13,7 +13,7 @@ struct node
 
     bool operator < ( const node &e) const
     {
-        return w> e.w;
+        return w> e.w;                         // if it returns true means swap
     }
 };
 
