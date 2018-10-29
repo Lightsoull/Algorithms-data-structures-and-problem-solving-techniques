@@ -137,7 +137,10 @@ prime factors but not the same numbers.
 If you are dealing with equations and you want to write (num)/2 and num is not even and we want to get the ceiled value so 
 its written way is (num+1)/2.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+iff A>B then A%B <= (A+1)/2 .
+----------------------------------------------------------------------------------------------------------------------------------------
+If a number let it be T decreases by T%=B every time and T>B so if T is 10^18 it will be zero in log(n) complexity
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
