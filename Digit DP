@@ -1,0 +1,58 @@
+Problem here is to get the sum of of numbers from l to r that have at most k different digits.
+
+string s;
+pair<ll,ll> mem[20][(1<<11)][2][2];
+ll pw[20];
+const ll MOD=998244353;
+ll l,r;
+ll k;
+pair<ll,ll> solve(int id,int msk,int lim,int zero)
+{
+
+    if(id==sz(s))
+        return mp(1,0);
+
+    pair<ll,ll> &ret=mem[id][msk][lim][zero];
+    if(ret!=mp(-1ll,-1ll))
+        return ret;
+    ret=mp(0,0);
+    int till= (lim==1? s[id]-'0':9);
+    for(ll i=zero;i<=till;i++)
+    {
+        if(countNumBit1(msk)==k&&getBit(msk,i)==0)
+            continue;
+
+        pair<ll,ll> p = solve(id+1,msk | (1<<i), lim && i==till ,0);
+        ll val= (i*pw[sz(s)-1-id])%MOD;
+
+         ret.first= (ret.first+p.first)%MOD;
+         ret.second= (ret.second+p.second)%MOD;
+         ret.second= (ret.second+((val*p.first)%MOD))%MOD;
+
+
+
+    }
+
+  return ret;
+}
+ll calc(ll num)
+{
+    clr(mem,-1);
+    s=to_string(num);
+    ll ans=0;
+    for(int i=0;i<sz(s);i++)
+    {
+       ans= (ans+ solve(i,0,(i==0),1).second)%MOD;
+
+    }
+    return ans;
+}
+int main()
+{
+    cin>>l>>r>>k;
+    pw[0]=1;
+    for(int i=1;i<=19;i++)
+        pw[i]=(pw[i-1]*10ll)%MOD;
+
+    cout<< ((calc(r)-calc(l-1))%MOD+MOD)%MOD <<endl;
+}
