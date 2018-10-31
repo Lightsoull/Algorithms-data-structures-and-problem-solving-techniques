@@ -326,7 +326,9 @@ multiplied by the (total number of nodes - the number of nodes under the V sub t
 If you want to know the number of paths with odd edges then multiply the number of nodes at even level and the number of nodes at odd
 level assume we start from level zero.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you want to just know whether there is an answer or not and you counting all the number of ways and the number of ways may become too
+big so MOD the answer with 1e9+7 
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
