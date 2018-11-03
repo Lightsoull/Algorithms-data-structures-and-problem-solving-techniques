@@ -1,0 +1,63 @@
+/*
+Every integer array or string can be hashed to a single number represent it.
+for example the integer array [1 2 5] its hashing will be (1*100+2*10+5)= 125 as a number.
+            the string st= "anf" its hashing will be ('a'*100+'n'*10+'f')= some number.
+hash code : is the number that the string or the array will be hashed to.
+how to generate the hash code for a string/array
+
+for(int i=0;i<str.size();i++)
+code=( code*BASE+(str[i]-'a') )%MOD;
+
+BASE= 311
+MOD= 1000000007
+this may cause a collosion which may cause WA but rarely if this happened change the MOD and/or the BASE but if you will change the MOD 
+change it to another prime.
+
+Rolling hash by ( Rabin-Karp algorithm )
+Problem: getting the occurancess of a certain subtring in to a string
+the idea: since i can express each string as a number by hashing so if i am searching for a string is just like i am searching for a 
+number in a linear time.
+how ?
+I can move on to the main string and calculate the hash code for the first M chars, M is the length of the pattern and check whether
+it is equal to the hash code of the pattern or not and then delete the first char you taked and add the last char just like slidding
+window problem.
+CODE
+ll removeAt(ll code, int idx, int val) {
+  return (code - (val * fastpow(BASE, idx)) % MOD + MOD) % MOD;
+}
+
+ll addAt(ll code, int idx, int val) {
+  return (code + (val * fastpower(BASE, idx)) % MOD) % MOD;
+}
+
+ll shiftLeft(ll code) {
+  return (code * BASE) % MOD;
+}
+void pattern_search(string main, string pat) {
+  int n = pat.size();
+  ll patCode = 0;
+  for (int i = 0; i < (int) pat.size(); ++i) {
+    patCode = shiftLeft(patCode);
+    patCode = addAt(patCode, 0, val(pat[i]));
+  }
+
+  ll subCode = 0;
+  string subStr;
+  for (int i = 0; i < (int) main.size(); ++i) {
+    if (i - n >= 0) {
+      subCode = removeAt(subCode, n - 1, val(main[i - n]));
+      subStr.erase(subStr.end() - 1);
+    }
+    subCode = shiftLeft(subCode);
+    subCode = addAt(subCode, 0, val(main[i]));
+    subStr.insert(subStr.begin(), main[i]);
+    if (patCode == subCode)
+      cout << subCode << "\t" << subStr << "\n";
+  }
+}
+complexity : O(n)
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
