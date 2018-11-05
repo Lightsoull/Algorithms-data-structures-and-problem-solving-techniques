@@ -39,8 +39,8 @@ void bridgetree()
     dfs(1,-1);
     for(int i=0;i<sz(br);i++)
     {
-        int x=getpar(br[i].first);
-        int y=getpar(br[i].second);
+        int x=getpar(bridges[i].first);
+        int y=getpar(bridges[i].second);
         BridgeTree[x].pb(y);
         BridgeTree[y].pb(x);
     }
