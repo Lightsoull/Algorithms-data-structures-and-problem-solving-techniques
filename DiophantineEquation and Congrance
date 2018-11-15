@@ -1,0 +1,88 @@
+DiophantineEquation : is an equation in which its value should be only integers it either have no solution or have infinite number of 
+solutions.
+LDE (linear DiophantineEquation)
+ax+by=c, this equation have solution iff c % gcd(a,b), remeber if c==gcd(a,b) then i can get x and y by extended eucldian okay now
+let t= c/g where g = gcd(a,b) then get the extended eucldian for ax+by=g and then multiply x and y by t.
+But this is one solution for the equation and it has inf solutions how to get some of them, By bezout's identity i can get all the x and y
+of the extended eucldian then multiply them by t.
+
+ll LinearDiophantineEq(ll a,ll b,ll c,ll &x,ll &y,ll found)
+{
+    ll g= extentedEucldian(a,b,x,y);   // written before
+    if(found= (c%g==0))
+     x*= (c/g) , y*= (c/g);
+     
+     return g;
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+Congrance : two integer numbers a and b are colled (congrant module n) if a=b (mod n) it means that a%n = b%n.
+- this means (a-b)%n=0.
+- this means a = b-qn  for some integer q.
+If ax = ay (mod n) and gcd(a,n) = d  then a=b (mod n/d).
+Congrance Facts
+- if a=b (mod m)  then a^n = b^n (mod m) for n>=1.
+- if p is prime (x+y)^p = (x^p + y^p) (mod p).
+- if a=b (mod m) and b=c (mod m) then a=c (mod m)
+- if a=b (mod m) and c=d (mod m) then a +/- c = b +/- d (mod m)
+- if a=b (mod m) and c=d (mod m) then ac = bd (mod m)                                     
+- if a=b (mod m) then a+c=b+c (mod m)
+- if a=b (mod m) then ac=bc (mod m)
+- if ax=b (mod m) then x=(b*a^-1) (mod m).
+
+Note 
+there is a value for mod with -ve for example 27%28 the positive value is 27 but it can be also -1.
+
+Congrance and large powers
+eg1  3^5555 % 80
+given 3^4 % 80 =1 so  5555= 4*1388+3 so it will end up 3^3 % 80 
+
+eg2 (3^1000 +3)%28
+given 3^3 = 27 , 27%28 = -1 and 1000 = 3*333 + 1 so ((-1+3)+3)%28.
+----------------------------------------------------------------------------------------------------------------------------------------
+Linear Modular Equation
+ax=b (mod n)
+it can be rearranged to b=ax-qn which is LDE (linear dolphine equation) here x has max n solutions because of mod more than that there 
+will duplicates. one can proof that there is max g unique solutions for x where g= gcd(a,n).
+CODE
+----
+// solves the equation ax=b (mod n)
+vector<ll> modularEquation(ll a,ll b,ll n)
+{
+    vector<ll> sols;
+    ll x,y;
+    ll g=extendedeucldian(a,n,x,y);
+    if(b%g!=0)
+        return sols; // no solutions
+    
+    x= ((x*b/g)%n+n)%n;   // i just multiply the the x by t like LDE
+    // generate the other solutions
+    for(int i=0;i<g;i++)
+    {
+        sols.pb((x+i*n/g)%n);
+    }
+    
+    sort(all(sols));
+    return sols;
+    
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
