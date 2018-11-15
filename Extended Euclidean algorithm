@@ -1,0 +1,88 @@
+/*
+
+Bézout's identity — Let a and b be integers with greatest common divisor d. Then, there exist integers x and y such that
+ax + by = d. More generally, the integers of the form ax + by are exactly the multiples of d.
+so ax + by = kd for integer value k.
+
+Extended Euclidean algorithm target is to get the x and y that makes ax + by = d.
+Explanation 
+gcd(a,b)       a/b(integer division)     gcd(a,b)= a*x + b*y   x= prev_y   y= prev_x-q*x
+(16,2)         8                            2=16*0+2*1              0            1-8*0
+(2,0)          -                            2=2*1+0*0           (base x=1 base y=0)
+(here we
+stop and
+consider 
+the gcd 
+value is 2)
+--------------------------------------------------------------------------------------------
+CODE
+// ax + by = g = gcd( a,b )
+ll extended_Euclid(ll a,ll b,ll &x,ll &y)
+{
+    if(b==0)
+    {
+        x=1; y=0;  // base values
+        return a;
+    }    
+    ll g=extended_Euclid(b,a%b,y,x);
+    
+    y-= (a/b)*x; 
+    return g;
+}
+// Take care if the sign of a or b is -ve then work on its abs value then later you update the value of x and y accorging to the sign of
+a and b.
+-------------------------------------------------------------------------------------------------
+Extended Eucludian for more than two numbers  ax + by + cz = gcd(a,b,c) = gcd( gcd(a,b),c)
+so there is x and y such that x*gcd(a,b) + y*c =  gcd( gcd(a,b),c) = gcd(a,b,c) by this you can get y which is z in the orginal equation
+by getting z I can say that ax + by = gcd(a,b,c)-c*z (which is constant ) so i could get x and y. 
+                                      --------------
+you can extend this to n numbers not just three.
+----------------------------------------------------------------------------------------------------------------------------------------
+Extended Eucludian generates one value for x and y but there is a lot of other values
+eg  ax + by = d
+    a(x+b) + b(y-a) = d
+    a(x+kb) + b(y-ka) = d
+    a(x+kb/g) + b(y-ka/g) = d   where g=gcd(a,b)
+so if you computed one solution for x and y using extended eucldian algorithm you can compute all other solutions
+in the form  ( x+k*(b/g) ), (y+k*(a/g) )  where x,y are the solutions from the extended euldian algorithm.
+
+Among all the solutions for bezout's coffients (x and y) exactly one solution
+|x| < b/g    |y| < a/g  and this solution is the solution produced by extended eculdian algo
+--------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
