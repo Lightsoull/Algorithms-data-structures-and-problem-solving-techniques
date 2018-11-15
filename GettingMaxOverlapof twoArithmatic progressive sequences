@@ -1,1 +1,46 @@
+Arithmatic Progressive sequence : is a sequence where the difference between the numbers are equal eg 2 4 6 8 10 where the difference
+equals to two.
+Problem : you have block of size n1 it starts every m1 mins intially it begins at la
+          and you have block of size n2 it starts every m2 mins intially it begins at lb.
+and i want to get the max overlap between them .
+Solution
+to get the max overlap one block begining must be inside the other block, the first start = la+ (m1+n1)*k1 the second start = 
+lb+ (n2+m2)*k2 where k1,k2 are some integers, Now i want the difference between the first start and the second start to as min as 
+possible differnece = lb-la-(m1+n1)*k1+(n2+m2)*k2  ( this part by bezout's idenity equals to k*(gcd(m1+n1,n2+m2)) let g= gcd(m1+n1,n2+m2)
+                             ---------------------
+so diff= lb-la+k*g now i want the k to get the min diff so i will force the value of diff to be zero so k= (la-lb)/g ,k here can be float 
+which means there is no k to make the difference equals to zero so here i will try to take the ceil of k or the floor of k what results 
+in max overlap.
+
+CODE
+ll len(int l1, int r1, int l2, int r2)
+{
+    return min(r1, r2) - max(l1, l2) + 1;
+}
+int main()
+{
+    ll la, ra, ta, lb, rb, tb;
+    cin >> la >> n1 >> m1 >> lb >> n2 >> m2;
+    ll ta=(n1+m1);   ll tb=(n2+m2)
+    ll g = __gcd(ta, tb);
+    ll k1 = ceil((la - lb) / (long double) g);
+    ll k2 = floor((la - lb) / (long double) g);   // k1,k2 may be -ve
+    ll diff1 = lb - la + k1 * g, diff2 = lb - la + k2 * g;  
+    ll ans = 0;
+    for (ll diff : {diff1, diff2})
+    {
+        ll _lb = la + diff;
+        ll _rb = _lb + n2;
+
+        ans = max(len(la, la+n1-1, _lb, _rb), ans);
+    }
+
+        cout << ans;
+}
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+To get the max intersection 
 
