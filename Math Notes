@@ -141,7 +141,11 @@ iff A>B then A%B <= (A+1)/2 .
 ----------------------------------------------------------------------------------------------------------------------------------------
 If a number let it be T decreases by T%=B every time and T>B so if T is 10^18 it will be zero in log(n) complexity
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Force Value Technique
+If i have a equation where the variable is x , ax-diff=b and i want to get the value of x that makes the diff min possible so force (let 
+the value of diff equal to zero ) the value of diff to be min possible which is zero then get the x if it supposed to be integer and it 
+is float then there is no integer value for x to make diff equals to zero to to be min diff yu may ceil the value of x .
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
