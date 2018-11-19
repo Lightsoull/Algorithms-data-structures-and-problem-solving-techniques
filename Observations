@@ -1,0 +1,10 @@
+1- if i have a convex polgon the primeter of it in manhattem distance is the primeter of the rectangle a round it.
+
+2- the primeter of a triangle in manhattem distance : Let's show that the optimal triangle uses at least 2 of the extreme points.
+Imagine some optimal triangle, and its bounding rectangle. Notice that since each edge of the bounding rectangle must touch some
+vertex of the triangle (it is bounding after all), and we have 4 edges and 3 vertices, then there must be some vertex of the triangle 
+that touches 2 edges of the rectangle (so it coincides with a rectangle vertex). If this is the case, we know that in comparison with 
+the 2 other vertices, this vertex has "extremal" X and Y coordinates (minimal/maximal X, and minimal/maximal Y). Without loss of 
+generality, assume this vertex has maximum X and Y. Then to optimize the perimeter, the other two vertices should have smallest 
+possible X and smallest possible Y. We can pick these 2 vertices to be 2 of the extreme points (one with minimal X and one with minimal Y).
+
