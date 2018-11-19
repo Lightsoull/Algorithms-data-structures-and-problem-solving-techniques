@@ -1,0 +1,102 @@
+/*
+Note : this doesn't work if you want to get the min triangle primeter.
+Manhattan distance: integer distance where the distance between two points (x1,y1) and (x2,y2) is d= |x1-x2|+|y1-y2|.
+The primeter of a triangle: is the sum of all the lengths of its sides.
+The primeter of a triangle of 3 points A(x1,y1) B(x2,y2) C(x3,y3) in Manhattan distance is ( i take the points in clock wise order )
+|x1 — x2| + |y1 — y2| + |x2 — x3| + |y2 — y3| + |x3 — x1| + |y3 — y1| and if i want to get max triangle primeter so i need to maxmize this 
+expression but here the moduls value can be +ve or -ve so this disturbe us, we have 2^6 options of the signs of the moduls so we will 
+assign a certain sign and expand the expression so it will be  c1*x1 + c2*y1 + c3*x2 + c4*y2 + c5*x3 + c6*y3 for constants c1,c2..
+lets divide them to 3 arrays A,B and C
+A[pos]= c1*x[pos]+c2*y[pos]
+B[pos]= c3*y[pos]+c4*y[pos]
+C[pos]= c5*y[pos]+c6*y[pos]
+So we want A[i]+B[j]+C[k] to max as possible for three idexes i < j < k so we could do that by Dp.
+
+CODE
+int dp[MAXN][3];
+int mod=INT_MAX;
+int solve(int pos, int f)
+{
+    if(f == 3)return 0;
+    if(dp[pos][f] != -1)
+        return dp[pos][f];
+    int best=-mod;
+    if(f == 0)
+    {
+        if(pos < n-2)
+            best=max(best, solve(pos+1, f));
+        best=max(best, A[pos]+solve(pos+1, f+1));
+    }
+    if(f == 1)
+    {
+        if(pos < n-1)
+            best=max(best, solve(pos+1, f));
+        best=max(best, B[pos]+solve(pos+1, f+1));
+    }
+    if(f == 2)
+    {
+        if(pos < n)
+            best=max(best, solve(pos+1, f));
+        best=max(best, C[pos]+solve(pos+1, f+1));
+    }
+    return dp[pos][f]=best;
+}
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;i++)
+        cin>>X[i]>>Y[i];
+    
+    for(int i : {-1, 1})
+        for(int j : {-1, 1})
+            for(int k : {-1, 1})
+                for(int l : {-1, 1})
+                    for(int o : {-1, 1})
+                        for(int p :{-1, 1})
+                            {
+                                int x1=i-o, y1=j-p, x2=k-i, y2=l-j, x3=o-k, y3=p-l;
+                                for(int pos=1; pos<=n; pos++)
+                                {
+                                    A[pos]=x1*X[pos]+y1*Y[pos];
+                                    B[pos]=x2*X[pos]+y2*Y[pos];
+                                    C[pos]=x3*X[pos]+y3*Y[pos];
+                                }
+                                memset(dp, -1, sizeof dp);
+                                ans=max(ans, solve(1, 0));
+                            }
+    cout<<ans;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
