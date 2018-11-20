@@ -8,3 +8,6 @@ the 2 other vertices, this vertex has "extremal" X and Y coordinates (minimal/ma
 generality, assume this vertex has maximum X and Y. Then to optimize the perimeter, the other two vertices should have smallest 
 possible X and smallest possible Y. We can pick these 2 vertices to be 2 of the extreme points (one with minimal X and one with minimal Y).
 
+3- If you have queries and is a query contradicts with a pervious ones it will be neglected so you can't proceed the queries offline.
+
+
