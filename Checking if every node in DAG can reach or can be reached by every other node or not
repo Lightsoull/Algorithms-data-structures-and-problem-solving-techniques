@@ -1,0 +1,90 @@
+/*
+Checking if every node in DAG can reach or can be reached by every other node or not.
+Idea : If I have a node v that depend on node u this means that in the topological order u come before v 
+and if a node g depend on a node v then v will come before g in the topolgical order, so if i get the topolgical
+order of the nodes in the graph and then traverse them when i reach a node v this means that every node i reached
+before must be reacheable from v so i will check that, and the same for every node g must reach v so i will just
+inverse the edges direction and topological order and check by the same way.
+*/
+const int N=300009;
+vector< vector<int> > graph(N),iversegraph(N),pre(N);
+vector< set<int> > child(N);
+int cnt[N],vis[N];
+vector<int> tp;
+void dfs(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(vis[nw])
+            continue;
+        dfs(nw);
+    }
+    tp.pb(no);
+}
+void calc(vector<int> &tp,vector<vector<int> > &v)
+{
+    for(int i=0;i<N;i++)
+        child[i].clear(),pre[i].clear();
+    set<int> ZeroIn;
+    for(int i=sz(tp)-1;i>=0;i--)
+    {
+        int no= tp[i];
+        for(int j=0;j<sz(v[no]);j++)
+        {
+            int nw=v[no][j];
+            if(sz(pre[nw])==0)
+            {
+                child[no].insert(nw);
+                   ZeroIn.erase(nw);
+            }
+            else if(sz(pre[nw])==1)
+            {
+                child[pre[nw][0]].erase(nw);
+            }
+            pre[nw].pb(no);
+        }
+        if(sz(ZeroIn)==0)
+            ;
+        else if(sz(ZeroIn)==1)
+        {
+            int u= (*ZeroIn.begin());
+            if(sz(child[u])!=0)
+                cnt[no]+=2;
+            else
+                cnt[no]+=1;
+        }
+        else
+            cnt[no]+=2;
+
+        ZeroIn.insert(no);
+    }
+}
+int main()
+{
+    int n,m,f,t;
+    cin>>n>>m;
+    for(int i=0;i<m;i++)
+    {
+        cin>>f>>t;
+        graph[f].pb(t);
+        iversegraph[t].pb(f);
+    }
+    for(int i=1;i<=n;i++)
+        if(!vis[i])
+          dfs(i);
+    reverse(all(tp));
+    calc(tp,graph);
+    reverse(all(tp));
+    calc(tp,iversehraph);
+    int ans=0;
+    for(int i=1;i<=n;i++)
+    {
+        if(cnt[i]==0)   // cnt[i]=0 when ith node can reach/reachable by all the vertexes
+            ans++;      // cnt[i]=1 when ith node can reach/reachable by all the vertexes except only one node
+    }                   // and so on...
+
+  cout<<ans<<endl;
+}
+---------------------------------------------------------------------------------------------------------------------------------------
