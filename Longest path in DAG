@@ -1,0 +1,77 @@
+int solve(int no)
+{
+
+    int &ret=mem[no];
+    if(ret!=-1)
+        return ret;
+    int ans=0;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+
+        ans=max(ans,1+solve(nw));
+    }
+
+ return ret=ans;
+}
+void print(int no)
+{
+    int ans=0,Node=-1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        int res= 1+solve(nw);
+        if(res>=ans)
+        {
+            Node=nw;
+            ans=res;
+        }
+    }
+    if(Node!=-1)
+    {
+    Path.pb(Node);
+    return print(Node);
+    }
+}
+int main()
+{
+    int n,m,f,t;
+    cin>>n>>m;
+
+    for(int i=0;i<m;i++)
+    {
+        cin>>f>>t;
+        v[f].pb(t);
+    }
+    int ans=0,st;
+    clr(mem,-1);
+    for(int i=1;i<=n;i++)
+    {
+        int res=solve(i);
+        if(res>=ans)
+        {
+            ans=res;
+            st=i;
+        }
+    }
+    Path.pb(st);
+    print(st);
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
