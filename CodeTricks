@@ -329,6 +329,9 @@ level assume we start from level zero.
 If you want to just know whether there is an answer or not and you counting all the number of ways and the number of ways may become too
 big so MOD the answer with 1e9+7 
 ----------------------------------------------------------------------------------------------------------------------------------------
+To get a set of unique elements that every member of it occurs at least X times, loop on the array and once the occurance of an element
+reach exactly X take it.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
