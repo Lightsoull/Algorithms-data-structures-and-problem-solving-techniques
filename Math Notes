@@ -146,24 +146,9 @@ If i have a equation where the variable is x , ax-diff=b and i want to get the v
 the value of diff equal to zero ) the value of diff to be min possible which is zero then get the x if it supposed to be integer and it 
 is float then there is no integer value for x to make diff equals to zero to to be min diff yu may ceil the value of x .
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-a/b + b/a will be minminum when a=b and as much as the difference increase the value will increase.
+- a/b and c/d if the difference between them equal that doesn't mean their actual values are equal.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
