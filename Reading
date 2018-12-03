@@ -1,0 +1,38 @@
+-Degree set is the set ( unique & sorted of the degrees of each node in an undirected graph ), degree of a node is the number 
+of edges going out from it or to it.
+-------------------------------------------------------------------------------------------------------------------------------------------
+-the word evenly means all have the same
+-------------------------------------------------------------------------------------------------------------------------------------------
+intersection in a graph problem means node
+-------------------------------------------------------------------------------------------------------------------------------------------
+there is a difference between playing target the winning and playing target max Winning
+-------------------------------------------------------------------------------------------------------------------------------------------
+check the output format carefully there may be a period at the end of the line
+-------------------------------------------------------------------------------------------------------------------------------------------
+What ever your own opinion focus on what the problem states
+-------------------------------------------------------------------------------------------------------------------------------------------
+read the enqualities in the problems well
+-------------------------------------------------------------------------------------------------------------------------------------------
+Parity means odd / even
+-------------------------------------------------------------------------------------------------------------------------------------------
+When i say node X and node Y are connected so " connected " means from X to Y or from Y to X
+-------------------------------------------------------------------------------------------------------------------------------------------
+At Probability if he says that he plays optimally means that he wants the max probability
+-------------------------------------------------------------------------------------------------------------------------------------------
+Graph cardinality means the number of vertexes in it
+-------------------------------------------------------------------------------------------------------------------------------------------
+Lexigraphically smaller for example it works as the comaprsion between C++ strings   121 < 31  but as numbers 31<121
+-------------------------------------------------------------------------------------------------------------------------------------------
+Rectangle parallelpiped means cubiod
+-------------------------------------------------------------------------------------------------------------------------------------------
+Read all the constrains carefully
+-------------------------------------------------------------------------------------------------------------------------------------------
+order pairs means that i have to count i,j  and j,i  they differ
+unordered pairs means that i,j = j,i so count it only once
+-------------------------------------------------------------------------------------------------------------------------------------------
+If there is a replies to a question just ask then scan a reply take it and consider it and work normaly not nessacesary to ask  the 
+number of questions equal to the number of replies 
+-------------------------------------------------------------------------------------------------------------------------------------------
+If you select m numbers from a list and he doesn't say that you are not allowed to take a number more than one time then you are 
+allowed to select any number more than one time
+-------------------------------------------------------------------------------------------------------------------------------------------
