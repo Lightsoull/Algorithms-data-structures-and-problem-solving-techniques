@@ -1,0 +1,93 @@
+- suppose i have a cartesian plane and i have points ( lattice points ) and i want to know whether i can put only two lines on that
+cartesian plane to cover all the points or not.
+
+- Solution 
+the idea is If the number of points is less than 3, then the answer is obviously YES. Else let's fix first 3 points. Check if 
+there is a solution if 1-st and 2-nd points lie on the same line. Just erase all points which lie on this line and check the 
+remaining points if they belong to one line. If we didn't find the answer, let's check points 1 and 3 in the same way. If its 
+failed again then line which contains point 1 can't contain points 2 and 3, so points 2 and 3 must lie on one line. If we 
+didn't succeed again, then there is no way to do it, so the answer is NO.
+
+CODE
+----
+int n;
+struct poit
+{
+    ll x,y;
+    poit(ll x=0,ll y=0) : x(x),y(y){}
+    poit operator -(poit &other)
+    {
+        return poit(x-other.x,y-other.y);
+    }
+};
+vector<poit> v;
+ll cp(poit a,poit b)
+{
+    return a.x*b.y- a.y*b.x ;
+}
+bool iscollinear(poit a,poit b,poit c)
+{
+    return cp(b-a,c-a)==0;
+}
+bool checksameline(vector< poit > points)
+{
+    for(int i=2;i<sz(points);i++)
+    {
+        if(!iscollinear(points[i-2],points[i-1],points[i]))
+            return 0;
+    }
+
+    return 1;
+}
+vector<poit> generatesameline(poit a,poit b)
+{
+    vector<int> L(100009,0);
+    vector<poit> v1;
+    for(int i=0;i<n;i++)
+    {
+        if(iscollinear(a,b,v[i]))
+            L[i]=1;
+    }
+    for(int i=0;i<n;i++)
+        if(L[i]==0)
+         v1.pb(v[i]);
+  return v1;
+}
+int main()
+{
+    cin>>n;
+    ll x,y;
+    for(int i=0;i<n;i++)
+    {
+        cin>>x>>y;
+        v.pb(poit(x,y));
+    }
+    if(n<=3)
+    {
+        cout<<"YES\n";
+        return 0;
+    }
+    vector<poit> ret1= generatesameline(v[0],v[1]);
+    bool res1= checksameline(ret1);
+    if(res1)
+    {
+        cout<<"YES\n";
+        return 0;
+    }
+    vector<poit> ret2= generatesameline(v[0],v[2]);
+    bool res2= checksameline(ret2);
+    if(res2)
+    {
+        cout<<"YES\n";
+        return 0;
+    }
+    vector<poit> ret3= generatesameline(v[1],v[2]);
+    bool res3= checksameline(ret3);
+    if(res3)
+    {
+        cout<<"YES\n";
+        return 0;
+    }
+    cout<<"NO\n";
+}
+----------------------------------------------------------------------------------------------------------------------------------------
