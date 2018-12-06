@@ -1,0 +1,14 @@
+-If the root index is i then the left child is 2*i and the right child is 2*i+1 and the root is one
+-------------------------------------------------------------------------------------------------------------------------------------------
+-If you shift the nodes at a certain level let it br lv by S value and when every node is shifted all its subtree are shifted too that
+means that every node at ith level starting from the lv level will be shifted by the a mount S and S will be multiplied by two as we 
+go down.
+CODE
+for(ll i=lv,Sh=S;i<=61;i++,Sh*=2)
+{
+      ll str= power[i-1];
+      ll en= power[i]-1;
+      ll cnt= (en-str+1);
+      levelNodeshift[i]=(levelNodeshift[i]+Sh)%cnt;
+}
+-------------------------------------------------------------------------------------------------------------------------------------------
