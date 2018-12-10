@@ -1,0 +1,316 @@
+/*
+-LineSweep: is a technique where i just use it to reduce the space search at some problem like Dp for example.
+-Vertical Line sweep: is like a line you move it from left to right or reverse.
+-Horizontal Line sweep: is like a line you move it from top to bottom or reverse.
+
+-ActiveWindow: is the set of things ( points, shapes whatever ) i only want to compare them discarding every thing else because those things
+only may affect the answer and any other thing for sure won't affect the answer, Sometimes the active window is too large it still 
+works in n^2 so the point is to minmize the active window so it would make the over all complexity good, So we could only check a 
+subset of the active window.
+So 
+1- get the active window
+2- decide whether you will check all the active window or just a subset.
+3- how i will check the subset i got.
+4- at the end what would be the over all complexity.
+
+-The Point will be to how you could get the active window sometimes you may use advanced data structures like treaps or segment tree or
+you may use another line sweep.
+
+Example 1
+
+Closest pair problem: problem where you are given a set of points in a plane and he wants the nearest distance between 2 points
+,first you may think brudeforce thinking but it works n^2, Line sweep technique is like a line you move it from left to right if the
+minminum distance till now id d and the line moved to a new point the points that may affect the answer is the points the from left of 
+the new point at most d distance so those points only will be my active window but there may be a lot of points in this window okay
+we for sure every pair points in the window the distance between them will be greater then or equal to d and there is a theorm (see down)
+--------------------
+Theroem that says that if i have a rectangle of width d and height 2d can contain at most six points such that any two
+points are at distance at least d, to prove that divide the rectangle in to 2 dxd rectangles put four points at one and another
+two at other draw six circles every point will be center and the circle radius will be d and it is not allowed to put any point
+in any circle bec this result in a pair of points the distance between them less than d which contradicts with d is the min 
+distance will find that there is no space to put a single point.
+--------------------
+CODE
+----
+#define     point   complex<double>
+#define   Y            imag()
+#define   X            real()
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+struct cmpX
+{
+    bool operator()(const &point a,const &point b)
+    {
+        if(dcmp(a.X,b.X)!=0)
+            return dcmp(a.X,b.X)<0;
+        return dcmp(a.Y,b.Y)<0;
+    }
+};
+struct cmpY
+{
+    bool operator()(const &point a,const &point b)
+    {
+        if(dcmp(a.Y,b.Y)!=0)
+            return dcmp(a.Y,b.Y)<0;
+        return dcmp(a.X,b.X)<0;
+    }
+};
+const double oo=1e15;
+// take care of value of infinity
+double closestpair(vector<point> &events)
+{
+    multiset< point , cmpY> activewindow;
+    sort(all(events),cmpX);
+    double d=oo;
+    int left=0;
+    for(int right=0;right<sz(events);right++)
+    {
+        while(left<right&& events[right].X-events[left].X > d)
+            activewindow.erase(activewindow.find(events[left++]));
+        auto strit= activewindow.lower_bound(point(-oo,events[right].Y-d));
+        /* here the value of x of point is negative infinity bec if there is same y value 
+           he must take the one with smallest x */
+        auto enit= activewindow.upper_bound(point(-oo,events[right].Y+d));
+        /* here the value of iterator keep it increased by one */
+        for(;strit!=enit;strit++)
+        {
+            d=min(d,length(events[right]-(*strit)));
+        }
+        activewindow.insert(events[right]);
+    }
+    return d;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Example 2
+
+Line segements intersection problem: the problem is to get the segements that intersect with each other first you may think of 
+brudeforce which works in n^2, but there is soluton with line sweep works in nlogn, the idea if you are moving from left to right 
+you will either pass by a start point of a segment or an end point of a segment if i am at a start point of a segement and there is 
+a segment that i already passed by its start and end points so for sure i don't intersect with it so there is no need to put it 
+in my active set so what i will put in my active set is the segments that starts and doesn't end till now but this may be too large
+okay there is an algorithsm that let us take only 2 segments to check from all the active window.
+Bently-Ottman Algorithm
+- Let current segment is C
+- From active set, let segment above C is A and
+segment below C is B
+- For Start Event
+- Check intersect(Current, Above)
+- Check intersect(Current, Below)
+- Add C to active Set
+- For End Event
+- Remove C from active Set
+- Check intersect(Above, Below)
+Implementation
+//we will build the segment strucure 
+#define     point   complex<double>
+#define   Y            imag()
+#define   X            real()
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+
+struct segment
+{
+    point p,q;
+    int seg_id;
+    
+    segment(){seg_id=-1;}
+    segment(point p_,point q_,int seg_id_)
+    {
+        if(q_<p_)
+            swap(q_,p_);
+        p=p_; q=q_;  seg_id=seg_id_;
+    }
+    double CY(int x) const
+    {
+        if(dcmp(p.X,q.X)==0)
+            return p.Y;   // segment i project on is vertical
+        
+        double t= 1.0*(x-p.X)/(q.X-p.X);
+        return p.Y+ t*(q.Y-p.Y);   /* this is the equation to get a point on a stright line but
+                                       here i only deal with Y component bec i only need to get 
+                                       the Y component not the whole point*/
+    }
+    /* here because i will sort according to this segment is above 
+       me or not, i will decide if it is above or not if it is above
+       so i will put it first, i will decide whether it is above or not
+       by taking the max X of the start point of the two segments then
+       project this X on the first and second segment the one with lower
+       Y axis is at bottom and other is above.
+    */
+        
+    bool operator<(const segment &rhs)const  
+    {
+        if(same(p,rhs.p)&&same(q,rhs.q))
+            return false;
+        int maxX=max(p.X,rhs.p.X);
+        int yc= dcmp(CY(maxX),rhs.CY(maxX)); 
+        
+        if(yc==0) 
+            return seg_id < rhs.seg_id;
+        return yc<0;
+    }
+};
+        
+// Event structure
+int Entry=1,Exist=-1;
+
+struct Events
+{
+    point p;
+    int type,seg_id;
+    // sort on smaller X if tie put the entry point first if tie put smaller Y
+    bool operator<(const Event & rhs)const
+    {
+        if(dcmp(p.X,rhs.p.X)!=0)
+            return dcmp(p.X,rhs.p.X)<0;
+        if(type!=rhs.type)
+            return type>rhs.type;
+        return dcmp(p.Y,rhs.p.Y)<0;
+    }
+};
+
+int n;
+segment segments[MAX_size];
+Events events[MAX_size];
+set< segment > sweepset;
+typedef set<segment> :: iterator ITER;
+
+// input
+cin>>n;
+for(int i=0;i<n;i++)
+{
+    cin>>x>>y;
+    point p1=point(x,y);
+    cin>>x>>y;
+    point p2=point(x,y);
+    segments[i]=segment(p1,p2,i);
+}
+// some used functions
+bool intersectseg(ITER seg1ITER,ITER seg2ITER)
+{
+    if(seg1ITER==sweepset.end()||seg2ITER==sweepset.end())
+        return false    
+    return intersect(seg1ITER->p,seg1ITER->q,seg2ITER->p,seg2ITER->q);
+}
+ITER after(ITER cur)
+{
+    return (cur==sweepset.end() ? sweepset.end():++cur);
+}
+ITER before(ITER cur)
+{
+    return (cur==sweepset.begin()? sweepset.end():--cur);  // just make sweepset.end() as a flag 
+}
+void foundintersection(int i,int j)
+{
+    cout<<i+1<<" "<<j+1<<endl;
+    // +1 because it is zero based
+}
+void bentleyottman_linesweep()  // works in O(nlogn)
+{
+    // prepare events
+    for(int i=0;i<n;i++)
+    {
+        events[2*i]={segments[i].p,Entry,i};
+        events[2*i+1]={segments[i].q,Exist,i};
+    }
+    sort(events,events+2*n);
+    for(int i=0;i<2*n;i++)
+    {
+        if(events[i].type==Entry)
+        {
+            auto status= sweepset.insert(segments[events.seg_id]);
+            ITER cur=status.first, below= before(cur), above=after(cur);
+            if(!status.second)
+            {
+                Foundintersection(cur->seg_id,events[i].seg_id); // Duplicate segment
+            }
+            else
+            {
+                if(intersectseg(cur,above))
+                    foundintersection(cur->seg_id,above->seg_id);
+                if(intersectseg(cur,below))
+                    foundintersection(cur->seg_id,below->seg_id);
+            }
+        }
+        else
+        {
+            ITER cur= sweepset.find(segments[events[i].seg_id]);
+            if(cur==sweepset.end())    // Duplicate segment
+                continue;        
+            ITER below= before(cur), above=after(cur);
+            if(intersectseg(above,below))
+                foundintersection(above->seg_id,below->seg_id);
+            sweepset.erase(cur);
+        }
+    }
+}
+-------------------
+Some applications on that
+1- test if a polygon is simple or complex, note simple polygon no edges intersection so it is the same problem but
+   take care for end points bec they already intersect at simple/complex.
+2- Test if two polygons intersect , Again direct test if any of edges intersect and again take care of end points.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
