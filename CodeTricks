@@ -332,7 +332,9 @@ big so MOD the answer with 1e9+7
 To get a set of unique elements that every member of it occurs at least X times, loop on the array and once the occurance of an element
 reach exactly X take it.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you have an undirected graph and you want to know whether the edge AB that involved in the path from S to T is AB or BA consider
+both of them and take the min in length.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
