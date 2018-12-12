@@ -335,6 +335,35 @@ reach exactly X take it.
 If you have an undirected graph and you want to know whether the edge AB that involved in the path from S to T is AB or BA consider
 both of them and take the min in length.
 ----------------------------------------------------------------------------------------------------------------------------------------
+If you have a start binary number and an end binary number and you want to get the number of numbers between start and end but this 
+range can be overflowed in long long.
+CODE
+----
+string s,t,tend="",tstart="";
+ll MX=1000000000; // MX is the max number you care a bout in the range
+ll n;
+int main()
+{
+    cin>>n>>start>>End;
+    ll pre=1;
+    for(int i=0;i<n;i++)
+    {
+        tstart+=start[i];
+        tend+=End[i];
+        if(tstart[i]=='0'&&tend[i]=='1')
+            pre= min(MX,pre*2);
+        else if(tstart[i]=='1'&&tend[i]=='0')
+            pre= min(MX,(pre-2)*2+2);
+        else
+        {
+             if(pre>1)
+            pre= min(MX,(pre-1)*2+1);
+        }
+        // pre is the difference between start till ith char and end till ith char of the binary numbers
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 
