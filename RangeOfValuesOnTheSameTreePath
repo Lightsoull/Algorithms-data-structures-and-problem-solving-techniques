@@ -1,0 +1,199 @@
+Problem: suppose i have a tree of nodes from 1 to n and on each node there is a value written from 0 to n-1 and i want the values of a 
+some nodes starting from 0 then 1 then 2 and so on till some value let it be X to be on the same path in the tree i want to get the 
+max X i could.
+
+Solution: lets build a segment tree and each node have a pair of the start node and the end node of the path that contain the value of 
+the node and i am mergeing the paths, lets talk a bout merging 2 paths ab and cd okay a is the start of the first path and b is the end
+and the same for cd to get the a do dfs and record the In and Out for each node and the a is the smallest value of Out and value of
+d is the bigest value of In, the lca of a and d must be of level lower than all of a,b,c,d this is the first part the second part i must
+could reach a,b,c,d from any of a or d.
+
+CODE
+----
+const int N=200009;
+pair<int,int> tree[4*N];
+int pr[N],p[N][40],vis[N],val[N],level[N],n,F=1,in[N],out[N];
+vector< vector<int> > v(N);
+void dfs(int no)
+{
+    vis[no]=1;
+    in[no]=F++;
+    for(int i:v[no])
+    {
+        if(vis[i])
+            continue;
+        level[i]=level[no]+1;
+        dfs(i);
+    }
+    out[no]=F++;
+}
+void LCA()
+{
+    for(int i=1;(1<<i)<n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            if(p[j][i-1]!=-1)
+            p[j][i]=p[p[j][i-1]][i-1];
+        }
+    }
+}
+int getlca(int a,int b)
+{
+    if(level[a]>level[b])
+        swap(a,b);
+    int mx= log2(level[b]);
+    for(int i=mx;i>=0;i--)
+    {
+        if(level[b]-(1<<i)>=level[a])
+            b=p[b][i];
+    }
+    if(a==b)
+        return a;
+    for(int i=mx;i>=0;i--)
+    {
+        if(p[b][i]!=-1&&p[a][i]!=p[b][i])
+            a=p[a][i],b=p[b][i];
+    }
+    return p[a][0];
+}
+int getkthlca(int a,int lv)
+{
+    int mx=log2(level[a]);
+
+    for(int i=mx;i>=0;i--)
+        if(level[a]-(1<<i)>=lv)
+           a=p[a][i];
+    return a;
+}
+bool online(int x,int y,int z)
+{
+    int lca=getlca(x,y);
+    if(level[lca]>level[z])
+        return 0;
+    return getkthlca(x,level[z])==z || getkthlca(y,level[z])==z;
+}
+pair<int,int> Merge(pair<int,int> A,pair<int,int> B)
+{
+    int a,b,c,d,x,y,z;
+    a=A.first; b=A.second; c=B.first; d=B.second;
+    if(a==-1||b==-1||c==-1||d==-1)
+        return mp(-1,-1);
+    x=min(mp(out[d],d),min(mp(out[c],c),min(mp(out[a],a),mp(out[b],b)))).second;
+    y=max(mp(in[a],a),max(mp(in[b],b),max(mp(in[c],c),mp(in[d],d)))).second;
+
+    if(x==y)
+    {
+        z=min(mp(level[d],d),min(mp(level[c],c),min(mp(level[a],a),mp(level[b],b)))).second;
+       return mp(z,y);
+    }
+    else if(online(x,y,a)&&online(x,y,b)&&online(x,y,c)&&online(x,y,d))
+    {
+        return mp(x,y);
+    }
+    else
+        return mp(-1,-1);
+}
+void build(int s,int e,int p)
+{
+    if(s==e)
+    {
+        tree[p]=mp(val[s],val[s]);
+        return;
+    }
+    int mid=(s+e)/2;
+    build(s,mid,p*2);
+    build(mid+1,e,p*2+1);
+    tree[p]=Merge(tree[p*2],tree[p*2+1]);
+}
+void update(int s,int e,int p,int pos,int val)
+{
+    if(s==e)
+    {
+        tree[p]=mp(val,val);
+        return;
+    }
+    int mid=(s+e)/2;
+
+    if(pos<=mid)
+        update(s,mid,p*2,pos,val);
+    else if(pos>mid)
+        update(mid+1,e,p*2+1,pos,val);
+
+    tree[p]=Merge(tree[p*2],tree[p*2+1]);
+}
+int query(int s,int e,int p,pair<int,int> Z)
+{
+    if(s==e)
+    {
+        return (Merge(Z,tree[p]).first==-1? s-1:s);
+    }
+    int mid=(s+e)/2;
+    int lf=p*2;
+    int rg=p*2+1;
+    pair<int,int> temp= Merge(Z , tree[lf]);
+
+    if(temp.first!=-1)
+      return  query(mid+1,e,rg,temp);
+    else
+      return  query(s,mid,lf,Z);
+}
+int main()
+{
+    cin>>n;
+    for(int i=1;i<=n;i++)
+    {
+        cin>>pr[i];
+        val[pr[i]]=i;
+    }
+    int pp;
+    clr(p,-1);
+    for(int i=2;i<=n;i++)
+    {
+        cin>>pp;
+        v[pp].pb(i);
+        v[i].pb(pp);
+        p[i][0]=pp;
+    }
+    dfs(1);
+    LCA();
+    build(0,n-1,1);
+    int q;
+    cin>>q;
+    int st,x,y;
+    /*
+    st=1 if i will swap the value of two nodes x,y
+    st=2 if the value after taken the longest X value ocuur on the same path 0,1,...X 
+    */
+    while(q--)
+    {
+        cin>>st;
+        if(st==2)
+        {
+            cout<< query(0,n-1,1,mp(val[0],val[0]))+1<<endl;   // this the first index after 0,1...X
+           continue;
+        }
+        cin>>x>>y;             
+        update(0,n-1,1,pr[x],y);
+        update(0,n-1,1,pr[y],x);
+        swap(val[pr[x]],val[pr[y]]);
+        swap(pr[x],pr[y]);
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
