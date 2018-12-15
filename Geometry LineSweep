@@ -258,82 +258,101 @@ general form the rectangles may not be starting directly from the x-axis there m
 sweep that moves from up to bottom so i could get the start y-axis and the end y-axis where my region express.
 CODE
 ----
+/*
+note the horizontal line sweep from lower y to up
+*/
+const int N=50009,Entry=0,Exist=1;
+struct point
+{
+    int x,y;
+    point()
+    {
+        x=y=0;
+    }
+    point(int x,int y):x(x),y(y){}
+};
 struct event
 {
     int id,type;
     event(){}
-    event(int id,int type): id(id),type(type) {}
-
+    event(int id,int type):id(id),type(type){}
+ 
 };
-struct point
-{
-    int x,y;
-
-};
-const int MAX=100009;
-const int Entry=0,Exist=1;
-point rects[MAX][2];
-bool inAcativeset[MAX];
-event events_v[MAX],events_h[MAX];
-
+point rects[N][2];
+event event_v[N],event_h[N];
 bool cmpX(event a,event b)
 {
-    return rects[a.id][a.type].x<rects[b.id][b.type].x;
+    if(rects[a.id][a.type].x!=rects[b.id][b.type].x)
+     return rects[a.id][a.type].x<rects[b.id][b.type].x;
+    if(a.type!=b.type)
+        return a.type<b.type;
+    return rects[a.id][a.type].y<rects[b.id][b.type].y;
 }
 bool cmpY(event a,event b)
 {
-    return rects[a.id][a.type].y < rects[b.id][b.type].y;
+    if(rects[a.id][a.type].y!=rects[b.id][b.type].y)
+     return rects[a.id][a.type].y<rects[b.id][b.type].y;
+    if(a.type!=b.type)
+        return a.type<b.type;
+    return rects[a.id][a.type].x<rects[b.id][b.type].x;
 }
+bool inActiveset[N];
 int main()
 {
-    ll area=0,n=0,events_cnt=0;
-
+    int n;
     cin>>n;
-    /* x1,y1 is the lower left point
-       x2,y2 is the upper right point
+    int x1,y1,x2,y2;
+    int events_cnt=0;
+    /*
+    x1,y1 lower left point
+    x2,y2 upper right point
     */
-    int x1,x2,y1,y2;
     for(int i=0;i<n;i++)
     {
         cin>>x1>>y1>>x2>>y2;
-        events_v[events_cnt]=event(i,Entry),events_v[events_cnt+1]=event(i,Exist);
-        events_h[events_cnt]=event(i,Entry),events_h[events_cnt+1]=event(i,Exist);
+        rects[i][Entry].x=x1; rects[i][Entry].y=y1; rects[i][Exist].x=x2; rects[i][Exist].y=y2;
+        event_v[events_cnt]=event(i,Entry); event_v[events_cnt+1]=event(i,Exist);
+        event_h[events_cnt]=event(i,Entry); event_h[events_cnt+1]=event(i,Exist);
         events_cnt+=2;
+ 
     }
-
-    sort(events_v,events_v+events_cnt,cmpX);
-    sort(events_h,events_h+events_cnt,cmpY);
-
-    inAcativeset[events_v[0].id]=1;
-
+    sort(event_v,event_v+events_cnt,cmpX);
+    sort(event_h,event_h+events_cnt,cmpY);
+ 
+    inActiveset[event_v[0].id]=1;
+    ll area=0;
     for(int i=1;i<events_cnt;i++)
     {
-        event cur= events_v[i];
-        event pre= events_v[i-1];
-        int cnt=0,first_rec,deltaX,deltaY;
-        if(deltaX=rects[cur.id][cur.type].x-rects[cur.id][cur.type].x==0)
+        event cur=event_v[i];
+        event pre=event_v[i-1];
+        int deltaX,deltaY,cnt=0,first_rec;
+        deltaX=rects[cur.id][cur.type].x-rects[pre.id][pre.type].x;
+        if(deltaX==0)
+        {
+            inActiveset[cur.id]=(cur.type==Entry);
             continue;
-
+        }
         for(int h=0;h<events_cnt;h++)
         {
-            if(inAcativeset[events_h[h].id])
+            if(inActiveset[event_h[h].id]==1)
             {
-                if(events_h[h].type==Entry)
-                {
-                   if(cnt++==0)
-                      first_rec=h;
-                }
-                else if(--cnt==0)
-                {
-                   deltaY=rects[events_h[h].id][events_h[h].type].y-rects[events_h[first_rec].id][events_h[first_rec].type].y;
-                    area+= deltaY*deltaX;
-                }
+               if(event_h[h].type==Entry)
+               {
+                if(cnt++==0)
+                    first_rec=h;
+               }
+               else
+               {
+                   if(--cnt==0)
+                   {
+                       deltaY= rects[event_h[h].id][Exist].y-rects[event_h[first_rec].id][Entry].y;
+                       area+= deltaX*deltaY;
+                   }
+               }
             }
         }
-
-        inAcativeset[cur.id]= (cur.type==Entry);
+        inActiveset[cur.id]=(cur.type==Entry);
     }
-
     cout<<area<<endl;
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
