@@ -363,6 +363,19 @@ int main()
     }
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
+IF you have a sorted list of integers let it be A and for each ith number you want the elements smaller than it from another list 
+let it be B.
+solutions 
+1-use multiset to store B elements then do upper_bound on the set for the ith element value and the subtract one from id to the number
+of elements lower than ith element. O(nlogn)
+2-use priority_queue to get the smallest element so if it is smaller than the smallest element in list A so it is smaller than all 
+remaining elements and move on.   O(n)+some constant
+3- use 2-pointers technique move on list B till the value become greater than the ith element in list A then stop those are the elements
+that are smaller than the ith element in list A and move again from the current pointer and so on. O(n)
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 
 
 
