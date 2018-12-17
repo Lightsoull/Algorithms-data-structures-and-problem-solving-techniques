@@ -38,7 +38,7 @@ CODE
 #define   length(a)      hypot( (a.imag()),(a.real()) )
 struct cmpX
 {
-    bool operator()(const &point a,const &point b)
+    bool operator()(const point &a,const point &b)
     {
         if(dcmp(a.X,b.X)!=0)
             return dcmp(a.X,b.X)<0;
@@ -47,7 +47,7 @@ struct cmpX
 };
 struct cmpY
 {
-    bool operator()(const &point a,const &point b)
+    bool operator()(const point &a,const point &b)
     {
         if(dcmp(a.Y,b.Y)!=0)
             return dcmp(a.Y,b.Y)<0;
@@ -59,21 +59,26 @@ const double oo=1e15;
 double closestpair(vector<point> &events)
 {
     multiset< point , cmpY> activewindow;
-    sort(all(events),cmpX);
+    sort(all(events),cmpX());
     double d=oo;
     int left=0;
     for(int right=0;right<sz(events);right++)
     {
         while(left<right&& events[right].X-events[left].X > d)
             activewindow.erase(activewindow.find(events[left++]));
+            
         auto strit= activewindow.lower_bound(point(-oo,events[right].Y-d));
+        
         /* here the value of x of point is negative infinity bec if there is same y value 
            he must take the one with smallest x */
+           
         auto enit= activewindow.upper_bound(point(-oo,events[right].Y+d));
+        
         /* here the value of iterator keep it increased by one */
+        
         for(;strit!=enit;strit++)
         {
-            d=min(d,length(events[right]-(*strit)));
+            d=min(d,length( ( events[right]-(*strit) ) ));  // length must take the point in bracket
         }
         activewindow.insert(events[right]);
     }
