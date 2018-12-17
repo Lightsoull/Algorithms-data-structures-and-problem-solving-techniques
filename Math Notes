@@ -149,6 +149,42 @@ is float then there is no integer value for x to make diff equals to zero to to 
 -a/b + b/a will be minminum when a=b and as much as the difference increase the value will increase.
 - a/b and c/d if the difference between them equal that doesn't mean their actual values are equal.
 ----------------------------------------------------------------------------------------------------------------------------------------
+Factorization equation
+(-b +/- sqrt( b^2-4ac ) )/ (2a) 
+eg ax^2+bx+c=0  note take the c with its sign.
+----------------------------------------------------------------------------------------------------------------------------------------
+If i have a circle let it be circle1 it is center (x1,y1) and radius r1 and i want to get the center of the circle that contain circle1 
+let it be circle2 it is center (x2,y2) and radius r2 there is a range of points where the center of circle2 can exist given that the 
+center of circle2 is on the x-axis so the leftside of the range is x2-delta and the rightside is x2+delta on x-axis where delta is 
+ double delta= sqrt(((r2-r1)*(r2-r1))-(y2*y2)); 
+ ---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
