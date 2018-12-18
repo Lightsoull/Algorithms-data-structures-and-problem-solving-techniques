@@ -4,11 +4,8 @@ Segment tree + Lazy Propagation
 //Sum segment tree
 ----------------------------------------------------------------------------------------------------------------------------------------
 idea of lazy
-
 - lazy is like a flag i use it to know the value of the smaller sub ranges in the big range when i need that smaller range
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
 inline void build(int st = 0, int en = n - 1, int root = 1)
 {
 if(st == en)
@@ -23,10 +20,6 @@ build(mid + 1, en, (root << 1)|1);
 tree[root] = tree[root << 1] + tree[(root << 1) |1];
 }
 //Update by idx and changes value (not addition)
-
-
-
-
 void update(int idx, int val, int st, int en, int root)
 {
   if(idx < st || idx > en)
@@ -40,10 +33,6 @@ update(idx, val, st, mid, root << 1);
 update(idx, val, mid + 1, en, (root << 1) | 1);
 tree[root] = tree[root << 1] + tree[(root << 1) |1];
 }
-
-
-
-
 //Query on range (Not LAZY)
 
 int query(int L, int R, int st, int en, int root)
@@ -54,10 +43,6 @@ int query(int L, int R, int st, int en, int root)
    return tree[root];
    return query(L, R, st, mid, root << 1) + query(L,R, mid + 1, en, (root << 1) | 1);
 }
-
-
-
-
 //Lazy Propagation----------------------------------------------------------------------------------------
 
 inline void build(int st = 0, int en = n - 1, int root = 1)
@@ -71,10 +56,8 @@ int mid = (st + en) >> 1;
 build(st, mid, root << 1);
 build(mid + 1, en, (root << 1)|1);
 }
-
 ---------------------------------------------------------------------
 // general lazy
-
 inline void apply(int root)
 {
   if(lazy[root] == -1)
@@ -84,10 +67,8 @@ inline void apply(int root)
     lazy[L] = lazy[R] = tree[L] = tree[R] = lazy[root];
     lazy[root] = -1;
 }
-
 ------------------------------------------------------------------
 //Query By idx
-
 inline int query(int idx, int st, int en, int root)
 {
     if(idx < st || idx > en)
@@ -99,7 +80,6 @@ inline int query(int idx, int st, int en, int root)
 }
 //   query with lazy
 -------------------------------------------------------------------------------------
-
 inline void update(int val, int L, int R, int st,int en, int root)
 {
   if(R < st || L > en)
@@ -118,7 +98,6 @@ update(val, L, R, mid + 1, en, (root << 1) | 1);
 // update with lazy
 -------------------------------------------------------------------------------------------------
 //Lazy Sum
-
 void apply(int root, int st, int mid , int en)
 {
    int r = root * 2 + 1;
@@ -148,11 +127,8 @@ update(L, R, val, st, mid, root * 2);
 update(L, R, val, mid + 1, en, root * 2 + 1);
 tree[root] = tree[root * 2] + tree[root * 2 + 1];
 }
-
 --------------------------------------------------------------------------------------------------------
-
 // query with lazy RSQ
-
 ll query(int L, int R, int st = 0, int en = n - 1,int root = 1)
 {
 if(L > en || R < st)
@@ -164,15 +140,11 @@ return tree[root];
 int mid = (st + en) >> 1;
 apply(root, st, mid, en);
 return query(L, R, st, mid, root * 2) + query(L,R, mid + 1, en, root * 2 + 1);
-
 }
-
 ----------------------------------------------------------------------------------------------------------------
 The above query may TL , here is more optimal code for query 
-
 int query(int a,int b,int s=1,int e=n,int root=1)
 {
-
     if(a<=s&&e<=b)
     {
         return tree1[root];
@@ -182,83 +154,146 @@ int query(int a,int b,int s=1,int e=n,int root=1)
       return query1(a,b,s,mid,root*2);
    else if(a>mid)
       return  query1(a,b,mid+1,e,root*2+1);
-
-
    return max(query1(a,b,s,mid,root*2),query1(a,b,mid+1,e,root*2+1));
 }
-
 ----------------------------------------------------------------------------------------------------------------------------------------
-IF you have ranges and you want to ( query on the all the tree (only) ) how many elements in this range but every cell have to 
-contain at most one element and the update is on the range whether be +1 or -1 .
+IF you have a range and the query is only on all the tree not ranges, we can build a segment tree to solve the following problems
+1- update query: add to a certain range a value which is +/- and then query on all the tree how many cells having values greater
+than one. the answer will be tree[1].coverlength.
+2- update query: add to a certain range a value which is +/- and then query on all the tree how many blocks of conscutive cells haveing 
+values greater than one. the answer will be tree[1].lines.
 
 CODE
 ----
-#define L(n)((n)<<(1))
-#define R(n)(L(n)+(1))
+l,r: are the left and the right of the range i put flags on them to know whether this left or this right is covered or not
+length: is the length of the range.
+cover: is the number of times the whole range is completely covered.
+coverlength: is the number of elements in a range that its value is greater than one. 
+lines: is the number of blocks of conscutive cells having values greater than one ( so its like a number of lines between them gap ).
 
-struct node {
-   int cnt, lzy;
-   node() : cnt( 0 ), lzy( 0 ) {}
+const int N=4*50009;
+struct Node
+{
+    int l,r,length,cover,coverlength,lines;
+    Node(){}
+    Node(int l,int r,int length,int cover,int coverlength,int lines) : l(l),r(r),length(length),cover(cover),
+    coverlength(coverlength),lines(lines) {}
+ 
+    Node operator+(const Node &b)
+    {
+        Node c;
+        c.cover=0;
+        c.l=l;
+        c.r=b.r;
+        c.length=length+b.length;
+        c.coverlength=coverlength+b.coverlength;
+        c.lines= lines+b.lines-(r&&b.l);
+        return c;
+    }
 };
-void Construct( int n ) {
-   for( tlen = 1; tlen < n; tlen <<= 1 );
-   Tree.resize( tlen << 1 );
+Node tree[N];
+void Push(int p)
+{
+    if(tree[p].cover==0)
+    {
+        tree[p]=tree[p*2]+tree[p*2+1];
+    }
+    else
+    {
+        tree[p].coverlength=tree[p].length;
+        tree[p].l=tree[p].r=tree[p].lines=1;
+    }
 }
-vector< node > Tree;
-int lo, hi, tlen;
-void update( int x, int y, int v, int n ) {
-   if( x >= hi || y <= lo ) return;
-   if( x >= lo && y <= hi ) {
-      Tree[ n ].lzy += v;
-      if( Tree[ n ].lzy ) Tree[ n ].cnt = ( y - x );
-      if( Tree[ n ].lzy < 1 ) {
-         if( n >= tlen ) Tree[ n ].cnt = 0;
-         else Tree[ n ].cnt = Tree[ L( n ) ].cnt + Tree[ R( n ) ].cnt;
-      }
-      return;
-   }
-
-   update( x, ( x + y )>>1, v, L( n ) );
-   update( ( x + y )>>1, y, v, R( n ) );
-
-   if( Tree[ n ].lzy < 1 )
-      Tree[ n ].cnt = Tree[ L( n ) ].cnt + Tree[ R( n ) ].cnt;
+void build(int s,int e,int p)
+{
+    if(s==e)
+    {
+        tree[p].l=tree[p].r=tree[p].cover=tree[p].coverlength=tree[p].lines=0;
+        tree[p].length=1;
+        return ;
+    }
+    int m=(s+e)/2;
+    build(s,m,p*2);
+    build(m+1,e,p*2+1);
+    tree[p].cover=0;
+    Push(p);
 }
-
-void Update( int x, int y, int v ) {
-   lo = x; hi = y;
-   update( 0, tlen, v, 1 );
+void cover(int s,int e,int a,int b,int v,int p)
+{
+    if(s>b||a>e)
+    {
+        return;
+    }
+    if(s>=a&&e<=b)
+    {
+        if(tree[p].cover==0)
+        {
+ 
+            tree[p].l=tree[p].r=tree[p].lines=1;
+            tree[p].coverlength=tree[p].length;
+ 
+        }
+        tree[p].cover++;
+     return;
+    }
+    int m=(s+e)/2;
+    cover(s,m,a,b,p*2);
+    cover(m+1,e,a,b,p*2+1);
+    Push(p);
 }
-int query( int x, int y, int n ) {
-   if( x >= hi || y <= lo ) return 0;
-   if( x >= lo && y <= hi ) return Tree[ n ].cnt;
-   if( Tree[ n ].lzy ) return min( y, hi ) - max( x, lo );
-
-   return query( x, ( x + y )>>1, L( n ) ) +
-          query( ( x + y )>>1, y, R( n ) );
+void uncover(int s,int e,int a,int b,int v,int p)
+{
+    if(s>b||a>e)
+    {
+        return;
+    }
+    if(s>=a&&e<=b)
+    {
+        tree[p].cover-=v;
+        if(tree[p].cover==0)
+        {
+            if(s==e)
+            {
+                tree[p].l=tree[p].r=tree[p].lines=tree[p].coverlength=0;
+            }
+            else
+                tree[p]=tree[p*2]+tree[p*2+1];
+        }
+        return;
+    }
+    int m=(s+e)/2;
+    uncover(s,m,a,b,p*2);
+    uncover(m+1,e,a,b,p*2+1);
+    Push(p);
 }
-int Query() {
-   lo = 0; hi = 30005;
-   return query( 0, tlen, 1 );
-}
-
+#define pii pair<int,int>
+vector< pair<pii,pii> > v;
 int main()
 {
-    Construct( 30005 );
-     Query();
-     Update( From, to, value );
+    int n;
+    cin>>n>>q;
+    build(0,30005,1);
+    sort(all(v));
+    int state,l,r,value;
+    while(q--)
+    {
+        cin>>state;
+        if(state==1)
+        {
+          cin>>l>>r>>value;
+          if(value<0)
+          uncover(0,30005,l,r,value,1);
+          else
+          cover(0,30005,l,r,value,1);
+        }
+        else
+        {
+           cout<<tree[1].lines<<endl;
+           // cout whatever you want
+        }
+     }
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
 
 
 
