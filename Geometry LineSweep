@@ -454,11 +454,195 @@ int main( void )
 }
 O(nlogn)
 ----------------------------------------------------------------------------------------------------------------------------------------
+Example 4
+getting primeter of union of rectangles
+there is 2 ways to do so
+1- doing horizontal sweep then doing vertical sweep on the rectangles
+CODE
+----
+const int MAXN=25000;
+int visited[MAXN];
+int query(int L, int R){
+    int ans=0;
+    for(int i=L; i<=R; i++) ans+=(visited[i]!=0);
+    return ans;
 
+}
+void update(int L, int R, int val){
+    for(int i=L; i<=R; i++) visited[i]+=val;
+}
 
+vector<pair<pii,pii> > eventsX;
+vector<pair<pii,pii> > eventsY;
 
-
-
+int solve(){
+    sort(eventsX.begin(),eventsX.end());
+    sort(eventsY.begin(),eventsY.end());
+    int ans=0;
+    for(int i=0; i<eventsX.size(); i++){
+        int L=eventsX[i].ss.ff;
+        int R=eventsX[i].ss.ss;
+        if(eventsX[i].ff.ss==1){
+        update(L,R-1,-1);
+         ans+=(R-L)- query(L,R-1);
+        }else{
+            ans+=(R-L)- query(L,R-1);
+            update(L,R-1,1);
+        }
+    }
+    memset(visited,0, sizeof visited);
+    for(int i=0; i<eventsY.size(); i++){
+        int L=eventsY[i].ss.ff;
+        int R=eventsY[i].ss.ss;
+        if(eventsY[i].ff.ss==1){
+        update(L,R-1,-1);
+         ans+=(R-L)- query(L,R-1);
+        }else{
+            ans+=(R-L)- query(L,R-1);
+            update(L,R-1,1);
+        }
+    }
+    return ans;
+}
+int main(){
+    int a,b,c,d;
+    int n;
+   scanf("%d",&n);
+    lp(i,n){
+       scanf("%d%d%d%d",&a,&b,&c,&d);
+        a+=10000;
+        c+=10000;
+        d+=10000;
+        b+=10000;  // just shifting values
+        eventsX.pb({{a,0},{b,d}});
+        eventsX.pb({{c,1},{b,d}});
+               eventsY.pb({{b,0},{a,c}});
+        eventsY.pb({{d,1},{a,c}});
+    }
+    printf("%d\n",solve());
+}
+--------------------------------------------------
+2- Doing the same but the query and update with segment tree so the overall complexity O( nlogn )
+CODE
+----
+#define ls l,m,rt<<1
+#define rs m+1,r,rt<<1|1
+#define maxn 20007   
+ 
+struct Node{
+	int cover;
+	int lines;
+	bool L,R;
+	int CoverLength; 
+	int Length;
+	Node(){}
+	Node(int cover,int lines,bool L,bool R,int CoverLength):cover(cover),lines(lines),L(L),R(R),CoverLength(CoverLength){}
+	Node operator +(const Node &B){
+		Node C;
+		C.cover=0;
+		C.lines=lines+B.lines-(R&&B.L);
+		C.CoverLength=CoverLength+B.CoverLength;
+		C.L=L;C.R=B.R;
+		C.Length=Length+B.Length;
+		return C;
+	}
+	void Show(){
+		printf("cover=%d  lines=%d  L=%d R=%d CoverLength=%d Length=%d\n",cover,lines,L,R,CoverLength,Length);
+	}
+}K[maxn<<2];
+void PushUp(int rt){ 
+	if(K[rt].cover){
+		K[rt].CoverLength=K[rt].Length;
+		K[rt].L=K[rt].R=K[rt].lines=1;
+	}
+	else{
+		K[rt]=K[rt<<1]+K[rt<<1|1];
+	}
+}
+void Build(int l,int r,int rt){
+	if(l==r){
+		K[rt].L=K[rt].R=K[rt].cover=K[rt].lines=K[rt].CoverLength=0;
+		K[rt].Length=1;
+		return;
+	}
+	int m=(l+r)>>1;
+	Build(ls);
+	Build(rs);
+	K[rt].cover=0;
+	PushUp(rt);
+}
+void Cover(int L,int R,int l,int r,int rt){
+	if(L <= l && r <= R){
+		if(!K[rt].cover){
+			K[rt].L=K[rt].R=true;
+			K[rt].lines=1;
+			K[rt].CoverLength=K[rt].Length;	
+		}
+		K[rt].cover++;
+		return;
+	}
+	int m=(l+r)>>1;
+	if(L <= m) Cover(L,R,ls);
+	if(R >  m) Cover(L,R,rs);
+	PushUp(rt);
+}
+void Uncover(int L,int R,int l,int r,int rt){
+	if(L <= l && r <= R){
+		--K[rt].cover;
+		if(!K[rt].cover)  {
+			if(l==r){ 
+				K[rt].L=K[rt].R=K[rt].cover=K[rt].lines=K[rt].CoverLength=0;
+			}
+			else K[rt]=K[rt<<1]+K[rt<<1|1];
+		}
+		return;
+	}
+	int m=(l+r)>>1;
+	if(L <= m) Uncover(L,R,ls);
+	if(R >  m) Uncover(L,R,rs);
+	PushUp(rt);
+}
+ 
+int n;
+struct Lines{
+	int x,y1,y2,c;
+	Lines(){}
+	Lines(int x,int y1,int y2,int c):x(x),y1(y1),y2(y2),c(c){}
+	bool operator < (const Lines &B)const{return x < B.x;} 
+}L[10000];
+int main(void)
+{ 
+	while(~scanf("%d",&n)){
+		int x1,y1,x2,y2;
+		for(int i=0;i<n;++i){
+			scanf("%d%d%d%d",&x1,&y1,&x2,&y2);
+			L[i<<1]=Lines(x1,y1+10001,y2+10001,1);
+			L[i<<1|1]=Lines(x2,y1+10001,y2+10001,0);
+		}
+		int nL=n<<1;
+		sort(L,L+nL);
+		int PreX=L[0].x;
+		int ANS=0;
+		int PreLength=0;
+		int PreLines=0;
+		Build(1,20001,1);
+		for(int i=0;i<nL;++i){
+			if(L[i].c) Cover(L[i].y1,L[i].y2-1,1,20001,1);
+			else Uncover(L[i].y1,L[i].y2-1,1,20001,1);
+			 
+			ANS+=2*PreLines*(L[i].x-PreX);
+			PreLines=K[1].lines;
+			PreX=L[i].x;
+			
+			ANS+=abs(K[1].CoverLength-PreLength);
+			PreLength=K[1].CoverLength;
+		}
+	
+		printf("%d\n",ANS);
+	}
+return 0;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
