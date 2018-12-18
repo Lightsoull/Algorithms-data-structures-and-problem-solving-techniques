@@ -366,91 +366,127 @@ O(n^2)
 A small update in the perious logic allow us to do it in O(nlogn) using segment tree instead of the horizontal line sweep.
 CODE
 ----
-#define L(n)((n)<<(1))
-#define R(n)(L(n)+(1))
-
-struct event {
-   int x, ya, yb, t;
-   event( int _x, int _ya, int _yb, int _t ) {
-      x = _x; ya = _ya; yb = _yb; t = _t;
-   }
-   friend bool operator<( const event &A, const event &B ) {
-      return ( A.x == B.x ) ? ( A.t > B.t ) : ( A.x < B.x );
-   }
-};
-struct node {
-   int cnt, lzy;
-   node() : cnt( 0 ), lzy( 0 ) {}
-};
-
-vector< event > E;
-vector< node > Tree;
-int lo, hi, tlen;
-
-void Construct( int n ) {
-   for( tlen = 1; tlen < n; tlen <<= 1 );
-   Tree.resize( tlen << 1 );
-}
-void update( int x, int y, int v, int n ) {
-   if( x >= hi || y <= lo ) return;
-   if( x >= lo && y <= hi ) {
-      Tree[ n ].lzy += v;
-      if( Tree[ n ].lzy ) Tree[ n ].cnt = ( y - x );
-      if( Tree[ n ].lzy < 1 ) {
-         if( n >= tlen ) Tree[ n ].cnt = 0;
-         else Tree[ n ].cnt = Tree[ L( n ) ].cnt + Tree[ R( n ) ].cnt;
-      }
-      return;
-   }
-
-   update( x, ( x + y )>>1, v, L( n ) );
-   update( ( x + y )>>1, y, v, R( n ) );
-
-   if( Tree[ n ].lzy < 1 )
-      Tree[ n ].cnt = Tree[ L( n ) ].cnt + Tree[ R( n ) ].cnt;
-}
-
-void Update( int x, int y, int v ) {
-   lo = x; hi = y;
-   update( 0, tlen, v, 1 );
-}
-int query( int x, int y, int n ) {
-   if( x >= hi || y <= lo ) return 0;
-   if( x >= lo && y <= hi ) return Tree[ n ].cnt;
-   if( Tree[ n ].lzy ) return min( y, hi ) - max( x, lo );
-
-   return query( x, ( x + y )>>1, L( n ) ) +
-          query( ( x + y )>>1, y, R( n ) );
-}
-int Query() {
-   lo = 0; hi = 30005;
-   return query( 0, tlen, 1 );
-}
-
-int main( void )
+const int N=4*50009;
+struct Node
 {
-   int N; scanf( "%d", &N );
-   for( int i = 0; i < N; ++i ) {
-      int xa, ya, xb, yb;
-      scanf( "%d%d%d%d", &xa, &ya, &xb, &yb );
-      E.push_back( event( xa, ya, yb, +1 ) );
-      E.push_back( event( xb, ya, yb, -1 ) );
-   }
-
-   Construct( 30005 );
-
-   sort( E.begin(), E.end() );
-   int last = 0, sol = 0;
-
-   for( int i = 0; i < E.size(); ++i ) {
-      sol += Query()*( E[i].x - last );
-      Update( E[i].ya, E[i].yb, E[i].t );
-      last = E[i].x;
-   }
-
-   printf( "%d\n", sol );
-
-   return 0;
+    int l,r,length,cover,coverlength,lines;
+    Node(){}
+    Node(int l,int r,int length,int cover,int coverlength,int lines) : l(l),r(r),length(length),cover(cover),
+    coverlength(coverlength),lines(lines) {}
+ 
+    Node operator+(const Node &b)
+    {
+        Node c;
+        c.cover=0;
+        c.l=l;
+        c.r=b.r;
+        c.length=length+b.length;
+        c.coverlength=coverlength+b.coverlength;
+        c.lines= lines+b.lines-(r&&b.l);
+ 
+        return c;
+    }
+};
+Node tree[N];
+void Push(int p)
+{
+    if(tree[p].cover==0)
+    {
+        tree[p]=tree[p*2]+tree[p*2+1];
+    }
+    else
+    {
+        tree[p].coverlength=tree[p].length;
+        tree[p].l=tree[p].r=tree[p].lines=1;
+    }
+}
+void build(int s,int e,int p)
+{
+    if(s==e)
+    {
+        tree[p].l=tree[p].r=tree[p].cover=tree[p].coverlength=tree[p].lines=0;
+        tree[p].length=1;
+        return ;
+    }
+    int m=(s+e)/2;
+    build(s,m,p*2);
+    build(m+1,e,p*2+1);
+    tree[p].cover=0;
+    Push(p);
+}
+void cover(int s,int e,int a,int b,int p)
+{
+    if(s>b||a>e)
+    {
+        return;
+    }
+    if(s>=a&&e<=b)
+    {
+        if(tree[p].cover==0)
+        {
+            tree[p].l=tree[p].r=tree[p].lines=1;
+            tree[p].coverlength=tree[p].length;
+        }
+        tree[p].cover++;
+     return;
+    }
+    int m=(s+e)/2;
+    cover(s,m,a,b,p*2);
+    cover(m+1,e,a,b,p*2+1);
+    Push(p);
+}
+void uncover(int s,int e,int a,int b,int p)
+{
+    if(s>b||a>e)
+    {
+        return;
+    }
+    if(s>=a&&e<=b)
+    {
+        tree[p].cover--;
+        if(tree[p].cover==0)
+        {
+            if(s==e)
+            {
+                tree[p].l=tree[p].r=tree[p].lines=tree[p].coverlength=0;
+            }
+            else
+                tree[p]=tree[p*2]+tree[p*2+1];
+        }
+        return;
+    }
+    int m=(s+e)/2;
+    uncover(s,m,a,b,p*2);
+    uncover(m+1,e,a,b,p*2+1);
+    Push(p);
+}
+#define pii pair<int,int>
+vector< pair<pii,pii> > v;
+int main()
+{
+    int n;
+    cin>>n;
+    int x1,y1,x2,y2;
+    int events_cnt=0;
+    for(int i=0;i<n;i++)
+    {
+        cin>>x1>>y1>>x2>>y2;
+        v.pb(mp(mp(x1,y1),mp(y2,0)));
+        v.pb(mp(mp(x2,y1),mp(y2,1)));
+    }
+    build(0,30005,1);
+    sort(all(v));
+    ll area=0,last=0;
+    for(int i=0;i<sz(v);i++)
+    {
+        area+= tree[1].coverlength*(v[i].first.first-last);
+        if(v[i].second.second==0)
+            cover(0,30005,v[i].first.second,v[i].second.first-1,1);  // Takecare here i have to subtract 1 from the right end
+        else                                                             bec i calculate the difference between the two y ranges 
+            uncover(0,30005,v[i].first.second,v[i].second.first-1,1);    which is y2-y1 not y2-y1+1.
+       last=v[i].first.first;
+    }
+    cout<<area<<endl;
 }
 O(nlogn)
 ----------------------------------------------------------------------------------------------------------------------------------------
@@ -471,7 +507,6 @@ int query(int L, int R){
 void update(int L, int R, int val){
     for(int i=L; i<=R; i++) visited[i]+=val;
 }
-
 vector<pair<pii,pii> > eventsX;
 vector<pair<pii,pii> > eventsY;
 
@@ -525,127 +560,159 @@ int main(){
 2- Doing the same but the query and update with segment tree so the overall complexity O( nlogn )
 CODE
 ----
-#define ls l,m,rt<<1
-#define rs m+1,r,rt<<1|1
-#define maxn 20007   
+const int N=4*50009;
+struct Node
+{
+    int l,r,length,cover,coverlength,lines;
+    Node(){}
+    Node(int l,int r,int length,int cover,int coverlength,int lines) : l(l),r(r),length(length),cover(cover),
+    coverlength(coverlength),lines(lines) {}
  
-struct Node{
-	int cover;
-	int lines;
-	bool L,R;
-	int CoverLength; 
-	int Length;
-	Node(){}
-	Node(int cover,int lines,bool L,bool R,int CoverLength):cover(cover),lines(lines),L(L),R(R),CoverLength(CoverLength){}
-	Node operator +(const Node &B){
-		Node C;
-		C.cover=0;
-		C.lines=lines+B.lines-(R&&B.L);
-		C.CoverLength=CoverLength+B.CoverLength;
-		C.L=L;C.R=B.R;
-		C.Length=Length+B.Length;
-		return C;
-	}
-	void Show(){
-		printf("cover=%d  lines=%d  L=%d R=%d CoverLength=%d Length=%d\n",cover,lines,L,R,CoverLength,Length);
-	}
-}K[maxn<<2];
-void PushUp(int rt){ 
-	if(K[rt].cover){
-		K[rt].CoverLength=K[rt].Length;
-		K[rt].L=K[rt].R=K[rt].lines=1;
-	}
-	else{
-		K[rt]=K[rt<<1]+K[rt<<1|1];
-	}
+    Node operator+(const Node &b)
+    {
+        Node c;
+        c.cover=0;
+        c.l=l;
+        c.r=b.r;
+        c.length=length+b.length;
+        c.coverlength=coverlength+b.coverlength;
+        c.lines= lines+b.lines-(r&&b.l);
+ 
+        return c;
+    }
+};
+Node tree[N];
+void Push(int p)
+{
+    if(tree[p].cover==0)
+    {
+        tree[p]=tree[p*2]+tree[p*2+1];
+    }
+    else
+    {
+        tree[p].coverlength=tree[p].length;
+        tree[p].l=tree[p].r=tree[p].lines=1;
+    }
 }
-void Build(int l,int r,int rt){
-	if(l==r){
-		K[rt].L=K[rt].R=K[rt].cover=K[rt].lines=K[rt].CoverLength=0;
-		K[rt].Length=1;
-		return;
-	}
-	int m=(l+r)>>1;
-	Build(ls);
-	Build(rs);
-	K[rt].cover=0;
-	PushUp(rt);
+void build(int s,int e,int p)
+{
+ 
+    if(s==e)
+    {
+        tree[p].l=tree[p].r=tree[p].cover=tree[p].coverlength=tree[p].lines=0;
+        tree[p].length=1;
+        return ;
+    }
+    int m=(s+e)/2;
+    build(s,m,p*2);
+    build(m+1,e,p*2+1);
+    tree[p].cover=0;
+    Push(p);
+ 
 }
-void Cover(int L,int R,int l,int r,int rt){
-	if(L <= l && r <= R){
-		if(!K[rt].cover){
-			K[rt].L=K[rt].R=true;
-			K[rt].lines=1;
-			K[rt].CoverLength=K[rt].Length;	
-		}
-		K[rt].cover++;
-		return;
-	}
-	int m=(l+r)>>1;
-	if(L <= m) Cover(L,R,ls);
-	if(R >  m) Cover(L,R,rs);
-	PushUp(rt);
+void cover(int s,int e,int a,int b,int p)
+{
+ 
+    if(s>b||a>e)
+    {
+        return;
+    }
+    if(s>=a&&e<=b)
+    {
+ 
+        if(tree[p].cover==0)
+        {
+ 
+            tree[p].l=tree[p].r=tree[p].lines=1;
+            tree[p].coverlength=tree[p].length;
+ 
+        }
+        tree[p].cover++;
+     return;
+    }
+    int m=(s+e)/2;
+    cover(s,m,a,b,p*2);
+    cover(m+1,e,a,b,p*2+1);
+ 
+    Push(p);
 }
-void Uncover(int L,int R,int l,int r,int rt){
-	if(L <= l && r <= R){
-		--K[rt].cover;
-		if(!K[rt].cover)  {
-			if(l==r){ 
-				K[rt].L=K[rt].R=K[rt].cover=K[rt].lines=K[rt].CoverLength=0;
-			}
-			else K[rt]=K[rt<<1]+K[rt<<1|1];
-		}
-		return;
-	}
-	int m=(l+r)>>1;
-	if(L <= m) Uncover(L,R,ls);
-	if(R >  m) Uncover(L,R,rs);
-	PushUp(rt);
+void uncover(int s,int e,int a,int b,int p)
+{
+ 
+    if(s>b||a>e)
+    {
+        return;
+    }
+    if(s>=a&&e<=b)
+    {
+        tree[p].cover--;
+        if(tree[p].cover==0)
+        {
+            if(s==e)
+            {
+                tree[p].l=tree[p].r=tree[p].lines=tree[p].coverlength=0;
+            }
+            else
+                tree[p]=tree[p*2]+tree[p*2+1];
+ 
+        }
+        return;
+ 
+    }
+    int m=(s+e)/2;
+    uncover(s,m,a,b,p*2);
+    uncover(m+1,e,a,b,p*2+1);
+ 
+    Push(p);
 }
  
-int n;
-struct Lines{
-	int x,y1,y2,c;
-	Lines(){}
-	Lines(int x,int y1,int y2,int c):x(x),y1(y1),y2(y2),c(c){}
-	bool operator < (const Lines &B)const{return x < B.x;} 
-}L[10000];
-int main(void)
-{ 
-	while(~scanf("%d",&n)){
-		int x1,y1,x2,y2;
-		for(int i=0;i<n;++i){
-			scanf("%d%d%d%d",&x1,&y1,&x2,&y2);
-			L[i<<1]=Lines(x1,y1+10001,y2+10001,1);
-			L[i<<1|1]=Lines(x2,y1+10001,y2+10001,0);
-		}
-		int nL=n<<1;
-		sort(L,L+nL);
-		int PreX=L[0].x;
-		int ANS=0;
-		int PreLength=0;
-		int PreLines=0;
-		Build(1,20001,1);
-		for(int i=0;i<nL;++i){
-			if(L[i].c) Cover(L[i].y1,L[i].y2-1,1,20001,1);
-			else Uncover(L[i].y1,L[i].y2-1,1,20001,1);
-			 
-			ANS+=2*PreLines*(L[i].x-PreX);
-			PreLines=K[1].lines;
-			PreX=L[i].x;
-			
-			ANS+=abs(K[1].CoverLength-PreLength);
-			PreLength=K[1].CoverLength;
-		}
-	
-		printf("%d\n",ANS);
-	}
-return 0;
+#define pii pair<int,int>
+vector< pair<pii,pii> > v;
+vector< pair<pii,pii> > vv;
+int main()
+{
+    int n;
+    cin>>n;
+    int x1,y1,x2,y2;
+    int events_cnt=0;
+    for(int i=0;i<n;i++)
+    {
+        cin>>x1>>y1>>x2>>y2;
+        y2+=10001;
+        y1+=10001;  // shifting
+        v.pb(mp(mp(x1,0),mp(y1,y2)));
+        v.pb(mp(mp(x2,1),mp(y1,y2)));
+ 
+        vv.pb(mp(mp(y1,0),mp(x1,x2)));
+        vv.pb(mp(mp(y2,1),mp(x1,x2)));
+    }
+    build(0,30005,1);
+    sort(all(v));
+    sort(all(vv));
+ 
+    ll area=0,last=0,precoverlength=0,prelines=0;
+    for(int i=0;i<sz(v);i++)
+    {
+        if(v[i].first.second==0)
+            cover(0,30005,v[i].second.first,v[i].second.second-1,1);
+        else
+            uncover(0,30005,v[i].second.first,v[i].second.second-1,1);
+ 
+        area+= 2ll*prelines*(v[i].first.first-last);
+        area+= llabs(tree[1].coverlength-precoverlength);
+        precoverlength=tree[1].coverlength;
+        prelines=tree[1].lines;
+       last=v[i].first.first;
+ 
+    }
+ 
+    cout<<area<<endl;
 }
+O(nlogn)
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
-
+ 
+ 
+ 
 
 
 
