@@ -157,8 +157,10 @@ If i have a circle let it be circle1 it is center (x1,y1) and radius r1 and i wa
 let it be circle2 it is center (x2,y2) and radius r2 there is a range of points where the center of circle2 can exist given that the 
 center of circle2 is on the x-axis so the leftside of the range is x2-delta and the rightside is x2+delta on x-axis where delta is 
  double delta= sqrt(((r2-r1)*(r2-r1))-(y2*y2)); 
- ---------------------------------------------------------------------------------------------------------------------------------------
-
+----------------------------------------------------------------------------------------------------------------------------------------
+if I sum up the diff between ranges for eg range(x,y) sum+= (y-x) so i am taking from x to y-1 ---> x-(y-1)+1.
+so if i update a range with value take care i am calculating all the range y-x+1 or the diff between it y-x.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
