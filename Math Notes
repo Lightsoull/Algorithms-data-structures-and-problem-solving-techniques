@@ -161,7 +161,9 @@ center of circle2 is on the x-axis so the leftside of the range is x2-delta and 
 if I sum up the diff between ranges for eg range(x,y) sum+= (y-x) so i am taking from x to y-1 ---> x-(y-1)+1.
 so if i update a range with value take care i am calculating all the range y-x+1 or the diff between it y-x.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you have a Regular Polygon (all sides & angles equal and you want to take a regular polygon from it so the number of sides of the 
+new polygon must be factor of the number of points of the orginal polygon.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
