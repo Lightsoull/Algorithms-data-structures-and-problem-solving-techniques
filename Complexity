@@ -1,0 +1,120 @@
+at dp complexity of for loop at main if it doesn't add nested complexity will be (complexity of dp)+n(n of loop)
+
+Doing backtracking to print all the permutations of a set of length n is in the order of permuations  O( nPr ) 
+
+some times doing backtracking with conditions this may reduce its complexity to be linear and fit in time 
+----------------------------------------------------------------------------------------------------------------------------------------
+If you have a recursive function divides in to 2 branches every time and returns only if it reaches point at which it can't divide so 
+the comlexity will be nlog(n) where n is the length of the  string you are dividing
+-----------------------------------------------------------------------------------------------------------------------------------------
+To get the number of divisors to a number is in order O( sqrt(n) ) but the number of the divisors is very very small 
+----------------------------------------------------------------------------------------------------------------------------------------
+In the graph problems Take care of the edges number constrain 
+----------------------------------------------------------------------------------------------------------------------------------------
+If you couldn't compute the complexity just run the program and set a count variable to know the number of operations 
+----------------------------------------------------------------------------------------------------------------------------------------
+If your code is C*10^7  operations complexity so using scanf / printf and using arrays instead of map could make it AC 
+----------------------------------------------------------------------------------------------------------------------------------------
+If you have a wide grid 10^9 X 10^9  you way unuse most of it ( may be it is a tricky constrain )
+----------------------------------------------------------------------------------------------------------------------------------------
+Take care clr(mem,0) inside a loop the complexity will be n^2 , clr()  works in O( N )
+----------------------------------------------------------------------------------------------------------------------------------------
+the constant time of priority_queue is smaller than set and multiset 
+----------------------------------------------------------------------------------------------------------------------------------------
+When you calculate the complexity for your code and it sounds that it is above the limit with a few so think what is the real performance of the code not just the upper bound complexity bec it may differ
+----------------------------------------------------------------------------------------------------------------------------------------
+Calcualte the complexity of your code if it is fits strictly so use scanf/printf
+----------------------------------------------------------------------------------------------------------------------------------------
+At vectors or sets or maps or any STL the operator ' = '  Works in linear time 
+eg1:  set<int> s1,s2;        s1={1,2,3,4} ;  s2=s1;     in O(n)
+eg2= s2= set<int> (s1.begin(),s1.end())  in O(n)
+eg3  set<int> s2(s1.begin(),s1.begin()+3)  in O(n)
+----------------------------------------------------------------------------------------------------------------------------------------
+Spend time analysing complexity
+to know at DP whether the loop at the main adds additional complexity or not ask your self the calculated res through one loop what is its relation with the answer from the second loop
+----------------------------------------------------------------------------------------------------------------------------------------
+The number of the testcases not involved in calculating the complexity 
+IN ICPC up to 2*10^8 is OK
+----------------------------------------------------------------------------------------------------------------------------------------
+At DP memorization if the memory MLE you can push parameter to a loop so you reduce the memory
+----------------------------------------------------------------------------------------------------------------------------------------
+complexity of dfs/bfs O( V+E )
+----------------------------------------------------------------------------------------------------------------------------------------
+time limit  ------>  2*(10^8)
+memory limit -----> (10^8)
+----------------------------------------------------------------------------------------------------------------------------------------
+if you want to use a memory in an array which gets compilation error bec it over the limit you can use some STL dynamic memory such as vectors or maps instead which passes in compilation but steal MLE
+----------------------------------------------------------------------------------------------------------------------------------------
+Some TLE tips
+1- Calling another function costs time than implementing it in my current function
+2- assigning by this style vector,int> v(size,value)   Takes a linear time
+3- sending parameters to a function not by reference is like linear assigning
+4- putting information in the state of the function costs more than putting the information globally and just undo when you return
+----------------------------------------------------------------------------------------------------------------------------------------
+If you want to use a mask of base 3 to binary mask so to getbit it costs a linear movement on the bits so we can use vector to express the mask and get bit in O(1) but to mem on that vector you will use map which is costs
+so instead you can do that mem[ v[0] ][ v[1] ][ v[2] ][ v[3] ][ v[4] ][ v[5] ][ v[6] ][ v[7] ][ v[8] ][ v[9] ]  each cell represents the element in the vector
+----------------------------------------------------------------------------------------------------------------------------------------
+When you are scanning from a file if you can precompute before scaning do it bec it is not like a seprate cases
+----------------------------------------------------------------------------------------------------------------------------------------
+String s+= substring   works in O(N)
+----------------------------------------------------------------------------------------------------------------------------------------
+For(int i=1;i<=N;i++)
+     For(int j=1;j<=N;j+=i)
+This is in NlogN
+----------------------------------------------------------------------------------------------------------------------------------------
+For N=10^5   n logn logn is very risky
+----------------------------------------------------------------------------------------------------------------------------------------
+Such a code works in better than nlogn
+for(int i=1;i<=n;i++)
+     for(int j=i*2;j<=n;j+=i)
+----------------------------------------------------------------------------------------------------------------------------------------
+If I have vector of strings it has the same memory as 2-D char array
+----------------------------------------------------------------------------------------------------------------------------------------
+When your constrains is 2.10^5   so if you do in nlogn take care of using 
+scanf/printf
+min the constant complexity as much as you can
+----------------------------------------------------------------------------------------------------------------------------------------
+If you won't update a vector or string you are sending to a function always send it by reference
+fun( string &s)   -  fun( vector<int> &v)
+----------------------------------------------------------------------------------------------------------------------------------------
+Don't use mod by this way (num%MOD)
+use a sum function
+int sum(int a,int b)
+{
+a+=b;
+if(a>=MOD)
+a-=MOD;
+return a;
+}
+(a+b)%MOD  --->  sum(a,b)
+((a-b)+MOD)%MOD   ------>  acc(a,MOD-b)
+----------------------------------------------------------------------------------------------------------------------------------------
+Meomery limit is trictly 10^8 if you add some contest it won't work
+----------------------------------------------------------------------------------------------------------------------------------------
+__gcd(x,y) works in log(n) 
+----------------------------------------------------------------------------------------------------------------------------------------
+At Dp if you just want to know if there is  an answer or not if you found the answer return directly
+----------------------------------------------------------------------------------------------------------------------------------------
+Long Long / mod may cause TL
+----------------------------------------------------------------------------------------------------------------------------------------
+string st=char+st   this in the time of lengthof st plus one every time
+----------------------------------------------------------------------------------------------------------------------------------------
+If there is a solution that you think it fits in time like it is over all 10^7, try to optimize as you can 
+1- fast I/O
+2- if you are iterating on extra elements by default, Don't.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
