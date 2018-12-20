@@ -373,7 +373,10 @@ remaining elements and move on.   O(n)+some constant
 3- use 2-pointers technique move on list B till the value become greater than the ith element in list A then stop those are the elements
 that are smaller than the ith element in list A and move again from the current pointer and so on. O(n)
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+At segment tree if you are returning from invalid state eg if(b<str||a>end) return; and you are returning the index of the min
+element then return n and put at index of n in the array large value.
+----------------------------------------------------------------------------------------------------------------------------------------
+        
 
 
 
