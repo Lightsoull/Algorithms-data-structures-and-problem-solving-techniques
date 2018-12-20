@@ -1,0 +1,62 @@
+-Problem: Here the problem is to get the max length of regular bracket sequence ( right bracket squence eg ((())) or ()()() )
+and the number of the bracket squenences having that max length.
+-Idea: i will get the ranges that have right bracket sequence and sort them increasing of start and decreasing of end 
+the key observation here is that if i start at some index and some one starts after me he must end before and i will not consider it 
+bec it won't result in larger bracket squence i will only consider the one that will be appended with me or if it won't be appended with
+me i will take it as my current interval and start to match it with the coming ones.
+CODE
+----
+string s;
+int vis[1000009];
+vector<int> v;
+vector< pair<int,int> > vv;
+int main()
+{
+    cin>>s;
+    int mx=0,st,en,L=-3,R=-3;
+    for(int i=0;i< sz(s);i++)
+    {
+        if(s[i]=='(')
+        {
+            v.pb(i);
+        }
+        else if(sz(v)>0)
+        {
+            st=v.back();
+            en=i;
+            v.pop_back();
+            vv.pb(mp(st,-en));
+        }
+    }
+    sort(all(vv));
+    int id=0,s1,e1;
+   if(sz(vv)>0)
+   {
+    s1=vv[0].first;
+    e1=-vv[0].second;
+    mx=max(mx,e1-s1+1);
+   vis[(e1-s1+1)]++;
+   }
+    for(int i=1;i<sz(vv);i++)
+    {
+        int s2=vv[i].first;
+        int e2=-vv[i].second;
+        if(e2<e1)
+            continue;
+            
+        if(s2==e1+1)
+        {
+            e1=e2;
+            vis[(e1-s1+1)]++;
+        }
+        else
+        {
+            s1=s2;
+            e1=e2;
+            vis[(e1-s1+1)]++;
+        }
+        mx=max(mx,e1-s1+1);
+    }
+    cout<<mx<<" "<<vis[mx]<<endl;
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
