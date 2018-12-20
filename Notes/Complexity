@@ -103,7 +103,8 @@ If there is a solution that you think it fits in time like it is over all 10^7, 
 1- fast I/O
 2- if you are iterating on extra elements by default, Don't.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+D&C (Divide and Conquer algorithm) works in o(n).
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
