@@ -164,7 +164,9 @@ so if i update a range with value take care i am calculating all the range y-x+1
 If you have a Regular Polygon (all sides & angles equal and you want to take a regular polygon from it so the number of sides of the 
 new polygon must be factor of the number of points of the orginal polygon.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If i have an array of integers of size up to 10^5 the number of distinct elements that their number of occurance in the 
+array equals to their value  is at most 500 bec (n*(n+1))/2 <= 10^5.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
