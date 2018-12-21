@@ -1,3 +1,8 @@
 -At Dp buttom up approach if i want to continue in the same path it can be dp[i][j]=dp[i][j-1] here i keep going in the same path but 
 adding one extra j.
----------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------
+-At Dp buttom up if you have an index which express the last position of a certain ith element and the next one i+1th can be after the
+pervious one position with T positions 1<=T<=N so instead of making another loop to decide the the value of T, you can consider that the
+T will be with one at the begining so dp[i+1][pos]=dp[i][pos-1] then if T will be 2 means that i will take from the i+1th element one
+dp[i+1][pos]=dp[i+1][pos-1] so this will in n^2 instead of n^3.
+-------------------------------------------------------------------------------------------------------------------------------------------
