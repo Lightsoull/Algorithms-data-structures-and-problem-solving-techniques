@@ -12,6 +12,11 @@ BASE= 311
 MOD= 1000000007
 this may cause a collosion which may cause WA but rarely if this happened change the MOD and/or the BASE but if you will change the MOD 
 change it to another prime.
+-Trick
+to grantee that your answer will be correct even if there is collosion ocurrs, if you are hashing a string to a certain number let it be 
+W then create a map which maps W to the string, so if you are searching for a string by its W also search in the set of strings the W
+mapped to to grantee the answer is true if there is a collosion and for the time complexity it is very rare to occur a collosion so it
+is okay.
 
 Rolling hash by ( Rabin-Karp algorithm )
 Problem: getting the occurancess of a certain subtring in to a string
