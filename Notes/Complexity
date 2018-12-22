@@ -105,7 +105,14 @@ If there is a solution that you think it fits in time like it is over all 10^7, 
 ----------------------------------------------------------------------------------------------------------------------------------------
 D&C (Divide and Conquer algorithm) works in o(n).
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+When i use set of strings Find in it is logN comparsions and each comparsion is in the length of the string stored in it so
+the over all complexity is MlogN where M is the max length of strings in the set and N is the number of the strings in the set.
+The same for map of strings.
+----------------------------------------------------------------------------------------------------------------------------------------
+Trick you can always perform in the complexity of scanning
+for example
+if i have q queries and at each i scan string s, so i can do each query in the length of the string s off course bec i already scan it.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
