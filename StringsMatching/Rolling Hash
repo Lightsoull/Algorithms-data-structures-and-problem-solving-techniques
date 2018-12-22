@@ -18,6 +18,9 @@ W then create a map which maps W to the string, so if you are searching for a st
 mapped to to grantee the answer is true if there is a collosion and for the time complexity it is very rare to occur a collosion so it
 is okay.
 
+Note: if you have the hash value let be v1 of a string say aabc and you want to get the hash value of the same string but 
+change b to c so just subtract from v1 (b-'a')*poweroften[len-1-indexofb] and then add (c-'a')*poweroften[len-1-indexofb].
+
 Rolling hash by ( Rabin-Karp algorithm )
 Problem: getting the occurancess of a certain subtring in to a string
 the idea: since i can express each string as a number by hashing so if i am searching for a string is just like i am searching for a 
