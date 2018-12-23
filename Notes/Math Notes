@@ -167,8 +167,16 @@ new polygon must be factor of the number of points of the orginal polygon.
 If i have an array of integers of size up to 10^5 the number of distinct elements that their number of occurance in the 
 array equals to their value  is at most 500 bec (n*(n+1))/2 <= 10^5.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
+Sum of arithematic progression sequence ( sequence where the difference between values equal eg 2,4,6 diffrence=2 )
+sum= ((a1+an)*n)/2 where a1 is the value of the first element and an is the value of the last element and n is the total number of
+elements, Takecare don't write (a1+an)/2 * n bec (a1+an)/2 may be double.
+----------------------------------------------------------------------------------------------------------------------------------------
+If i have an opertaion which is i pick m indexes of an array and decrease their value by one of the m indexes must be different i can do
+that t times to turn all array values to zero okay i can say m*t is the number of decreases i can make so if the sum of all the elements
+of the array is less than or equal to m*t so its possible to turn values to zero else its impossible but here there is one thing i am 
+a fraid that may some element be decreased more than t times by choosing not distinct indexes at some of t times so i have to check first
+whether the max of the array is less or equal to t if so it works you can use the rule else it is impossible.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
