@@ -1,16 +1,18 @@
+Note
+If you are inserting binary number in a trie takecare that binary numbers differ in the number of bits so let a certain fixed number
+of bits for example 30 so if the number of bits less than that number you will continue the remaining with zeros.
+----------------------------------------------------------------------------------------------------------------------------------------
+
 struct trie
 {
     map< char,trie* > child;
     int isleaf;
-
     trie()
     {
         child=map<char,trie*> ();
         isleaf=0;
     }
 };
-
-
     void insertt(trie* cur,string word,int id)
     {
         if(id==sz(word))
@@ -18,66 +20,42 @@ struct trie
             cur->isleaf++;
             return ;
         }
-
        char ch=word[id];
-
       if(cur->child.find(ch)==cur->child.end())
        {
-
            cur->child[ch]= new trie();
        }
-
          trie* node=cur->child[ch];
-
-
     insertt(node,word,id+1);
     }
     bool searchh(trie* cur,string word,int id)
     {
-
         if(id==sz(word))
             return  cur->isleaf!=0 ;
-
         char ch=word[id];
-
       if(cur->child.find(ch)==cur->child.end())
        {
            return 0;
        }
          trie* node=cur->child[ch];
-
         return  searchh(node,word,id+1);
     }
-
-
-
-
     bool del(trie* cur,string word,int id)
     {
         if(id==sz(word))
         {
             if(cur->isleaf==0)
                 return 0;
-
             cur->isleaf--;
-
-
             return sz(cur->child)==0&&cur->isleaf==0;
-
-
         }
-
-
         char ch=word[id];
-
       if(cur->child.find(ch)==cur->child.end())
        {
            return 0;
        }
          trie* node=cur->child[ch];
-
         bool ret=  del(node,word,id+1);
-
         if(ret)
         {
             cur->child.erase(cur->child.find(ch));
@@ -87,7 +65,6 @@ struct trie
     }
     int main()
     {
-    
             trie* root=new trie();
             insertt(root,bin,0);
             del(root,bin,0);
