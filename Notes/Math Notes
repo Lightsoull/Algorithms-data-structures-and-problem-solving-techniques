@@ -177,7 +177,8 @@ of the array is less than or equal to m*t so its possible to turn values to zero
 a fraid that may some element be decreased more than t times by choosing not distinct indexes at some of t times so i have to check first
 whether the max of the array is less or equal to t if so it works you can use the rule else it is impossible.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If a ^ b = c and i have only a and c so b = a ^ c
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
