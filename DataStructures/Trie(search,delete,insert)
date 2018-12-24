@@ -2,7 +2,7 @@ Note
 If you are inserting binary number in a trie takecare that binary numbers differ in the number of bits so let a certain fixed number
 of bits for example 30 so if the number of bits less than that number you will continue the remaining with zeros.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Using map for child
 struct trie
 {
     map< char,trie* > child;
@@ -13,7 +13,20 @@ struct trie
         isleaf=0;
     }
 };
-    void insertt(trie* cur,string word,int id)
+Using array for child
+struct trie
+{
+    trie* child[3];
+    int isleaf;
+    trie()
+    {
+        isleaf=0;
+        clr(child,0);
+    }
+};
+----------------------------------------------------------------------------------------------------------------------------------------
+  Using map for child
+  void insertt(trie* cur,string word,int id)
     {
         if(id==sz(word))
         {
@@ -28,7 +41,25 @@ struct trie
          trie* node=cur->child[ch];
     insertt(node,word,id+1);
     }
-    bool searchh(trie* cur,string word,int id)
+  Using array for child
+  void insertt(trie* cur,int id,string s)
+  {
+    if(id==sz(s))
+    {
+        cur->isleaf++;
+        return;
+    }
+    int ch=s[id]-'0';
+    if(cur->child[ch]==0)
+    {
+        cur->child[ch]=new trie();
+    }
+   
+    insertt(cur->child[ch],id+1,s);
+  }
+  -------------------------------------------------------------------------------------------------------------------------------------
+  Using map for child  
+  bool searchh(trie* cur,string word,int id)
     {
         if(id==sz(word))
             return  cur->isleaf!=0 ;
@@ -40,7 +71,20 @@ struct trie
          trie* node=cur->child[ch];
         return  searchh(node,word,id+1);
     }
-    
+  Using array for child  
+  bool searchh(trie* cur,string word,int id)
+    {
+        if(id==sz(word))
+            return  cur->isleaf!=0 ;
+        char ch=word[id];
+      if(cur->child[ch]==0)
+       {
+           return 0;
+       }
+         trie* node=cur->child[ch];
+        return  searchh(node,word,id+1);
+    }
+  --------------------------------------------------------------------------------------------------------------------------------------
     /*
     to delete there is 2 ways the first way i have to make sure that the cur node have no children and leaf==0
     the second way is to make a vaiable integer cnt in the trie struct and when i insert a word i increase the node
@@ -91,7 +135,7 @@ struct trie
     }
 
   }
-       
+----------------------------------------------------------------------------------------------------------------------------------------
     int main()
     {
             trie* root=new trie();
