@@ -1,0 +1,63 @@
+- Dp can be with D&C here is an example on a problem that used that approach
+-Problem 
+For an array b of length m we define the function f as
+
+f(b)={b[1]f(b[1]⊕b[2],b[2]⊕b[3],…,b[m−1]⊕b[m])if m=1otherwise,
+where ⊕ is bitwise exclusive OR.
+
+For example, f(1,2,4,8)=f(1⊕2,2⊕4,4⊕8)=f(3,6,12)=f(3⊕6,6⊕12)=f(5,10)=f(5⊕10)=f(15)=15
+You are given an array a and a few queries. Each query is represented as two integers l and r.
+The answer is the maximum value of f on all continuous subsegments of the array al,al+1,…,ar.
+
+Solution: 
+Let's calculate f(a) recursively and save arrays from each level of recursion. We get two-dimencional array dp[n][n] and dp[n][1]=f(a).
+Now let's view recursive calculation for f(al…ar). You can see what array of i-th level of recursion
+is dp[i][l…r−i+1]⇒dp[r−l+1][l]=f(al…ar) (numbeer of levels of recursion is length of segment). 
+To calculate maximum of all sub-segments for each segment, replace dp[i][j] on max(dp[i][j],dp[i−1][j],dp[i−1][j+1]).
+Now answer of question l,r is dp[r−l+1][l]. Overall time complexity is O(n2+q).
+CODE
+----
+vector<int> v;
+const int N=5009;
+int dp[N][N];
+void solve(vector<int> v,int len)
+{
+    if(sz(v)==1)
+    {
+        dp[len][1]=v[0];
+        return;
+    }
+    vector<int> nv;
+    for(int i=0;i<sz(v);i++)
+    {
+        dp[len][i+1]=v[i];
+        if(i+1<sz(v))
+        nv.pb(v[i]^v[i+1]);
+    }
+    solve(nv,len+1);
+}
+int main()
+{
+    int n;
+    cin>>n;
+    int no;
+    for(int i=1;i<=n;i++)
+      cin>>no,v.pb(no);
+    solve(v,1);
+    for(int len=2;len<=n;len++)
+    {
+        for(int l=1;l<=n;l++)
+        {
+            dp[len][l]=max(dp[len-1][l],max(dp[len-1][l+1],dp[len][l]));
+        }
+    }
+   int q;
+   cin>>q;
+   int l,r;
+   while(q--)
+   {
+       cin>>l>>r;
+       cout<<dp[r-l+1][l]<<endl;
+   }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
