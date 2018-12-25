@@ -1,0 +1,97 @@
+-Problem: You are given 2 arrays A and B and i want the min of array A to be at least the same as the max of array B in min number
+of operations, during one operation you can pick any element in any array and dec/incr it by 1.
+
+-Solution: it looks the same to increase the mi number of array A to mx of array B or decrease the mx of array B to min of array A but 
+there might be multiple element of array A having this min value and the same for array B so i will just check whose have min cnt and 
+process on it to reach the other one.
+CODE
+----
+map< ll,int> vis1,vis2;
+int n,m;
+priority_queue<int> b;
+priority_queue<int, vector<int> , greater<int> > a;
+ll getnext1()
+{
+    ll v1=b.top();
+    b.pop();
+    if(sz(b)==0)
+    {
+         b.push(v1);
+        return 0;
+    }
+    ll v2=b.top();
+    b.push(v1);
+    return v2;
+}
+ll getnext2()
+{
+    ll v1=a.top();
+    a.pop();
+    if(sz(a)==0)
+    {
+        a.push(v1);
+        return 0;
+    }
+    ll v2=a.top();
+    a.push(v1);
+    return v2;
+}
+int main()
+{
+    cin>>n>>m;
+    ll no;
+    for(int i=0;i<n;i++)
+    {
+        cin>>no;
+        vis1[no]++;
+
+        if(vis1[no]==1)
+            a.push(no);
+    }
+    for(int i=0;i<m;i++)
+    {
+        cin>>no;
+        vis2[no]++;
+        if(vis2[no]==1)
+            b.push(no);
+    }
+    ll pre2=0,pre1=0;
+    ll ans=0;
+    while(1)
+    {
+        ll v1=a.top();
+        ll v2= b.top();
+        if(v1>=v2)
+            break;
+        ll cnt1=pre1+vis1[v1];
+        ll cnt2=pre2+vis2[v2];
+        ll nxt1= getnext2();
+        ll nxt2= getnext1();
+        ll diff=0;
+        if(cnt1<=cnt2)
+        {
+            if(nxt1==0)
+                nxt1=1e15;
+            diff= min((nxt1-v1),(v2-v1));
+            ans+= cnt1*(diff);
+
+            a.pop();
+            pre1+=vis1[v1];
+        }
+        else
+        {
+            diff= min((v2-nxt2),(v2-v1));
+            ans+= cnt2*(diff);
+            b.pop();
+            pre2+=vis2[v2];
+        }
+        if(diff==(v2-v1))
+        {
+            break;
+        }
+
+    }
+        cout<<ans<<endl;
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------
