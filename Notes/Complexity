@@ -113,7 +113,10 @@ Trick you can always perform in the complexity of scanning
 for example
 if i have q queries and at each i scan string s, so i can do each query in the length of the string s off course bec i already scan it.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+When you send vector/queue/set what ever to a function without reference then it will copy the vector in linear time.
+----------------------------------------------------------------------------------------------------------------------------------------
+Even if you are allowed to use nlogn complexity so you used a set if you can do it with priority_queue do it.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
