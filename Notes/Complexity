@@ -117,7 +117,10 @@ When you send vector/queue/set what ever to a function without reference then it
 ----------------------------------------------------------------------------------------------------------------------------------------
 Even if you are allowed to use nlogn complexity so you used a set if you can do it with priority_queue do it.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+When you find that your complexity barely fits in time think of the exact real complexity.
+-----------------------------------------------------------------------------------------------------------------------------------------
+The array memory limit is 10^8 if you have memeory limit 2*(10^8) you can use some dynamic memory like map instead.
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
