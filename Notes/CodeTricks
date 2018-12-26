@@ -376,7 +376,10 @@ that are smaller than the ith element in list A and move again from the current 
 At segment tree if you are returning from invalid state eg if(b<str||a>end) return; and you are returning the index of the min
 element then return n and put at index of n in the array large value.
 ----------------------------------------------------------------------------------------------------------------------------------------
-        
+IF you are moving in a grid by a ceratin sequence for example left then up then right then down then left a gain note the cycle and 
+create dcol[] and drow[] arrays in it the next move i should make according to the cycle, this helps a lot to avoid writing longer code
+and more bugs.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
