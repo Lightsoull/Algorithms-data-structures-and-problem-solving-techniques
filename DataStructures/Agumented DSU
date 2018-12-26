@@ -69,7 +69,8 @@ int main()
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
 -Note
-for dsu i can use the rnk array to put other values like the sum of a certain connected nodes and when i link i merge the rnk array too
+-You can view the dsu as you have different sepearted blocks and you have some information about this blocks and when you linking
+2 blocks you merge those informations.
 ----------------------------------------------------------------------------------------------------------------------------------------
 
 
