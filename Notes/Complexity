@@ -121,7 +121,9 @@ When you find that your complexity barely fits in time think of the exact real c
 -----------------------------------------------------------------------------------------------------------------------------------------
 The array memory limit is 10^8 if you have memeory limit 2*(10^8) you can use some dynamic memory like map instead.
 -----------------------------------------------------------------------------------------------------------------------------------------
-
+Putting data type bool insteasd of integer decreases the memory complexity to its half and putting longlong increases the
+memeory complexity double.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
