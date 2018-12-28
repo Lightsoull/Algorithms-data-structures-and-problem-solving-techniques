@@ -217,27 +217,10 @@ bool CanFormAline(vector< point > points)
     return 1;
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-C++ function at complex library to get the theta of a vector to x-axis
+arg( givenvector )
+-abs() with complex get the magnitude of a given vector its absulote length eg vector AB sqrt((A.x-B.x)^2+(A.y-B.y)^2)
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
