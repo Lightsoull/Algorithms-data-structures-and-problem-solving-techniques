@@ -1,0 +1,378 @@
+- Here is another kind of sweep which is the radical sweep which means that i will sweep in a circular motion using 2 paramters
+the angle i sweep with and the length of the line i sweep with.
+
+Example 1 
+Problem: Maximum points that can be enclosed in a circle of given radius R
+Solution 1 (with out line sweep just brudeforce) 
+just pick any pair points and assume that one of them is the most left point in the circle that touches its circumfirance and the other
+is the rightmost one but the distance between them must be at most 2*R and then check every other point whether it is inside the circle
+or not and maxmimize for each circle. O( n^3 )
+
+Solution 2 ( this is the line SweepSolution )
+By using Angular Sweep, we can solve this problem in O((n^2)log n). The basic logical idea of this algorithm is described below.
+We pick an arbitrary point P from the given set. We then rotate a circle with fixed-radius ‘R’ about the point P.
+During the entire rotation P lies on the circumference of the circle and we maintain a count of the number of points 
+in the circle at a given value of Θ where the parameter Θ determines the angle of rotation. The state of a circle can 
+thus be determined by a single parameter Θ because the radius is fixed.
+We can also see that the value of the count maintained will change only when a point from the set enters or exits the circle.
+
+After this, the problem reduces to, how to maintain the value of count.
+For any given point except P (say Q), we can easily calculate the value of Θ for which it enters the circle (Let it be α) and
+the value of Θ for which it exits the circle (Let it be β).
+We have angles A and B defined as under,
+A is the angle between PQ and the X-Axis.
+B is the angle between PC and PQ where C is the center of the circle.
+
+A= tan-1( (p.y-Q.y)/(p.x-Q.x) )
+B= cos-1 d/(2*R)   where d is the distance between p and Q.
+and
+α = A-B 
+β = A+B
+(Note: All angles are w.r.t. to X-Axis. Thus, it becomes ‘A-B’ and not ‘B-A’)
+then
+We can calculate angles A and B for all points excluding P. Once these angles are found, we sort them and then traverse them in 
+increasing order. Now we maintain a counter which tells us how many points are inside the circle at a particular moment.
+Count will change only when a point enters the circle or exits it. In case we find an entry angle we increase the counter by 1 
+and in case we find an exit angle we decrease the counter by 1. The check that the angle is entry or exit can be easily realised 
+using a flag.Proceeding like this, the counter always gives us a valid value for number of points inside the circle in a particular
+state.
+Important Note: The points which have ‘d’>2R do not have to be considered because they will never enter or exit the circle.
+The angular sweep algorithm can be described as:
+Calculate the distance between every pair of nC2 points and store them.
+For an arbitrary point (say P), get the maximum number of points that can lie inside the circle rotated about P using the getPointsInside() function.
+The maximum of all values returned will be the final answer.
+CODE
+----
+
+// C++ program to find the maximum number of 
+// points that can be enclosed by a fixed-radius 
+// circle 
+#include <bits/stdc++.h> 
+using namespace std; 
+  
+const int MAX_POINTS = 500; 
+  
+// complex class which is available in STL has 
+// been used to implement points. This helps to 
+// ensure greater functionality easily 
+typedef complex<double> Point; 
+  
+Point arr[MAX_POINTS]; 
+double dis[MAX_POINTS][MAX_POINTS]; 
+  
+// This function returns the maximum points that 
+// can lie inside the circle of radius 'r' being 
+// rotated about point 'i' 
+int getPointsInside(int i, double r, int n) 
+{ 
+    // This vector stores alpha and beta and flag 
+    // is marked true for alpha and false for beta 
+    vector<pair<double, bool> > angles; 
+  
+    for (int j=0; j<n; j++) 
+    { 
+        if (i != j && dis[i][j] <= 2*r) 
+        { 
+            // acos returns the arc cosine of the complex 
+            // used for cosine inverse 
+            double B =  acos(dis[i][j]/(2*r)); 
+  
+            // arg returns the phase angle of the complex 
+            double A = arg(arr[j]-arr[i]); 
+            double alpha = A-B; 
+            double beta = A+B; 
+            angles.push_back(make_pair(alpha, true)); 
+            angles.push_back(make_pair(beta, false)); 
+        } 
+    } 
+  
+    // angles vector is sorted and traversed 
+    sort(angles.begin(), angles.end()); 
+  
+    // count maintains the number of points inside 
+    // the circle at certain value of theta 
+    // res maintains the maximum of all count 
+    int count = 1, res = 1; 
+    vector<pair<double, bool> >::iterator it; 
+    for (it=angles.begin(); it!=angles.end(); ++it) 
+    { 
+        // entry angle 
+        if ((*it).second) 
+            count++; 
+  
+        // exit angle 
+        else
+            count--; 
+  
+        if (count > res) 
+            res = count; 
+    } 
+  
+    return res; 
+} 
+  
+// Returns count of maximum points that can lie 
+// in a circle of radius r. 
+int maxPoints(Point arr[], int n, int r) 
+{ 
+    // dis array stores the distance between every 
+    // pair of points 
+    for (int i=0; i<n-1; i++) 
+        for (int j=i+1; j<n; j++) 
+  
+            // abs gives the magnitude of the complex 
+            // number and hence the distance between 
+            // i and j 
+            dis[i][j] = dis[j][i] = abs(arr[i]-arr[j]); 
+  
+    // This loop picks a point p 
+    int ans = 0; 
+    for (int i=0; i<n; i++) 
+  
+        // maximum number of points for point arr[i] 
+        ans = max(ans, getPointsInside(i, r, n)); 
+  
+    return ans; 
+} 
+  
+// Driver code 
+int main() 
+{ 
+    Point  arr[] = {Point(6.47634, 7.69628), 
+                    Point(5.16828, 4.79915), 
+                    Point(6.69533, 6.20378)}; 
+    int r = 1; 
+  
+    int n = sizeof(arr)/sizeof(arr[0]); 
+  
+    cout << "The maximum number of points are: " 
+         << maxPoints(arr, n, r); 
+  
+    return 0; 
+} 
+---------------------------------------------------------------------------------------------------------------------------------------
+Example 2 
+Problem: getting the max number of points in a line
+Solution 1: using map brudeforce solution 
+We can solve above problem by following approach – For each point p, calculate its slope with other points and use a map to 
+record how many points have same slope, by which we can find out how many points are on same line with p as their one point. 
+For each point keep doing the same thing and update the maximum number of point count found so far.
+Some things to note in implementation are:
+1) if two point are (x1, y1) and (x2, y2) then their slope will be (y2 – y1) / (x2 – x1) which can be a double value and
+can cause precision problems. To get rid of the precision problems, we treat slope as pair ((y2 – y1), (x2 – x1)) instead of ratio 
+and reduce pair by their gcd before inserting into map. In below code points which are vertical or repeated are treated separately.
+CODE
+----
+// method to find maximum colinear point 
+int maxPointOnSameLine(vector< pair<int, int> > points) 
+{ 
+    int N = points.size(); 
+    if (N < 2) 
+        return N; 
+  
+    int maxPoint = 0; 
+    int curMax, overlapPoints, verticalPoints; 
+    map<pair<int, int>, int> slopeMap; 
+  
+    // looping for each point 
+    for (int i = 0; i < N; i++) 
+    { 
+        curMax = overlapPoints = verticalPoints = 0; 
+  
+        // looping from i + 1 to ignore same pair again 
+        for (int j = i + 1; j < N; j++) 
+        { 
+            // If both point are equal then just 
+            // increase overlapPoint count 
+            if (points[i] == points[j]) 
+                overlapPoints++; 
+  
+            // If x co-ordinate is same, then both 
+            // point are vertical to each other 
+            else if (points[i].first == points[j].first) 
+                verticalPoints++; 
+  
+            else
+            { 
+                int yDif = points[j].second - points[i].second; 
+                int xDif = points[j].first - points[i].first; 
+                int g = __gcd(xDif, yDif); 
+  
+                // reducing the difference by their gcd 
+                yDif /= g; 
+                xDif /= g; 
+  
+                // increasing the frequency of current slope 
+                // in map 
+                slopeMap[make_pair(yDif, xDif)]++; 
+                curMax = max(curMax, slopeMap[make_pair(yDif, xDif)]); 
+            } 
+  
+            curMax = max(curMax, verticalPoints); 
+        } 
+  
+        // updating global maximum by current point's maximum 
+        maxPoint = max(maxPoint, curMax + overlapPoints + 1); 
+  
+        // printf("maximum colinear point  
+        // which contains current point  
+        // are : %d\n", curMax + overlapPoints + 1); 
+        slopeMap.clear(); 
+    } 
+  
+    return maxPoint; 
+} 
+  
+// Driver code 
+int main() 
+{ 
+    const int N = 6; 
+    int arr[N][2] = {{-1, 1}, {0, 0}, {1, 1}, {2, 2}, 
+                    {3, 3}, {3, 4}}; 
+    vector< pair<int, int> > points; 
+    for (int i = 0; i < N; i++) 
+        points.push_back(make_pair(arr[i][0], arr[i][1])); 
+  
+    cout << maxPointOnSameLine(points) << endl; 
+  
+    return 0; 
+} 
+------------------------------------
+Solution 2 : (using radical sweep) 
+Pick any point P and loop on the rest points and calulate the angle between line from P to the ith point and P axis and store it
+and then sort all of the angles and get the max number of times a certain angle exists this is the number of points.
+O(n^2 logn)
+---------------------------------------------------------------------------------------------------------------------------------------
+Example 3
+Problem: getting The convex hull of a set of points is the smallest convex polygon that surrounds the entire set.
+Solution:  An efficient method that is often used in challenges is the Graham scan [2], which requires a sort by angle.
+This isn’t as easy as it looks at first, since computing the actual angles is expensive and introduces problems with numeric
+error. A simpler yet equally efficient algorithm is due to Andrew [1], and requires only a sort by X for a line sweep 
+(although Andrew’s original paper sorts by Y and has a few optimizations I won’t discuss here).
+Andrew’s algorithm splits the convex hull into two parts, the upper and lower hull. Usually these meet at the ends, but
+if more than one points has minimal (or maximal) X coordinate, then they are joined by a vertical line segment. We’ll describe
+just how to construct the upper hull; the lower hull can be constructed in similar fashion, and in fact can be built in the same loop.
+To build the upper hull, we start with the point with minimal X coordinate, breaking ties by taking the largest Y coordinate.
+After this, points are added in order of X coordinate (always taking the largest Y value when multiple points have the same X value).
+Of course, sometimes this will cause the hull to become concave instead of convex:
+okay we keep joining the current point with the one with nearest x-axis till we reach the last point then we will return and check the
+last point with pervious point and preprevious point if they are convex or not if not then i will delete the previous point and so on
+this to build the upper of the hull and the same for the down layer.
+CODE
+----
+// Implementation of Andrew's monotone chain 2D convex hull algorithm.
+// Asymptotic complexity: O(n log n).
+// Practical performance: 0.5-1.0 seconds for n=1000000 on a 1GHz machine.
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+typedef double coord_t;         // coordinate type
+typedef double coord2_t;  // must be big enough to hold 2*max(|coordinate|)^2
+
+struct Point {
+	coord_t x, y;
+
+	bool operator <(const Point &p) const {
+		return x < p.x || (x == p.x && y < p.y);
+	}
+};
+
+// 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
+// Returns a positive value, if OAB makes a counter-clockwise turn,
+// negative for clockwise turn, and zero if the points are collinear.
+coord2_t cross(const Point &O, const Point &A, const Point &B)
+{
+	return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
+}
+
+// Returns a list of points on the convex hull in counter-clockwise order.
+// Note: the last point in the returned list is the same as the first one.
+vector<Point> convex_hull(vector<Point> P)
+{
+	size_t n = P.size(), k = 0;
+	if (n <= 3) return P;
+	vector<Point> H(2*n);
+
+	// Sort points lexicographically
+	sort(P.begin(), P.end());
+
+	// Build lower hull
+	for (size_t i = 0; i < n; ++i) {
+		while (k >= 2 && cross(H[k-2], H[k-1], P[i]) <= 0) k--;
+		H[k++] = P[i];
+	}
+
+	// Build upper hull
+	for (size_t i = n-1, t = k+1; i > 0; --i) {
+		while (k >= t && cross(H[k-2], H[k-1], P[i-1]) <= 0) k--;
+		H[k++] = P[i-1];
+	}
+
+	H.resize(k-1);
+	return H;
+}
+O( nlogn )
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
