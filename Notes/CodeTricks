@@ -380,7 +380,9 @@ IF you are moving in a grid by a ceratin sequence for example left then up then 
 create dcol[] and drow[] arrays in it the next move i should make according to the cycle, this helps a lot to avoid writing longer code
 and more bugs.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you are dealing with doubles and you sort using STL won't let you avoid percision problems but using cmp function will let you a void 
+precision problems by using dcmp().
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
