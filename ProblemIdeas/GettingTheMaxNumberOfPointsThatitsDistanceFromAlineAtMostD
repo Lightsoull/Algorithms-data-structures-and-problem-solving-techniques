@@ -1,0 +1,52 @@
+-ProblemName: PowerSupply topcoder
+-Problem: Getting The Max Number Of Points That its Distance From aline( parallel to x-axis or parallel to y-axis or parallel to any of
+the two diagonals).
+Solution: there is four lines vertical,horizontal,x=y line,x=-y line okay for the vertical i will need only the x value, for horizontal i 
+will only y value for x=y i will put x-y to represent the diagonal and for x=-y i will put x-y to represent the diagonal and then sort
+and line sweep, but there is some questions
+1- the line that might be the answer may be in between 2 points so not exactly at any point, okay this may happen bec the line may stand
+before a point d distance away from it and after point d distance a way from it the solution for this is to consider the d equals to 2*d
+and consider the line at a certain point from the sorted vector.
+2- the distance at the diagonals how to be computed, okay compute the distance from the orginal x=y and x=-y diagonals the passed by (0,0)
+orgin which means i will deal with it as a reference and using this distance to compute the distance between any two diagonals.
+
+CODE
+----
+int mx=0,n;
+int solve(vector<int> &v,ll d)
+{
+    sort(all(v));
+    int mx=0;
+    for(int i=0;i<n;i++)
+    {
+        int cnt=0;
+        for(int j=i;j<n;j++)
+        {
+            if( (v[j]-v[i])*(v[j]-v[i]) <= d)
+                cnt++;
+        }
+        mx=max(mx,cnt);
+    }
+    return mx;
+}
+class PowerSupply
+{
+    int maxProfit(vector <int> x, vector <int> y, int D)
+    {
+        ll d=D;
+        d=d*d*4;
+        n=sz(x);
+        vector<int> vr,hr,lf,rg;
+        vr=x;
+        hr=y;
+        for(int i=0;i<n;i++)
+            lf.pb(x[i]-y[i]);
+        for(int i=0;i,n;i++)
+            rg.pb(x[i]+y[i]);
+        int mx=0;
+        mx=max(solve(vr,d),max(solve(hr,d),max(solve(lf,d*2),solve(rg,d*2))));
+        return mx;
+    }
+};
+
+-----------------------------------------------------------------------------------------------------------------------------------------
