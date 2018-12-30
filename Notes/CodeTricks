@@ -383,7 +383,8 @@ and more bugs.
 If you are dealing with doubles and you sort using STL won't let you avoid percision problems but using cmp function will let you a void 
 precision problems by using dcmp().
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Try always to work in integer domain eg x/sqrt(n) < d = (x^2) < d*d*n
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
