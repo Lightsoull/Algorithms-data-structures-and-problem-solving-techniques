@@ -1,0 +1,42 @@
+-Problem: i have a sequence A of +ve and -ve values and i want to get the subsequence that have the min abs value.
+- Used technique: Dp
+-Solution: first of all abs(a-b)=abs(b-a) so if i have an obtimal abs value at a certain point the other values can deal with that to get
+the obtimal over all answer.
+
+CODE
+----
+const int N=4009;
+int n;
+ll mem[N];
+int arr[N];
+ll solve(int id)
+{
+    if(id==n)
+    {
+        return 0;
+    }
+    ll &ret=mem[id][cnt];
+    if(ret!=1e15)          // not -1 bec -ve values can be the answer
+        return ret;
+        
+    ll a1,a2;
+    a1=A[id]+solve(id+1);
+    a2=solve(id+1);
+    if(abs(a1)<abs(a2))
+        return ret=a1;
+    else
+        return ret=a2;
+}
+int main()
+{
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        cin>>arr[i];
+    }
+    for(int i=0;i<N;i++)
+        mem[i][j]=1e15;
+    cout<<abs(solve(0))<<endl;
+    // the min abs value
+}
+----------------------------------------------------------------------------------------------------------------------------------------
