@@ -1,0 +1,119 @@
+to use unique at c++ v.erase(unique(all(v),v.end())  but vector v must be sorted first 
+----------------------------------------------------------------------------------------------------------------------------------------
+to approximate double you can use cout << round(ans) ;
+----------------------------------------------------------------------------------------------------------------------------------------
+when you want to erase from a set st.erase(s.find( element ) )    check first whether the element exist or not 
+----------------------------------------------------------------------------------------------------------------------------------------
+atoi is when you cnvert from string to integer But if you convert from string to long long  use atoll
+----------------------------------------------------------------------------------------------------------------------------------------
+When you send a sort function to cmp true means it is on the wanted order false means it is order need to adjust
+----------------------------------------------------------------------------------------------------------------------------------------
+the function max_element( all(v ) ) returns a pointer on memeory address
+----------------------------------------------------------------------------------------------------------------------------------------
+the function st.substr( a,b)  where a is the start index of the substring zero based and b is how many elements you want from the 
+start including the start itself
+----------------------------------------------------------------------------------------------------------------------------------------
+C++ DataTypes     to know the min number and the max number each datad type store   
+cout<<  numeric_limits<  long long > :: min()  <<endl ;     cout<<  numeric_limits<  long long > :: max()  <<endl ;
+note there is long double , double , float  ,  the difference between them is float is 4 bytes and it has less percision numbers
+i mean the number of numbers after the point is less than double , double is 8 bytes and the 
+number of digits after the point is more than float and less than long double , long double is 12 bytes and it stores number 
+of digits after the point greater than the double . Well what is the benefit of storing more digits after
+the percision point okay this helps more to distinguish between the decimals eg  2.5678964567      2.5678964521  
+if i compare till the 8th digit after the point they look the same but they actually not the same so to discover
+that i should compare till the 10 th digit this is the beneifit it makes the comparsion more accurate.
+----------------------------------------------------------------------------------------------------------------------------------------
+If there is a comparision with doubles with long double   printf(" %Lf ",num); it uses Lf
+----------------------------------------------------------------------------------------------------------------------------------------
+Defining a variable as int and scan it with %I64d  cause run time error
+----------------------------------------------------------------------------------------------------------------------------------------
+To get the distance between the iterators use int d= distance( a,b ) which is equal to b-a;
+----------------------------------------------------------------------------------------------------------------------------------------
+Output format ( cout<<setw(x)<< num ) for printing x spaces before num  and ( cout<<num<<setw(x) ) for printing x spaces after num.
+printf( "%-20s",st.c_str() ) it will print the string s in 20 width field including the word but you have to write st.c_str() 
+printf( "%5d", num)  will print the num with 5 width field increasing from right to left 
+the same if you want to print a string increasing from right to left printf("%5s", st.c_str() )    
+but if you print a string using printf it must be st.c_str()
+the same if you want to scan C++ string using scanf (  scanf("%s",n.c_str());  )
+----------------------------------------------------------------------------------------------------------------------------------------
+if you want to add to iterator use advance( it,5 ) then get element element= (*it)  works in constant time
+----------------------------------------------------------------------------------------------------------------------------------------
+If you want to work with prioeity_queue and top will be the min element so use  priority_queue<int, vector<int>, greater<int>> and if you want the top to be the greater element   priority_queue<int, vector<int>, less<int>>
+----------------------------------------------------------------------------------------------------------------------------------------
+The pow function with long double is powl( b, p )  
+The fabs function with long double fabsl( num )
+----------------------------------------------------------------------------------------------------------------------------------------
+You can do this vector< pair<int,int> > v(100,mp(0,0)) ;
+----------------------------------------------------------------------------------------------------------------------------------------
+The assign to complex point can be as follows p= point(x,y)
+----------------------------------------------------------------------------------------------------------------------------------------
+there is in complex libaray function called polar( point, angle ) returns the vector
+----------------------------------------------------------------------------------------------------------------------------------------
+there is a function called isnan( val ) like if i divide on zero 
+----------------------------------------------------------------------------------------------------------------------------------------
+atan returns in rad and to convert to degree multiply by 180/pi
+----------------------------------------------------------------------------------------------------------------------------------------
+dequeue push/pop in constant
+----------------------------------------------------------------------------------------------------------------------------------------
+Bitset has  bitset< size >v( string(n,'1') );
+reset( bit ) to put it zero
+ count() to count number of ones 
+set( bit ) to put it 1 and and
+test(bit) to know it is 1 or 0 , it returns 0 or 1
+  ' ~ ' this to flip all bits
+----------------------------------------------------------------------------------------------------------------------------------------
+printf(" %s ",st)  Doesn't work with C++ string works only with char arrays
+----------------------------------------------------------------------------------------------------------------------------------------
+to take substring from a string use     st.assign( to.begin(),to.end() );
+----------------------------------------------------------------------------------------------------------------------------------------
+String st.insert( iterator on position , char )
+----------------------------------------------------------------------------------------------------------------------------------------
+Clear vector of point doesn't work
+----------------------------------------------------------------------------------------------------------------------------------------
+multiset - set , Whwn you insert an element in the set all the iterators on the other elements inserted before remain as it 
+----------------------------------------------------------------------------------------------------------------------------------------
+fabs() deal with double only if you want to use long double use fabsl();
+----------------------------------------------------------------------------------------------------------------------------------------
+Before using unique(all(v) ) you have to sort the vector and then v.resize( v.begin(), unique(all(v) ) )
+----------------------------------------------------------------------------------------------------------------------------------------
+~ make the number -ve 
+if you want to flip all the bits make XOR(^) with (1<<N)-1
+----------------------------------------------------------------------------------------------------------------------------------------
+cubic root in c++ is cbrt(num) return double
+if you want fourth root just  sq=sqrt(num);  forth=sqrt(sq)
+----------------------------------------------------------------------------------------------------------------------------------------
+If you are converting from double to long long +eps  eps=1e-9
+If you are converting from long long to double -eps  eps=1e-9
+----------------------------------------------------------------------------------------------------------------------------------------
+atoll( st.c_str() )  for long long
+----------------------------------------------------------------------------------------------------------------------------------------
+When you write operator (<) in an struct it must take the other one value only not the two values if you want it to take the two 
+values write friend before the bool data type of the returning value
+----------------------------------------------------------------------------------------------------------------------------------------
+abs() with long long is llabs()
+----------------------------------------------------------------------------------------------------------------------------------------
+multiset.erase(value) ---> removes all the elements having this value .
+----------------------------------------------------------------------------------------------------------------------------------------
+polar(LengthOfTheVector , Angle) this function at complex library only accept Angle as const number or defined const datatype
+----------------------------------------------------------------------------------------------------------------------------------------
+scanf("%d.%d",&integer,&percision);
+it is a trick to get the integer of some double value and the decimal eg 20.786  integer=20  percision=786
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
