@@ -1,0 +1,192 @@
+ try to get observations closer to what you want in somehow not random observations.
+-----------------------------------------------------------------------------------------------------------------------------------------
+once you get an idea spend time verify it and see for corner cases and if it fit or not 
+----------------------------------------------------------------------------------------------------------------------------------------
+at dp when it has a loop at main to know whether its counted as a nested complexity or not look at the table it self i mean the
+array mem how it fills :).
+----------------------------------------------------------------------------------------------------------------------------------------
+instead of doing something then check its correctness do it right from the begining if you can
+----------------------------------------------------------------------------------------------------------------------------------------
+some times getting totally out of an idea you stucked in and think from another view helps
+----------------------------------------------------------------------------------------------------------------------------------------
+When you verify if there is a cycle check when it is even and when it is odd
+----------------------------------------------------------------------------------------------------------------------------------------
+if you feel stucking in a problem try on very small samples then larger and so on.....
+----------------------------------------------------------------------------------------------------------------------------------------
+Sometimes you can proof by contradictions.
+----------------------------------------------------------------------------------------------------------------------------------------
+Sometimes you can move to the answer by assuming and proof.
+----------------------------------------------------------------------------------------------------------------------------------------
+Check when the answer will be zero if you count
+----------------------------------------------------------------------------------------------------------------------------------------
+When you think about a code make sure it applies your idea
+----------------------------------------------------------------------------------------------------------------------------------------
+Try to think simbolliaclly espically with probability or math problems 
+----------------------------------------------------------------------------------------------------------------------------------------
+In probability if you want an expectation of some thing for example E(cost) you can think of the calculation of the cose equation 
+itself then by linearity of expectation you can get the equation of the expectation as well
+----------------------------------------------------------------------------------------------------------------------------------------
+Some times if you stuck flip your thinking 180 degree
+----------------------------------------------------------------------------------------------------------------------------------------
+Think in the process when it is done what is the problem should look like
+----------------------------------------------------------------------------------------------------------------------------------------
+Dont think as black or white for eample your idea may be partially correct so if you see some thing wrong with it dont distroy it 
+all but update it or divide it to cases
+----------------------------------------------------------------------------------------------------------------------------------------
+if you stucked simulate alot of examples :)
+----------------------------------------------------------------------------------------------------------------------------------------
+take time to verify your ideas
+----------------------------------------------------------------------------------------------------------------------------------------
+think in the structure of the code
+----------------------------------------------------------------------------------------------------------------------------------------
+Spend more time thinking in the actual complexity taken
+----------------------------------------------------------------------------------------------------------------------------------------
+When you want to reach an end from some start and you want to know the start try to think reversley from the end up to the start
+----------------------------------------------------------------------------------------------------------------------------------------
+If you are in a problem that two players play againest each other each one wants the opposite of the other so  just let each one play 
+for what he want the get the answer
+----------------------------------------------------------------------------------------------------------------------------------------
+Dijkstra allows me to min with updating the distance inside it 
+----------------------------------------------------------------------------------------------------------------------------------------
+At Dp with graph if the graph is cyclic but your state contain another parameter that lead the recurrence to be not cyclic so you can 
+use dp
+----------------------------------------------------------------------------------------------------------------------------------------
+At Segment tree Don't go to range except when yu are sure 100% that there is answer inside it
+----------------------------------------------------------------------------------------------------------------------------------------
+Try to think in the code structure and optimize it in the size
+----------------------------------------------------------------------------------------------------------------------------------------
+implement the code completely on paper not just a part
+----------------------------------------------------------------------------------------------------------------------------------------
+when find a problem in your idea try to solve it Don't discard the whole idea once you find a problem with it 
+----------------------------------------------------------------------------------------------------------------------------------------
+Sometimes doing what is wrong and correct it later is easier than avoiding doing what is wrong
+----------------------------------------------------------------------------------------------------------------------------------------
+Learn to switch your thinking in many other directions after spending time thinking in a way and failed
+----------------------------------------------------------------------------------------------------------------------------------------
+If you have an observation on a fixed range but the rest you have no thing on it so you can work with your observation and the rest of 
+the range you can brudeforce
+----------------------------------------------------------------------------------------------------------------------------------------
+Try to think in sub problems of the big problem seprately
+----------------------------------------------------------------------------------------------------------------------------------------
+If you stuck restate the problem from the begining again
+----------------------------------------------------------------------------------------------------------------------------------------
+If you are searching for something think what if you don't find it 
+----------------------------------------------------------------------------------------------------------------------------------------
+Switching your thinking in  other direction, this direction may be not totally different
+----------------------------------------------------------------------------------------------------------------------------------------
+Try to think in an opposite way of the problem
+----------------------------------------------------------------------------------------------------------------------------------------
+Some times you can think in a path which is right but the children of this path is not right
+----------------------------------------------------------------------------------------------------------------------------------------
+Try to think in general not on a specific case or idea, in other words try to generalize your idea
+----------------------------------------------------------------------------------------------------------------------------------------
+Treat dijkstra state as dp state
+----------------------------------------------------------------------------------------------------------------------------------------
+learn to partitionate the problem
+----------------------------------------------------------------------------------------------------------------------------------------
+Don't look for the problem from a certain topic or idea look to it in general 
+----------------------------------------------------------------------------------------------------------------------------------------
+Takecare of linearity of expectation
+----------------------------------------------------------------------------------------------------------------------------------------
+If you are comparing two ranges there is 4 possibilities
+1- first inside second
+2-second inside first
+3-take part from end
+4-take part from beginng
+----------------------------------------------------------------------------------------------------------------------------------------
+You can know the number of operations to do something by the exact complexity of its code - Must be Exact  -
+----------------------------------------------------------------------------------------------------------------------------------------
+learn to mark the subproblems that a problem contains and start to think in them one by one
+----------------------------------------------------------------------------------------------------------------------------------------
+At geometry problems think of a way to solve without much percision errors
+----------------------------------------------------------------------------------------------------------------------------------------
+Verify alot
+----------------------------------------------------------------------------------------------------------------------------------------
+List your ways to solve and go through each one till the end
+----------------------------------------------------------------------------------------------------------------------------------------
+Understand the real meaning of the problem
+----------------------------------------------------------------------------------------------------------------------------------------
+Try sometimes to think in totally different interpertation for the problem
+----------------------------------------------------------------------------------------------------------------------------------------
+if you have a certain problem with a TLE solution for example your solution is AC if n<10 else its TL and n up to 15 so you can 
+just compute the above 10 and put the result manually in an array 
+----------------------------------------------------------------------------------------------------------------------------------------
+At implementation things can be not handeled exactly
+----------------------------------------------------------------------------------------------------------------------------------------
+if you are thinking by examples try large ones as much as possible
+----------------------------------------------------------------------------------------------------------------------------------------
+At Dp You can think of a problem simbollically as a functions
+----------------------------------------------------------------------------------------------------------------------------------------
+If you want to get the max sum of a sub array you can do it with sliding window but if it can be a subsequence so it can't be 
+sliding window
+----------------------------------------------------------------------------------------------------------------------------------------
+When you observe that this subtask is impossible return back a step
+----------------------------------------------------------------------------------------------------------------------------------------
+Try to cut the space into parts
+----------------------------------------------------------------------------------------------------------------------------------------
+Verfity some more time
+----------------------------------------------------------------------------------------------------------------------------------------
+You may change the way of writing the code to over come a bug yu don't know
+----------------------------------------------------------------------------------------------------------------------------------------
+Verfiy your thougths that make the problem harder
+----------------------------------------------------------------------------------------------------------------------------------------
+if you are minmizing or maximaizing think of the worest case and the best case
+----------------------------------------------------------------------------------------------------------------------------------------
+Try to think for a very small sample and then grow it up
+----------------------------------------------------------------------------------------------------------------------------------------
+try to think in a mathematical form
+----------------------------------------------------------------------------------------------------------------------------------------
+When the problem asks you to perform certain thing in less than or equal a certain a mount of steps try to think of a constructive 
+algorithsm 
+----------------------------------------------------------------------------------------------------------------------------------------
+Try sometimes to see things from a reversed side
+----------------------------------------------------------------------------------------------------------------------------------------
+When you draw a tree take care of drawing different cases
+1- multi edges
+2- directly to the root and not directly to the root
+----------------------------------------------------------------------------------------------------------------------------------------
+Learn to think overall thinking, for example what will happen to the graph after  applying those operations.
+----------------------------------------------------------------------------------------------------------------------------------------
+At Dp Learn to look to the problem from different recurrances points of view 
+----------------------------------------------------------------------------------------------------------------------------------------
+Think of a reduction to a problem 
+----------------------------------------------------------------------------------------------------------------------------------------
+Think BrudeForce and see whether it could fit in time or not
+----------------------------------------------------------------------------------------------------------------------------------------
+When you have different things that you need to adjust then you can fix something and work  on the others
+----------------------------------------------------------------------------------------------------------------------------------------
+when you have a lot of variables learn to fix some and work on the others
+----------------------------------------------------------------------------------------------------------------------------------------
+When you think dp think dp iterative
+----------------------------------------------------------------------------------------------------------------------------------------
+IF you are calculating the result for a range you can try to find the result for one value and then try to find the result of two values
+interms of finding the value for one value then build up you could find the result for all the range.
+eg
+i have function f(x) for integer x and i want to find the result for f(p1*p2*p3)
+first calculate f(p1) let it be equal to p1*4+2 then 
+calculate f( p1*p2 ) let it be equal to  f(p1)*f(p2)*4 
+so here i could build up the solution with a simple for loop .
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
