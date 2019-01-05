@@ -1,0 +1,54 @@
+Problem Link:https://codeforces.com/contest/615/problem/D.
+- Problem: you are give n prime factors represent the number N and i want the product of the divisors of N mod 1e9+7.
+- Solution: 
+first 
+Suppose i have a Number n = p1^a1 * p2^a2 * p3^a3 where p1,p2,p3 are distinct prime factors the number of divisors of n is 
+d=(a1+1)*(a2+1)*(a3+1) , let d(x) is the number of divisors of x.
+second 
+let function f(p) be the product of divisors of number p, if p is prime then f(p^k) = p^((k*(k+1))/2) okay but here i have 
+p1^k1 * p2^k2 *.. , okay what is the f( a*b ) where a and b are co-prime f( a*b )= f(a)^(d(b)) * f(b)^(d(a)) . 
+okay now we could calculate the solution, we will use Little fermat theorem as well.
+
+CODE
+----
+const int N=200009;
+ll MOD=1e9+7;
+int n;
+int cnt[N];
+vector< int > p;
+ll power(ll b,ll p)
+{
+    if(p==0)
+        return 1;
+    if(p&1)
+        return ((b)%MOD*power((b*b)%MOD,p/2))%MOD;
+    else
+        return power((b*b)%MOD,p/2);
+}
+int main()
+{
+    cin>>n;
+    int no;
+    for(int i=0;i<n;i++)
+    {
+        cin>>no;
+        cnt[no]++;
+        if(cnt[no]==1)
+            p.pb(no);
+    }
+    ll ans=1;
+    ll d=1;
+    for(int i=0;i<sz(p);i++)
+    {
+        ll c=cnt[p[i]];
+        ll curp= power(p[i],(c*(c+1))/2);
+        ans= (power(curp,d)*power(ans,c+1))%MOD;
+        d=(d*(cnt[p[i]]+1))%(MOD-1);
+    }
+    cout<<ans<<endl;
+
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
