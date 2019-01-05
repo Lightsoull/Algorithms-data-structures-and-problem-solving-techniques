@@ -8,3 +8,5 @@ is prime number so (x/y) % MOD = (x % MOD * power(y,mod-2) % MOD) % MOD.
  Suppose i have a Number n = p1^a1 * p2^a2 * p3^a3 where p1,p2,p3 are distinct prime factors the number of divisors of n is 
 d=(a1+1)*(a2+1)*(a3+1).
 -------------------------------------------------------------------------------------------------------------------------------------------
+Note: I can't make mod inverse with little fermat theorem bec the mod won't be prime.
+-------------------------------------------------------------------------------------------------------------------------------------------
