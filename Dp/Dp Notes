@@ -10,7 +10,65 @@ Note: assume that there is an integer sequence s contains only 1 or 2 numbers an
 sequences mod m 
 okay here if it was the sum of product of all sequences then we can do dp but if it is the product it can't be the same way because 
 a*(c+d) a will be distributed but a*(c*d) a won't be distributed.
--------------------------------------------------------------------------------------------------------------------------------------------
+So here the mem array will be of pair first for result and the second is for the number of parameters i distribute to.
+
+example problem : https://codeforces.com/contest/615/problem/D
+CODE
+----
+const ll MOD=1e9+7;
+const int N=200009;
+int n;
+pair<ll,ll> mem[N];
+vector<ll> v;
+ll cnt[N];
+ll power(ll b,ll p)
+{
+    if(p==0)
+        return 1;
+    if(p&1ll)
+        return (b%MOD*power((b*b)%MOD,p/2))%MOD;
+    else
+        return power((b*b)%MOD,p/2)%MOD;
+}
+pair<ll,ll> solve(int id)
+{
+    if(id==sz(v))
+    {
+        return mp(1,1);
+    }
+    pair<ll,ll> ret=mem[id];
+
+    if(ret.first!=-1)
+        return ret;
+    ll ans=solve(id+1).first;
+    ll c=solve(id+1).second;
+    for(int i=1;i<=cnt[v[id]];i++)
+    {
+
+        pair<ll,ll> p=solve(id+1);
+        c =(c+ p.second)%(MOD-1);
+        ll val=p.first;
+        ll res=power(v[id],p.second*i % (MOD-1));
+        ans= (ans*((res *val )%MOD))%MOD;
+    }
+    return mem[id]=mp(ans,c);
+}
+int main()
+{
+    cin>>n;
+    int no;
+    for(int i=0;i<n;i++)
+    {
+        cin>>no;
+        cnt[no]++;
+        if(cnt[no]==1)
+        v.pb(no);
+    }
+    clr(mem,-1);
+    ll ans=solve(0).first;
+    cout <<ans;
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
