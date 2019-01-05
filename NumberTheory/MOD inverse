@@ -1,3 +1,10 @@
 - MOD can be distributed with '+', '-', '*' but for '/' it can't , so  x/y = x*(1/y) and (1/y) % MOD = power(y,mod-2)%MOD but iff the mod 
 is prime number so (x/y) % MOD = (x % MOD * power(y,mod-2) % MOD) % MOD.
 ------------------------------------------------------------------------------------------------------------------------------------------
+- IF i want the value of (a^x) % m and x could be very large it can over flow with time here we use
+ Little Fermat Theorem
+ For a prime m and a!=0, a^(m-1) = 1  (mod m) and  a^x = a^(x%(m-1)) (mod m)
+ ------------------------------------------------------------------------------------------------------------------------------------------
+ Suppose i have a Number n = p1^a1 * p2^a2 * p3^a3 where p1,p2,p3 are distinct prime factors the number of divisors of n is 
+d=(a1+1)*(a2+1)*(a3+1).
+-------------------------------------------------------------------------------------------------------------------------------------------
