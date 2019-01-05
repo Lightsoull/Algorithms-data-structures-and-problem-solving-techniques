@@ -6,3 +6,33 @@ pervious one position with T positions 1<=T<=N so instead of making another loop
 T will be with one at the begining so dp[i+1][pos]=dp[i][pos-1] then if T will be 2 means that i will take from the i+1th element one
 dp[i+1][pos]=dp[i+1][pos-1] so this will in n^2 instead of n^3.
 -------------------------------------------------------------------------------------------------------------------------------------------
+Note: assume that there is an integer sequence s contains only 1 or 2 numbers and you want to calulate the product of all the possible
+sequences mod m 
+okay here if it was the sum of product of all sequences then we can do dp but if it is the product it can't be the same way because 
+a*(c+d) a will be distributed but a*(c*d) a won't be distributed.
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
