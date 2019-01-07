@@ -32,6 +32,10 @@ distance will find that there is no space to put a single point.
 --------------------
 CODE
 ----
+Notes on code
+- take care of value of infinity
+- if you compare the distance squared so events[right].X-events[left].X must be squared too
+
 #define     point   complex<double>
 #define   Y            imag()
 #define   X            real()
@@ -55,7 +59,6 @@ struct cmpY
     }
 };
 const double oo=1e15;
-// take care of value of infinity
 double closestpair(vector<point> &events)
 {
     multiset< point , cmpY> activewindow;
