@@ -127,7 +127,8 @@ memeory complexity double.
 Suppose i have a Number n = p1^a1 * p2^a2 * p3^a3 where p1,p2,p3 are distinct prime factors the number of divisors of n is 
 d=(a1+1)*(a2+1)*(a3+1) so the number of values of n if i will divide it to one of its divisors is d.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you are using set or map and you don't mind if it will be multi or unordered so let it be it will decrease the complexity.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
