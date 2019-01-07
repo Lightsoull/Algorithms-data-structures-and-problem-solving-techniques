@@ -1,0 +1,70 @@
+Problem link: https://codeforces.com/contest/429/problem/D
+Problem: You're given an (1-based) array a with n elements. 
+Let's define function f(i, j) (1 ≤ i, j ≤ n) as (i - j)^2 + g(i, j)^2. Function g is calculated by the following pseudo-code:
+int g(int i, int j) {
+    int sum = 0;
+    for (int k = min(i, j) + 1; k <= max(i, j); k = k + 1)
+        sum = sum + a[k];
+    return sum;
+}
+Find a value mini ≠ j  f(i, j).
+Solution: let the ACC array the accumulated sum array of the given array if i choosed i and j so the brudeforce solution
+will ( ACC[j] - ACC[i] )^2 + (j-i)^2 okay which is equal to the squared distance between two points First point ( Acc[i],ith ) and the
+second point ( Acc[j],jth ).
+CODE
+----
+const int N=100002;
+int n,arr[N];
+typedef pair<ll,ll> pii;
+vector<pii> v;
+multiset<pii> st;
+ll dist(pii a,pii b)
+{
+    return (b.first-a.first)*(b.first-a.first)+(b.second-a.second)*(b.second-a.second);
+}
+int main()
+{
+    scanf("%d",&n);
+    for(int i=0;i<n;i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+    int s=0;
+    for(int i=0;i<n;i++)
+    {
+         s+=arr[i];
+         v.pb(mp(s,i+1));
+    }
+    sort(all(v));
+    ll oo=3e18;
+    ll D=oo;
+    int j=0;
+    st.insert(mp(v[0].second,v[0].first));
+    for(int i=1;i<sz(v);i++)
+    {
+        while(j<i&&(v[i].first-v[j].first)*(v[i].first-v[j].first)>D)
+        {
+
+            st.erase(st.find(mp(v[j].second,v[j].first)));
+            j++;
+        }
+
+        auto beg=st.lower_bound(mp(v[i].second-D,-oo));
+        auto en=st.upper_bound(mp(v[i].second+D,-oo));
+
+        for(auto it=beg;it!=en;it++)
+        {
+
+            D=min(D,dist(*(it),mp(v[i].second,v[i].first)));
+        }
+
+        st.insert(mp(v[i].second,v[i].first));
+    }
+    ------------------------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
+
+    printf("%I64d",D);
+}
