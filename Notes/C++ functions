@@ -99,6 +99,12 @@ polar(LengthOfTheVector , Angle) this function at complex library only accept An
 scanf("%d.%d",&integer,&percision);
 it is a trick to get the integer of some double value and the decimal eg 20.786  integer=20  percision=786
 ----------------------------------------------------------------------------------------------------------------------------------------
+At complex library you can't say point p and then p.real() = val, you can't assign the real or the imag part only.
+----------------------------------------------------------------------------------------------------------------------------------------
+next is a reserved word.
+----------------------------------------------------------------------------------------------------------------------------------------
+set.insert(val) return pair<iter of the value , bool equals to one if there is no duplicate >
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
