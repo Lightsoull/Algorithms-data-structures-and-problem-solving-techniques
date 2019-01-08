@@ -28,7 +28,8 @@ struct Pt
         return Pt(x - a.x, y - a.y);
     }
 };
-typedef struct Seg {
+typedef struct Seg 
+{
 	Pt s, e;
 	int id;
 	Seg(Pt a , Pt b , int c)
