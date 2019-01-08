@@ -1,0 +1,216 @@
+-Problem: you are given n segments there is no horizontal segments or any intersection between any segments and there is q points
+which are asource of water the water goes down till it reaches the floor at some x calculate this x value for each point.
+-Solution: if i get the next segment for each source and for each low point at every segment then i could find the solution recurively 
+using solve function, okay Now to get the next segment i will use line sweep tech every segment already started and ended won't be 
+my next for sure so i will sort the points of the segments on x value and if they have the same x i will sort on the type of the point
+start and source first then end and if they have the same type i will sort on low point first then high point then source and by
+having the active set i will interpolate on the current x value all the active segments and choose the one directly below me.
+CODE
+----
+struct point
+{
+    int x,y;
+    point(int b=0,int c=0)
+    {
+        x=b; y=c;
+    }
+    bool operator<(const point &e)const
+    {
+        if(x!=e.x)
+            return (x<e.x);
+        return (y<e.y);
+    }
+    point operator-(const point &e)const
+    {
+        return point(x-e.x,y-e.y);
+    }
+};
+struct seg
+{
+    point s,e;
+    int id;
+    seg(point a,point b,int c)
+    {
+        s=a; e=b; id=c;
+    }
+};
+typedef struct EndPoints
+{
+    int x,s,kind,id;
+    EndPoints(int a=0,int b=0,int c=0,int d=0)
+    {
+        x=a; s=b; kind=c; id=d;
+    }
+    bool operator<(const EndPoints &e)const
+    {
+        if(x!=e.x)
+            return (x<e.x);
+        if(s!=e.s)
+            return (s<e.s);
+        return (kind<e.kind);
+    }
+}EE;
+struct CMX
+{
+    static int x;
+    double interpolation(const point &a,const point &b,int &x)
+    {
+        if(a.x==b.x)
+            return a.y;
+
+        return a.y+ (double)(b.y-a.y)/(b.x-a.x)*(x-a.x);
+    }
+
+    bool operator() (const seg &a,const seg &b)
+    {
+        return interpolation(a.s,a.e,x) < interpolation(b.s,b.e,x);
+    }
+
+
+};
+const int N=1000009;
+int n,so;
+vector<seg> sg;
+vector< EE >e;
+int sx[N],nxt[N],touch[N],sy[N];
+int ans[N];
+set<seg,CMX> S;
+void I()
+{
+    sg.clear();
+    e.clear();
+    S.clear();
+
+    for(int i=0;i<N;i++)
+        ans[i]=-2,touch[i]=-1,nxt[i]=-1;
+}
+int solve(int id)
+{
+    if(ans[id]!=-2)
+        return ans[id];
+
+    int myx;
+
+    if(sg[id].s.y<sg[id].e.y)
+    {
+        myx=sg[id].s.x;
+    }
+    else
+        myx=sg[id].e.x;
+
+
+    if(nxt[id]==-1)
+    {
+        return ans[id]=myx;
+    }
+
+    return ans[id]=solve(nxt[id]);
+}
+
+int CMX::x =0;
+
+
+void LineSweep()
+{
+
+    for(int i=0;i<n;i++)
+    {
+        if(sg[i].e<sg[i].s)
+            swap(sg[i].s,sg[i].e);
+
+       int st1= sg[i].s.y<sg[i].e.y;
+       int st2= sg[i].e.y<sg[i].s.y;
+       e.pb(EndPoints(sg[i].s.x , 0 , st1 ,i));
+       e.pb(EndPoints(sg[i].e.x, 1, st2, i));
+    }
+
+    for(int i=0;i<so;i++)
+    {
+
+        e.pb(EndPoints(sx[i],0,2,i));
+    }
+
+    sort(all(e));
+
+    for(int i=0;i<sz(e);i++)
+    {
+        CMX::x = e[i].x;
+        if(e[i].kind==2)
+        {
+            int id=e[i].id;
+           auto it= S.upper_bound(seg(point(sx[id],sy[id]),point(sx[id],sy[id]),0));
+            if(sz(S)>0&&it!=S.begin())
+            {
+                it--;
+                touch[e[i].id]=it->id;
+            }
+            continue;
+        }
+        if(e[i].kind==1)
+        {
+            auto it= S.upper_bound(sg[e[i].id]);
+            if(it!=S.begin())
+            {
+                it--;
+                if(it->id!=e[i].id)
+                nxt[e[i].id]=it->id;
+                else
+                {
+                    if(it!=S.begin())
+                    {
+                        it--;
+                        nxt[e[i].id]=it->id;
+                    }
+                }
+            }
+        }
+
+        if(e[i].s==0)
+            S.insert(sg[e[i].id]);
+        else
+        {
+            auto it= S.find(sg[e[i].id]);
+            if(it!=S.end())
+                S.erase(it);
+        }
+    }
+   for(int i=0;i<n;i++)
+   {
+       solve(i);
+   }
+   for(int i=0;i<so;i++)
+   {
+
+       if(touch[i]==-1)
+        cout<<sx[i]<<endl;
+       else
+        cout<<ans[touch[i]]<<endl;
+   }
+}
+int main()
+{
+    int T,in=0;
+    cin>>T;
+    while(T--)
+    {
+        if(in)
+            cout<<endl;
+        in=1;
+        I();
+        string blk;
+        cin.ignore();
+        getline(cin,blk);
+
+        cin>>n;
+        int x1,x2,y1,y2;
+        for(int i=0;i<n;i++)
+        {
+            cin>>x1>>y1>>x2>>y2;
+            sg.pb(seg(point(x1,y1),point(x2,y2),i));
+        }
+        cin>>so;
+        for(int i=0;i<so;i++)
+            cin>>sx[i]>>sy[i];
+        LineSweep();
+    }
+}
