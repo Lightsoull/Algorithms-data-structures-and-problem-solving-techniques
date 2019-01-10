@@ -30,6 +30,9 @@ point intersect(point a,point b,point c,point d)
 5-when you sweep in a circle with an angle you have to fix the angle always by fix function.
 
 6-Take care of the order of the points according to its kind, for example the start end point may be before the End endpoint.
+
+7-When you sweep in circle and you starts at theta equals to zero then see what if there is an event starts before theta equals to
+zero and its effect still exists when theta equals to zero.
 ----------------------------------------------------------
 CODE
 ----
@@ -162,7 +165,7 @@ int circlesweep(int id)
 
             e.pb(Event(a.ang,i,1));
             e.pb(Event(b.ang,i,3));
-            e.pb(Event(-PI,i,1));
+            AC.insert(seg(a,b));
 
         }
         else
