@@ -1,0 +1,242 @@
+-Problem: UVA 12675
+-Problem: you are given n segments in a 2-D plane and k points for only each one in the first s points i want to know the number
+of points it can see, each segment is like a wall which prevent one point from seeing other points.
+-Solution: if i stand at a certain point every segment that already started and ended will never prevent me from seeing any point and 
+every segment that doesn't start will never affects my vision, okay to get the set of segments that currently affects my i will fix a 
+certain point and sweep in a circle a round it entering segments and exist segments and for all the segments they will be sorted 
+with respect to the current point from the orgin since i shifted every to the orgin first.
+
+CODE Notes
+1- if you have a segment has start point and end point and you are sweeping in a circle counter-clockwise and you want to know what is the 
+start end and what is the End
+double d= fix(b.ang-a.ang);
+        if(dcmp((d-PI),0)>0)
+         swap(a,b);
+         
+2-if you are working with respect to point p and you want to shift it to the orgin then you will need to shift every thing 
+shifting a point p1 will be p1= p1-p.
+shifting a segment AB will be (A-p)(B-p).
+
+3-to get the angle between a point (x,y) and the x-axis you can use atan2(y,x).
+
+4- if you want the intersection between a vector of a certain angle Q with a segment, create a unit vector ( vector of length one )
+and with the angle Q by vec= ( 1*sin(Q in rad) , 1*cos(Q in rad) ) then intersect this vector with the segment you want and return
+the point of intersection.
+point intersect(point a,point b,point c,point d)
+{
+    return a+ (b-a)*(((a-c).CP(d-c))/((a-b).CP(d-c)));
+}
+
+5-when you sweep in a circle with an angle you have to fix the angle always by fix function.
+
+6-Take care of the order of the points according to its kind, for example the start end point may be before the End endpoint.
+----------------------------------------------------------
+CODE
+----
+struct point
+{
+    double x,y,ang;
+    point(double a=0,double b=0)
+    {
+        x=a;
+        y=b;
+        ang=atan2(y,x);
+    }
+    double dist2()
+    {
+        return sqrt(x*x+y*y);
+    }
+
+    point operator-(const point &b)const
+    {
+        return point(x-b.x,y-b.y);
+    }
+    point operator*(const double &e)const
+    {
+        return point(x*e,y*e);
+    }
+    point operator+(const point &e)const
+    {
+        return point(x+e.x,y+e.y);
+    }
+    point operator/(double &e)const
+    {
+        return point(x/e,y/e);
+    }
+
+    double CP(const point &e)const
+    {
+        return x*e.y-y*e.x;
+    }
+
+}O;
+double nowang;
+point intersect(point a,point b,point c,point d)
+{
+    return a+ (b-a)*(((a-c).CP(d-c))/((a-b).CP(d-c)));
+}
+struct seg
+{
+
+    point a,b;
+    seg()
+    {
+        a=0,b=0;
+    }
+    seg(point a,point b) : a(a),b(b){}
+
+    double D()const
+    {
+        if(dcmp(((a-O).CP(b-O)),0)==0)
+            return min((a-O).dist2(),(b-O).dist2());
+
+        return (O-intersect(a,b,O,point(cos(nowang),sin(nowang)))).dist2();
+    }
+
+
+    bool operator<(const seg &rhs)const
+    {
+        return dcmp(D(),rhs.D())<0;
+    }
+};
+struct Event
+{
+    double ang;
+    int id,st;
+    Event(double ang,int id,int st) : ang(ang),id(id),st(st){}
+
+    bool operator<(const Event &e)const
+    {
+        if(dcmp(ang,e.ang)!=0)
+            return dcmp(ang,e.ang)<0;
+        return st<e.st;
+    }
+};
+
+vector< Event > e;
+vector< seg > s;
+set< seg > AC;
+vector< point > p;
+int ans,w,ss,k;
+void I()
+{
+    AC.clear();
+    s.clear();
+    e.clear();
+    p.clear();
+}
+void tI()
+{
+    ans=0;
+    e.clear();
+    AC.clear();
+}
+double fix(double x)
+{
+    if(dcmp(x,0)<0)
+        x+=PI*2;
+    if(dcmp(x,2*PI)>=0)
+        x-=2*PI;
+    return x;
+}
+int circlesweep(int id)
+{
+    tI();
+    for(int i=0;i<k;i++)
+    {
+        if(i==id)
+            continue;
+        point pp=p[i]-p[id];
+        e.pb(Event(pp.ang,i,2));
+    }
+    for(int i=0;i<w;i++)
+    {
+
+        point a=s[i].a-p[id];
+        point b=s[i].b-p[id];
+        double d= fix(b.ang-a.ang);
+        if(dcmp((d-PI),0)>0)
+         swap(a,b);
+        if(dcmp((a.ang-b.ang)-PI,0)>0)
+        {
+
+            e.pb(Event(a.ang,i,1));
+            e.pb(Event(b.ang,i,3));
+            e.pb(Event(-PI,i,1));
+
+        }
+        else
+        {
+            e.pb(Event(a.ang,i,1));
+            e.pb(Event(b.ang,i,3));
+        }
+    }
+
+    sort(all(e));
+
+    for(int i=0;i<sz(e);i++)
+    {
+        nowang=e[i].ang;
+        int nowid=e[i].id;
+
+        if(e[i].st==1)
+        {
+            AC.insert(seg(s[nowid].a-p[id],s[nowid].b-p[id]));
+        }
+        else if(e[i].st==2)
+        {
+
+            ans+= (sz(AC)==0||dcmp(AC.begin()->D(),(p[nowid]-p[id]).dist2())>0);
+        }
+        else
+        {
+            auto it= AC.find(seg(s[nowid].a-p[id],s[nowid].b-p[id]));
+            if(it!=AC.end())
+                AC.erase(it);
+        }
+    }
+
+    return ans;
+}
+
+int main()
+{
+    O=point(0,0);
+    while(cin>>ss>>k>>w)
+    {
+        I();
+        double x1,y1,x2,y2;
+        for(int i=0;i<k;i++)
+        {
+            cin>>x1>>y1;
+            p.pb(point(x1,y1));
+        }
+
+        for(int i=0;i<w;i++)
+        {
+            cin>>x1>>y1>>x2>>y2;
+            s.pb(seg(point(x1,y1),point(x2,y2)));
+        }
+        for(int i=0;i<ss;i++)
+         cout<<circlesweep(i)<<endl;
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
