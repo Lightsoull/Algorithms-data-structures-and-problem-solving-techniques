@@ -167,6 +167,8 @@ first calculate f(p1) let it be equal to p1*4+2 then
 calculate f( p1*p2 ) let it be equal to  f(p1)*f(p2)*4 
 so here i could build up the solution with a simple for loop .
 -----------------------------------------------------------------------------------------------------------------------------------------
+At geometry problems verify alot there will be a lot of cases.
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
