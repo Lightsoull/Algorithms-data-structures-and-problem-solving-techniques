@@ -52,9 +52,12 @@ check that.
 
 Tricks
 1- here the angle between orgin and (x,y) point is atan2(y,x) okay true but here i am dealing in double domain, we can work in integer
-domain by some obsrvation y1/x1 > y2/x2 the angle of y1/x1 must be larger too so it is just a comparsion between y1/x1 and y2/x2 
-and it can be done by y1*x2+y2*x1 equation so we could sort the points according to their angles without precision errors.
-
+domain by some obsrvation y1/x1 > y2/x2 the angle of y1/x1 must be larger too from (-90,90) so it is just a comparsion between 
+y1/x1 and y2/x2 and it can be done by y1*x2+y2*x1 equation so we could sort the points according to their angles without 
+precision errors.
+Note
+This implementation assumes that there are no repeating vertices in this polygon, and the area of the polygon is non-zero and no 
+three points are collinear.
 CODE
 ----
 struct point 
