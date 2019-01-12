@@ -1,0 +1,224 @@
+-Problem: given 2 convex polygons and need the area of the intersection part between the two polygons .
+-Solution: the intersecting area will form a convex polygon consisting of all the intersecting points between all the segments and 
+the points of the first polygon that exists at the second polygon and the points of the second polygon that exists at the first
+polygon, okay to get the intersecting points there is 2 ways first one in n^2 brudeforce and second one in nlogn linesweep (bentlyottman
+algorithsm) and to get the points of one polygon that exists in other there is 2 ways one in n^2 and the other in nlogn (explaned before
+in pointInPolygon), okay after that there is one problem remaining that the points are not ordered ( clockwise/unti-clockwise ) so i will
+create a convex hull from those points so i will get the points ordered and will be ready to compute the area of the convex intersecting 
+polygon.
+
+CODE
+----
+typedef struct point
+{
+    double x,y;
+    point(double a=0,double b=0)
+    {
+        x=a; y=b;
+    }
+    bool operator <(const point &p) const {
+		return x < p.x || (x == p.x && y < p.y);
+	}
+    point operator*(const double &e)const
+    {
+        return point(x*e,y*e);
+    }
+    point operator-(const point &p)const
+    {
+        return point(x-p.x,y-p.y);
+    }
+    double absl()const
+    {
+        return sqrt(x*x+y*y);
+    }
+    double dist(const point &p)const
+    {
+        return sqrt((x-p.x)*(x-p.x)+(y-p.y)*(y-p.y));
+    }
+    point operator+(const point &p)const
+    {
+        return point(x+p.x,y+p.y);
+    }
+    bool operator==(const point &p)const
+    {
+        return (dcmp(x,p.x)==0)&&(dcmp(y,p.y)==0);
+    }
+}Point;
+struct seg
+{
+    point s,e;
+    int id;
+    seg(point s,point e,int id) : s(s),e(e),id(id) {}
+};
+vector< seg >sg;
+vector< point > A;
+struct ang
+{
+    int a,b;
+    ang(){a=0,b=0;}
+    ang(int a,int b): a(a),b(b){}
+    bool operator<(const ang &e)const
+    {
+        if(b==0&&e.b==0)
+            return a<e.a;
+        return (1ll*a*e.b)<(1ll*b*e.a);
+    }
+};
+ll cross(point &a,point &b,point &c)
+{
+    return a.x*1ll*(b.y-c.y) + b.x*1ll*(c.y-a.y) + c.x *1ll* (a.y-b.y);
+}
+void test(vector<point> p,vector<point> q)
+{
+    p.pop_back();
+    q.pop_back();
+    int zeroid=0;
+    for(int i=0;i<sz(p)-1;i++)
+    {
+        if(p[i].x<p[zeroid].x||(p[i].x==p[zeroid].x&&p[i].y<p[zeroid].y))
+            zeroid=i;
+    }
+    point zero=p[zeroid];
+    rotate(p.begin(),p.begin()+zeroid,p.end());
+    p.erase(p.begin());
+    int n=sz(p);
+    vector< ang > a(sz(p));
+    for(int i=0;i<sz(p);i++)
+    {
+         a[i].a= p[i].y-zero.y;
+         a[i].b= p[i].x-zero.x;
+         if(a[i].a==0)
+            a[i].b= a[i].b < 0 ? -11:a[i].b;
+    }
+    for(int i=0;i<sz(q);i++)
+    {
+        bool in=0;
+        if(q[i].x>=zero.x)
+        {
+            if(q[i].x==zero.x&&q[i].y==zero.y)
+                in=1;
+            else
+            {
+                ang my=ang(q[i].y-zero.y,q[i].x-zero.x);
+                auto it= upper_bound(all(a),my);
+                if(it==a.end()&& my.a==a[n-1].a&&my.b==a[n-1].b)
+                    it=a.end()-1;
+                if(it!=a.begin()&&it!=a.end())
+                {
+                    int p1= (int) (it-a.begin());
+                    if(cross(p[p1],p[p1-1],q[i])<=0)
+                        in=1;
+                }
+            }
+        }
+        if(in)
+            A.pb(q[i]);
+    }
+}
+double cross(point a,point b)
+{
+    return a.x*b.y-a.y*b.x;
+}
+vector< point > p1,p2;
+map< point ,int > mb;
+void getintersect(point a,point b,point c,point d)
+{
+    double d1= cross((a-b),(d-c)), d2=cross((a-c),(d-c)), d3=cross((a-b),(a-c));
+    if(fabs(d1)<eps)
+        return;
+    double t1=d2/d1,t2=d3/d1;
+    point inter= a+(b-a)*t1;
+    if(t1<-eps||t1>1+eps||t2<-eps||t2>1+eps)
+        return ;
+    if(mb.find(inter)==mb.end())  // to avoid considering the end points as an intersecting points
+    {
+      A.pb(inter);
+      mb[inter]=1;
+    }
+}
+void intersect(seg a,seg b)
+{
+    int id1=a.id, id2=b.id;
+    getintersect(sg[id1].s,sg[id1].e,sg[id2].s,sg[id2].e);
+}
+double cross2d(const point &O, const point &A, const point &B)
+{
+	return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
+}
+typedef double coord_t;       
+typedef double coord2_t;  
+coord2_t cross(const Point &O, const Point &A, const Point &B)
+{
+	return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
+}
+vector<Point> convex_hull(vector<Point> P)
+{
+	size_t n = P.size(), k = 0;
+	if (n <= 3) return P;
+	vector<Point> H(2*n);
+	sort(P.begin(), P.end());
+	for (size_t i = 0; i < n; ++i) 
+    {
+		while (k >= 2 && cross(H[k-2], H[k-1], P[i]) <= 0) k--;
+		H[k++] = P[i];
+	}
+	for (size_t i = n-1, t = k+1; i > 0; --i) 
+    {
+		while (k >= t && cross(H[k-2], H[k-1], P[i-1]) <= 0) k--;
+		H[k++] = P[i-1];
+	}
+	H.resize(k-1);
+	return H;
+}
+double getarea(vector<point> p)
+{
+    if(sz(p)<=2)
+        return 0;
+    p.pb(p[0]);
+    double area=0;
+    for(int i=0;i<sz(p)-1;i++)
+    {
+        area+= cross(p[i],p[i+1]);
+    }
+    return fabs(area/2.0);
+}
+class ConvexPolygons
+{
+public:
+    double overlap(vector <string> polygon1, vector <string> polygon2)
+    {
+        int x,y;
+        for(int i=0;i<sz(polygon1);i++)
+        {
+            stringstream ss(polygon1[i]);
+            ss>>x>>y;
+            p1.pb(point(x,y));
+            mb[point(x,y)]=1;
+        }
+        for(int i=0;i<sz(polygon2);i++)
+        {
+            stringstream ss(polygon2[i]);
+            ss>>x>>y;
+            p2.pb(point(x,y));
+            mb[point(x,y)]=1;
+        }
+        p1.pb(p1[0]);
+        p2.pb(p2[0]);
+        for(int i=0;i<sz(p1)-1;i++)
+            sg.pb(seg(p1[i],p1[i+1],sz(sg)));
+        
+        for(int i=0;i<sz(p2)-1;i++)
+            sg.pb(seg(p2[i],p2[i+1],sz(sg)));
+        
+        for(int i=0;i<sz(sg);i++)
+            for(int j=i+1;j<sz(sg);j++)
+                intersect(sg[i],sg[j]);
+            
+        test(p1,p2);
+        test(p2,p1);
+        vector<point> ret=convex_hull(A);
+        return getarea(ret);
+    }
+};
+-----------------------------------------------------------------------------------------------------------------------------------------
+
