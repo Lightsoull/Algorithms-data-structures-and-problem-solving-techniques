@@ -152,7 +152,7 @@ struct segment
         int yc= dcmp(CY(maxX),rhs.CY(maxX)); 
         
         if(yc==0) 
-            return seg_id < rhs.seg_id;
+            return seg_id < rhs.seg_id;          // take care when the y value is equal 
         return yc<0;
     }
 };
