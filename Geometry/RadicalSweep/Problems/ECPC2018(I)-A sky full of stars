@@ -1,0 +1,145 @@
+Problem: you are given n points in a 2d plane non of them are repeated, get the number of right angled triangles with area from L to R
+solution: okay i can fix one point and sweep in radical motion from it, i will shift every thing related to this point i choosed i will
+the angle of every other point and sort on angles, if when a meet an even here i have 2 points the third one should be at 90 from 
+the second one (event one) so i can consider all the points at 90 from second one to form a right angled triangle but i want its area 
+to be from L to R okay this let the distance from the third point and first one to be limited in a certain range so i will binary
+search on that range.
+
+CODE
+----
+typedef  double ld;
+struct point
+{
+    ld x,y;
+    ld ang;
+    point(ld a=0,ld b=0)
+    {
+        x=a; y=b;
+        ang=atan2(y,x);
+    }
+    bool operator<(const point &p)const
+    {
+        if(dcmp(x,p.x)!=0)
+            return dcmp(x,p.x)<0;
+        return dcmp(y,p.y)<0;
+    }
+    double dist(const point &p)const
+    {
+        return sqrt((x-p.x)*(x-p.x)+(y-p.y)*(y-p.y));
+    }
+};
+struct event
+{
+    ld ang;
+    point p;
+    event(ld a,point b)
+    {
+        ang=a; p=b;
+    }
+
+    bool operator<(const event &e)const
+    {
+        if(dcmp(ang,e.ang)!=0)
+            return dcmp(ang,e.ang)<0;
+        return p<e.p;
+    }
+
+};
+const int N=1009;
+ll L,R;
+int n;
+ll ans=0;
+vector<event> e;
+map< ll,vector<double> > vv;
+
+vector<point> p;
+void I()
+{
+    ans=0;
+    p.clear();
+    e.clear();
+    vv.clear();
+}
+ld fix(ld x)
+{
+    if(dcmp(x,0.0)<0)
+        x+=2.0*PI;
+    if(dcmp(x,2.0*PI)>=0)
+        x-=2.0*PI;
+    return x;
+}
+int calc(point A,point B,double ang)
+{
+    int ans=0;
+    ll id=round(((fix(ang+PI/2.0))*1e9));
+    vector<double>::iterator itr=vv[id].begin();
+    vector<double>::iterator itr2=vv[id].end();
+    double base= B.dist(point(0,0));
+   
+   int id1=lower_bound(itr,itr2,((L*2.0)/base)-eps)-itr;
+   int id2=upper_bound(itr,itr2,((R*2.0)/base)+eps)-itr;
+   ans= id2-id1;
+   
+  return ans;
+}
+
+int solve(int id)
+{
+    int ans=0;
+    e.clear();
+    vv.clear();
+    int cnt=1;
+    for(int i=0;i<n;i++)
+    {
+        if(i==id)
+            continue;
+        point pp=point(p[i].x-p[id].x,p[i].y-p[id].y);
+        ld ang=fix(pp.ang);
+
+        if(dcmp(pp.x,0)==0)
+        {
+            if(dcmp(pp.y,0)<0)
+                ang=3.0*PI/2.0;
+            else
+                ang=PI/2.0;
+        }
+
+        ll sc=round(ang*1e9);
+        vv[sc].pb(pp.dist(point()));
+
+        e.pb(event(ang,pp));
+    }
+    for(auto it=vv.begin();it!=vv.end();it++)
+        sort(all(it->second));
+    sort(all(e));
+
+    for(int i=0;i<sz(e);i++)
+    {
+       ans+= calc(p[id],e[i].p,e[i].ang);
+    }
+    return ans;
+}
+int main()
+{
+  int T;
+  cin>>T;
+  while(T--)
+  {
+     I();
+   int ans=0;
+   cin>>n>>L>>R;
+    ld x,y;
+    for(int i=0;i<n;i++)
+    {
+        cin>>x>>y;
+        p.pb(point(x,y));
+    }
+    for(int i=0;i<n;i++)
+    {
+       ans+= solve(i);
+    }
+    cout<<ans<<endl;
+  }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
