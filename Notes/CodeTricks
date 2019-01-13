@@ -385,6 +385,10 @@ precision problems by using dcmp().
 ----------------------------------------------------------------------------------------------------------------------------------------
 Try always to work in integer domain eg x/sqrt(n) < d = (x^2) < d*d*n
 ----------------------------------------------------------------------------------------------------------------------------------------
+suppose i have a double value d and i want to map it to something
+When you want to map from double to something this may cause WA due to precision errors you can multiply d by 10^9 to get it integer
+but take care this range up to long long only and if there is still precision round it.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
