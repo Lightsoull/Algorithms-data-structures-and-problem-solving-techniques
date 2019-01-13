@@ -129,6 +129,10 @@ d=(a1+1)*(a2+1)*(a3+1) so the number of values of n if i will divide it to one o
 ----------------------------------------------------------------------------------------------------------------------------------------
 If you are using set or map and you don't mind if it will be multi or unordered so let it be it will decrease the complexity.
 ----------------------------------------------------------------------------------------------------------------------------------------
+When you map an integer to vector of integer every time you will write mb[val][i] to get the ith value in the vector you will do it in 
+logn bec you will search for val in map in logn , so its better to make a map from val to the index the vector stores at
+First make a vector< vector<int> > v(MAXsiz)  v[ index ].pb(element)  and map[val]=index.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
