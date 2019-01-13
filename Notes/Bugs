@@ -1,0 +1,198 @@
+" when you do binary search 
+
+while(l<=h)
+{
+   mid=(l+h)/2;
+   
+   if(check valid)
+   // some stuff , ans=mid;
+   else
+   // some stuff;
+}
+store answer and it will be the answer and till l<=h (<=)."
+----------------------------------------------------------------------------------------------------------------------------------------
+at topcoder you should intialize each variable to a value - read input and output statement well
+----------------------------------------------------------------------------------------------------------------------------------------
+using of CLR have the same complexity as iterating on the array and don't use it with doubles or with large values
+---------------------------------------------------------------------------------------------------------------------------------------
+take care ( 1/e ) if e is integer so its integer division so you have to do (1.0/e ) to be float division
+---------------------------------------------------------------------------------------------------------------------------------------
+"at map       
+                for(auto i=mb.begin();i!=mb.end();i++)
+        {
+                 (*i).first;     // is the key of the map
+                 (*i).second   // is the something that i map to 
+            
+        }"
+---------------------------------------------------------------------------------------------------------------------------------------
+if you have alot inputs or outputs eg 10^5    use scanf/printf   to get it 1st AC
+---------------------------------------------------------------------------------------------------------------------------------------
+at finding a cycle in a directed graph take care of writing "  en[n]=timer++ "  out side of for loop 
+---------------------------------------------------------------------------------------------------------------------------------------
+take care of breaking in a condition while scanning 
+---------------------------------------------------------------------------------------------------------------------------------------
+at finding a cycle in a directed graph and you don't know the root loop for every node assume its the root and start timer from 
+zero again and intilaize str and end arrays and cycle flag
+---------------------------------------------------------------------------------------------------------------------------------------
+the STL set / periroity_queue / queue / stack you are not allowed to edit the data in them not like a vector i can say v[i]= 5 ;
+here i edit the value stored in vector, it is only allowed to insert and erase
+---------------------------------------------------------------------------------------------------------------------------------------
+Take care when you using ( continue or break ) statements  think what will happen if you continue or break
+---------------------------------------------------------------------------------------------------------------------------------------
+When you count in a vis array if you want to know the count of each number don't loop on the array and sum up vis[arr[i]] bec you
+are dublicate instead put all the numbers in arr[i] in a set then check the vis of each element in the set
+---------------------------------------------------------------------------------------------------------------------------------------
+When you are comparing two ranges check if first totally inside  the second or the second is totally inside the first or they
+partially shares elements or totally outside
+---------------------------------------------------------------------------------------------------------------------------------------
+Takecare when you divide its not on zeros
+---------------------------------------------------------------------------------------------------------------------------------------
+At the DSU the parent of each partition is not the root it is just a node
+---------------------------------------------------------------------------------------------------------------------------------------
+Don't use clr() with double arrays as it will be with nan and don't use it with a large value
+---------------------------------------------------------------------------------------------------------------------------------------
+At Dp ( Games ) If you define the state as the wininng or losing for the pervious player so at the end you will express the winning 
+or losing for the one who played before the first player so just if at the end is winning so first player lose and vice versa
+---------------------------------------------------------------------------------------------------------------------------------------
+At topcoder don't return with \n  or endl
+---------------------------------------------------------------------------------------------------------------------------------------
+num= setbit(num,i)   Don't forget that it doesn't update num but it returns the updated value 
+---------------------------------------------------------------------------------------------------------------------------------------
+When you loop on masks take care index zero is the rightmost cell so See this Affects the answer or not
+---------------------------------------------------------------------------------------------------------------------------------------
+At Dp ( Games ) When you flip the turns don't do  solve( st, t^=1 )  Do solve(st, t^1)
+---------------------------------------------------------------------------------------------------------------------------------------
+At calcualting the probability Take care when the you will divide on zero 
+---------------------------------------------------------------------------------------------------------------------------------------
+(ans!=-1? ans : "Impossible")  This line is invalid bec he must return te same type dg int , int Not int , String
+---------------------------------------------------------------------------------------------------------------------------------------
+Don't Forget  
+1- poping from queue
+2-intialize queue instead of periority queue
+3-At bfs if you mark the node vis inside the loop so mark the sourse vis before doing bfs 
+---------------------------------------------------------------------------------------------------------------------------------------
+Default parameters at function must be the last ones 
+void update(int id,int v,int st=1,int en=200000,int root=1)
+---------------------------------------------------------------------------------------------------------------------------------------
+If you make a printDP function just like the DP function to print  and use the mem array so make sur you assign each value of 
+each state in the mem array espically for the base case answer.
+---------------------------------------------------------------------------------------------------------------------------------------
+Take care of doing 1(ll)<<62  take care of 1 (long long )
+---------------------------------------------------------------------------------------------------------------------------------------
+if you define an array and put the data in it sorted the rest of the array will be zeros so it is not sorted for upper and 
+lower bound  so use vector and resize it
+---------------------------------------------------------------------------------------------------------------------------------------
+free is a reserved word
+---------------------------------------------------------------------------------------------------------------------------------------
+AT segment tree lazy array take care what you intialize it
+---------------------------------------------------------------------------------------------------------------------------------------
+At getline(cin,line)  make sure you empty line string first
+---------------------------------------------------------------------------------------------------------------------------------------
+If you are doing the following enquality m/2 >= n/2  don't multiply bothsides by 2 and be like m>=n 
+---------------------------------------------------------------------------------------------------------------------------------------
+cin>>st   cin doesn't take an empty string so use getline for the empty string
+---------------------------------------------------------------------------------------------------------------------------------------
+At Dp if one of the parameters be -ve don't memorize on it return first
+---------------------------------------------------------------------------------------------------------------------------------------
+Takecare when erase from a set the next index shoud be taken from the erase function
+---------------------------------------------------------------------------------------------------------------------------------------
+Try to generate test cases by your self and test your code
+---------------------------------------------------------------------------------------------------------------------------------------
+When you make a boolean function don't forget to return zero if its not true at the end
+---------------------------------------------------------------------------------------------------------------------------------------
+If you want to iterate with a pointer i from beg to half of the array and with pointer from half to end of the array 
+REMEMBER TO ITERATE till HALF of the array only 
+---------------------------------------------------------------------------------------------------------------------------------------
+When you want to use getline(cin,st)  write after the last cin>>no cin.ignore() not cin.clear()
+---------------------------------------------------------------------------------------------------------------------------------------
+After you pop from a data structure check if it is empty first
+---------------------------------------------------------------------------------------------------------------------------------------
+At maxflow with undirected graph when you add the flow on the reversed edge it may be not exist so yu have to create it
+---------------------------------------------------------------------------------------------------------------------------------------
+At Max flow when you put  a super source and super sink don't forget to connect them with the graph
+---------------------------------------------------------------------------------------------------------------------------------------
+(10^6 - 10^5 )=900000
+---------------------------------------------------------------------------------------------------------------------------------------
+Take care of over flow of long long
+use long double for better persicion
+---------------------------------------------------------------------------------------------------------------------------------------
+If you want distinct pairs and you put (i , j) and (j , i) take care if i==j
+---------------------------------------------------------------------------------------------------------------------------------------
+At MOD if you subtract no matter if you sure that the result won't be negative it can be because the MOD may decrease it so always
+ans+=MOD , ans%=MOD;
+---------------------------------------------------------------------------------------------------------------------------------------
+When you work in parallel with two arrays make sure that what if their lengths are not equal
+---------------------------------------------------------------------------------------------------------------------------------------
+When you check a number can be multiple of 2 same number or 4 same number
+eg X==p*p   X==p*p*p*p   check the 4 number first because it can have 2 and four
+---------------------------------------------------------------------------------------------------------------------------------------
+don't write num= ans.back() without checking first if the ans vector is empty or not
+---------------------------------------------------------------------------------------------------------------------------------------
+If i want the floor i can make integer division But if the value could be -ve so -0.98 its integer division is zero but its
+floor is -1
+---------------------------------------------------------------------------------------------------------------------------------------
+At intializing the memory for sparse table log(10^5) is 40  so the array will be p[10^5][40]
+---------------------------------------------------------------------------------------------------------------------------------------
+when you loop to see the the count of elements in the array do't loop on the orginal array loop on a set of elements of the array
+---------------------------------------------------------------------------------------------------------------------------------------
+if you check if vis[ val1 ] >=2 && vis[ val2 ] >=2 take care when val1==val2  here you have to check whether vis[ val1 ] >=4 .
+---------------------------------------------------------------------------------------------------------------------------------------
+When you subtract think if this value can be -ve 
+---------------------------------------------------------------------------------------------------------------------------------------
+If you will use "continue"  in a loop make sure that you don't miss some operations that will affect your next iteration
+---------------------------------------------------------------------------------------------------------------------------------------
+Useto intialize every variable you have
+---------------------------------------------------------------------------------------------------------------------------------------
+my limit for long long is 2^62 only 
+---------------------------------------------------------------------------------------------------------------------------------------
+Take care if you are doing cyclic operation you have to put mod
+---------------------------------------------------------------------------------------------------------------------------------------
+When you intialize the value of mi=min(mi,val) take care what is the max number that could be reached
+When you intialize the value of mx=max(mx,val) take care what is the min number that could be reached may be it can be -ve not 
+always mx=0; at the begining 
+---------------------------------------------------------------------------------------------------------------------------------------
+Takecare of the constrains it may be 2*10^5 or 5*10^5 or 10^6
+---------------------------------------------------------------------------------------------------------------------------------------
+Don't wirte v[0] with a vector without checking whether the vector is empty or not  
+---------------------------------------------------------------------------------------------------------------------------------------
+If i am handeling some range before the loop that will handel the remaining range makesure that every condition made to the 
+loop range also made to the range before the loop
+---------------------------------------------------------------------------------------------------------------------------------------
+When you divide make sure the number you divide on is not zero
+---------------------------------------------------------------------------------------------------------------------------------------
+Before you return from a function makesure that you are done with all you need for example you poped from a queue before you return
+---------------------------------------------------------------------------------------------------------------------------------------
+When you make a set takecare whether the values may be repeated or not
+---------------------------------------------------------------------------------------------------------------------------------------
+if you are making a vector of a certain struct then you aren't allowed to use vec.resize(n)
+---------------------------------------------------------------------------------------------------------------------------------------
+Make sure that you return from a certain function.
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
