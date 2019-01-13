@@ -110,7 +110,9 @@ function to take the first siz-1 elements and rotate them to the end of the vect
 eg 1 2 3 4 5 6  ---> if siz=3  3 4 5 6 1 2.
 O(n).
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+round( some double ) in c++ takes double and return double it returns the double approximated
+eg 5.56=6  and 4.3=4
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
