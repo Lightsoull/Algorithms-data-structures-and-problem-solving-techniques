@@ -1,5 +1,6 @@
 - Here is another kind of sweep which is the radical sweep which means that i will sweep in a circular motion using 2 paramters
 the angle i sweep with and the length of the line i sweep with.
+-Trick: you can sweep not with angle but with slope of line to avoid precision errors.
 
 Example 1 
 Problem: Maximum points that can be enclosed in a circle of given radius R
