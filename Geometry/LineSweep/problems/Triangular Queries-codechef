@@ -1,0 +1,205 @@
+Problem link: https://www.codechef.com/problems/TRIQUERY
+Problem: you are given n points in 2d plane and q queries each query x, y, d is a triangle having vertexes (x,y),(x+d,y),(x,y+d)
+and for each query you have to get the number of points inside this triangle or on its boundries.
+
+techniques used: line sweep, inclusion/exclusion, segment_tree.
+
+Solution: okay we will answer the queries in offline mode, imagine all the triangles as some lines having slope -1 (left diagonal of 2d 
+plane) where its intersection with y-axis is y+x so if i sorted all the lines by its intersection with y-axis and all the points also
+so at current triangle i will have all the points the lower or equal than y+x+d of the triangle but there is some problems remain the x 
+of those points must be not lower than the triangle x and y of those points must be not lower than the triangle y so i will handel this 
+by building 2 segment trees one for x-cordinate of every active point and one for y-cordinate of every active point and query on 
+the number of values less than triangle x and query on the number of values less than triangle y but here yu have to add the number
+of points less than triangle y and less than triangle x and this could be done by sorting the the points and the triangles on x-cordinate
+and use segment tree again to get the number of points having y greater than triangle y ( inclusion-exclusion ).
+
+CODE
+----
+const int N=300001;
+const int MX=7000009;
+int t1[MX],t2[MX],ans[N+9];
+struct point
+{
+    int x,y;
+    point(int a,int b)
+    {
+        x=a; y=b;
+    }
+};
+struct query
+{
+    int x,y,d,id;
+    query(int a,int b,int c,int e)
+    {
+        x=a; y=b; d=c;
+        id=e;
+    }
+};
+struct CMPQ1
+{
+    bool operator()(const query &a,const query &b)const
+    {
+        return (a.x+a.y+a.d < b.x+b.y+b.d);
+
+    }
+};
+struct CMPP1
+{
+    bool operator()(const point &a,const point &b)const
+    {
+        return (a.x+a.y < b.x+b.y);
+    }
+};
+struct CMPP2
+{
+    bool operator()(const point &a,const point &b)const
+    {
+        if(a.x!=b.x)
+            return a.x<b.x;
+        return a.y<b.y;
+    }
+};
+struct CMPQ2
+{
+    bool operator()(const query &a,const query &b)const
+    {
+        if(a.x!=b.x)
+            return a.x<b.x;
+        return a.y<b.y;
+    }
+};
+vector< point > p;
+vector< query > Q;
+void upd1(int s,int e,int p,int a,int b)
+{
+
+    if(a>e||b<s||b<a)
+        return ;
+
+    if(s>=a&&e<=b)
+    {
+        t1[p]++;
+        return;
+    }
+    int m=(s+e)/2;
+    upd1(s,m,p*2,a,b);
+    upd1(m+1,e,p*2+1,a,b);
+    t1[p]=t1[p*2]+t1[p*2+1];
+}
+void upd2(int s,int e,int p,int a,int b)
+{
+
+    if(a>e||b<s||b<a)
+        return ;
+
+    if(s>=a&&e<=b)
+    {
+        t2[p]++;
+        return;
+    }
+    int m=(s+e)/2;
+
+    upd2(s,m,p*2,a,b);
+    upd2(m+1,e,p*2+1,a,b);
+
+    t2[p]=t2[p*2]+t2[p*2+1];
+}
+int qu1(int s,int e,int p,int a,int b)
+{
+    if(a>e||b<s||b<a)
+        return 0;
+    if(s>=a&&e<=b)
+        return t1[p];
+    int m=(s+e)/2;
+
+    return qu1(s,m,p*2,a,b)+qu1(m+1,e,p*2+1,a,b);
+}
+int qu2(int s,int e,int p,int a,int b)
+{
+    if(a>e||b<s||b<a)
+        return 0;
+    if(s>=a&&e<=b)
+        return t2[p];
+    int m=(s+e)/2;
+
+    return qu2(s,m,p*2,a,b)+qu2(m+1,e,p*2+1,a,b);
+}
+int main()
+{
+    int n,q;
+    cin>>n>>q;
+    int x,y;
+    for(int i=0;i<n;i++)
+    {
+        cin>>x>>y;
+        p.pb(point(x,y));
+    }
+
+    int d;
+    for(int i=0;i<q;i++)
+    {
+        cin>>x>>y>>d;
+        Q.pb(query(x,y,d,i));
+    }
+
+    sort(all(Q),CMPQ1());
+    sort(all(p),CMPP1());
+
+    int j=0;
+    for(int i=0;i<q;i++)
+    {
+        for(;j<n;j++)
+        {
+            if(p[j].x+p[j].y > Q[i].x+Q[i].y+Q[i].d)
+                break;
+
+            upd1(0,N,1,p[j].x,p[j].x);
+            upd2(0,N,1,p[j].y,p[j].y);
+
+        }
+        ans[Q[i].id]= j-qu1(0,N,1,0,Q[i].x-1)-qu2(0,N,1,0,Q[i].y-1);
+    }
+
+    clr(t2,0);
+    sort(all(p),CMPP2());
+    sort(all(Q),CMPQ2());
+    j=0;
+    for(int i=0;i<q;i++)
+    {
+        for(;j<n;j++)
+        {
+            if(p[j].x>=Q[i].x)
+                break;
+
+            upd2(0,N,1,p[j].y,p[j].y);
+        }
+
+        ans[Q[i].id]+= (j-qu2(0,N,1,Q[i].y,N));
+    }
+
+    for(int i=0;i<q;i++)
+        cout<<ans[i]<<endl;
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
