@@ -1,0 +1,147 @@
+Problem: you are given some route from home to work of horizontal and vertical segments and you are required to put some horizontal or 
+vertical segment connecting two points that its length will be as min as possible and if there is multiple answers choose one with lower
+start and if there is tie choose one with farthest end.
+
+Solution: okay now if i am connecting a horizontal segment so it have to be between 2 points of the same y-cordinate and if there is many
+i should start from the lowest x value but make sure that it isn't already connected by checking the difference between its indexes
+so it is like scanning from buttom to top, and the same for the vertical segment.
+
+CODE
+----
+struct point
+{
+    int x, y, i;
+};
+
+const int MAX = 250016;
+point P[MAX], T[MAX];
+string buff;
+int bestfrom, bestto, bestdist;
+struct CMPX
+{
+    bool operator()(const point &a,const point &b)const
+    {
+        if(a.x!=b.x)
+            return a.x<b.x;
+        return a.y<b.y;
+    }
+};
+struct CMPY
+{
+    bool operator()(const point &a,const point &b)const
+    {
+        if(a.y!=b.y)
+            return a.y<b.y;
+        return a.x<b.x;
+    }
+};
+
+void scanX(int n)
+ {
+	int from, to, dist, i;
+	sort(T, T+n, CMPX());
+
+	for(i = 1; i < n; i++)
+    {
+		if(T[i-1].x==T[i].x && abs(T[i-1].i - T[i].i) > 1)
+		{
+			dist = abs(T[i-1].y - T[i].y);
+			from = min(T[i-1].i, T[i].i);
+			to = max(T[i-1].i, T[i].i);
+			if((dist<bestdist)||(dist==bestdist&&((from<bestfrom)||(from==bestfrom&&to>bestto))))
+			bestdist = dist,bestfrom = from,bestto = to;
+		}
+	}
+}
+
+void scanY(int n)
+{
+	int from, to, dist, i;
+	sort(T, T+n, CMPY());
+	for(i = 1; i < n; i++)
+	{
+		if(T[i-1].y==T[i].y && abs(T[i-1].i - T[i].i) > 1)
+        {
+			dist = abs(T[i-1].x - T[i].x);
+			from = min(T[i-1].i, T[i].i);
+			to = max(T[i-1].i, T[i].i);
+			if((dist<bestdist)||(dist==bestdist&&((from<bestfrom)||(from==bestfrom&&to>bestto))))
+			bestdist = dist,bestfrom = from,bestto = to;
+
+		}
+	}
+}
+
+int main()
+{
+	int t, n, i;
+	cin>>t;
+	while(t--)
+    {
+		cin>>n>>buff;
+		P[0].x = P[0].y = P[0].i = 0;
+        T[0] = P[0];
+		bestdist = INT_MAX; bestto = INT_MIN; bestfrom = INT_MAX;
+		for(i = 1; i <= n; i++)
+        {
+			P[i]=P[i-1];
+            if(buff[i-1]=='N')
+                P[i].y++;
+            if(buff[i-1]=='S')
+                P[i].y--;
+            if(buff[i-1]=='E')
+                P[i].x++;
+            if(buff[i-1]=='W')
+                P[i].x--;
+            P[i].i++;
+            T[i]=P[i];
+		}
+		scanY(n + 1);
+		scanX(n + 1);
+		printf("%d %d %d ", bestdist, bestfrom, bestto);
+
+        if(P[bestfrom].x==P[bestto].x)
+        {
+            if(P[bestfrom].y<P[bestto].y)
+                cout<<'N'<<endl;
+            else
+                cout<<'S'<<endl;
+        }
+        else
+        {
+            if(P[bestfrom].x<P[bestto].x)
+                cout<<'E'<<endl;
+            else
+                cout<<'W'<<endl;
+        }
+	}
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
