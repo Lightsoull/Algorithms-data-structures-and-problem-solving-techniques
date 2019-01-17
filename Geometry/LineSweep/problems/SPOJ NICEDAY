@@ -1,0 +1,60 @@
+Solution: i will fix the a side and work on b and c if i have a value its c lower then current c and its b lower than current b then it
+won't have any benefit from adding this b and c value since the next a value won't be affected by it.
+( you can get the idea by grawing three vertical lines on a paper and doing cross matching between the last 2 lines)
+
+CODE
+----
+vector< pair<int,pair<int,int> > > v;
+set< pair<int,int> > st;
+#define S  second
+#define F  first
+void I()
+{
+    v.clear();
+    st.clear();
+}
+int main()
+{
+    M();
+    int T;
+    cin>>T;
+    while(T--)
+    {
+        I();
+        int n;
+        cin>>n;
+        int a,b,c;
+        for(int i=0;i<n;i++)
+        {
+            cin>>a>>b>>c;
+            v.pb(mp(a,mp(b,c)));
+        }
+
+        sort(all(v));
+        st.insert(v[0].S);
+        int ans=1;
+        for(int i=1;i<sz(v);i++)
+        {
+            auto it= st.lower_bound(v[i].S);
+            if(it==st.begin()||((--it)->S)>v[i].S.S)
+            {
+                ans++;
+
+                st.insert(v[i].S);
+                auto cur=st.upper_bound(v[i].S);
+                vector< set<pair<int,int>>::iterator > vv;
+                for(auto it=cur;it!=st.end();it++)
+                {
+                    if(it->F > v[i].S.F && it->S > v[i].S.S)
+                    vv.pb((it));
+                }
+
+                for(int i=0;i<sz(vv);i++)
+                    st.erase(vv[i]);
+            }
+        }
+
+        cout<<ans<<endl;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
