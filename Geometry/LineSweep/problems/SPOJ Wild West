@@ -1,0 +1,72 @@
+Problem: there are players each have from 1 to m mark in each of 3 skills but there is a subset from them are bad players and i need
+to count the number of heros that are not bad that can beat all the bad players, a player can beat other player iff he has a higher mark 
+in at least one skill.
+Solution: okay imagine that the space of search has m^3 players which can be expressed as a volume of a cube of side length m 
+and if a bad player with skill (a,b,c) is found all the cubiod (a,b,c) can't be hero and all the rest of the space can be, okay
+so i need to get the union volume of cubiods of bad players and subtract from total space m^3 cube, okay we can do this by sweeping
+from top to buttom ( sweep on height from greater to smaller ) and at every layer has area of m*m so sum up to answer this area 
+subtracted by the area of the union of cubiods at that layer and move on.
+
+CODE
+----
+const int N=100009;
+int a[N],b[N],c[N];
+vector< vector<int> > v(N);
+map<int,int> mb;
+void I()
+{
+    v.clear();
+    v.resize(N);
+    mb.clear();
+}
+int main()
+{
+    ll n,m;
+
+  while(cin>>n>>m)
+  {
+        if(n==0&&m==0)
+            break;
+        I();
+        for(int i=1;i<=n;i++)
+        {
+            cin>>a[i]>>b[i]>>c[i];
+            v[c[i]].pb(i);
+        }
+
+        mb[0]=m+1;
+        mb[m+1]=0;
+        ll ans=0,sum=0;
+    for(int i=m;i>=1;i--)
+    {
+        int siz=sz(v[i]);
+        for(int j=0;j<siz;j++)
+        {
+            int id=v[i][j];
+            auto it= mb.lower_bound(a[id]);
+            int val=it->second;
+            if(val>=b[id])
+                continue;
+            auto pre= --it;
+            sum+= 1ll*(b[id]-val)*(a[id]- (pre->first));
+            mb[a[id]]=b[id];
+            while(1)
+            {
+                auto tpre= --(mb.lower_bound(a[id]));
+
+                int preval=tpre->second; int preid=tpre->first;
+                if(preval >= b[id])
+                    break;
+
+                auto ppre=--tpre;
+                sum+= 1ll*(b[id] - preval)*(preid - ppre->first);
+                mb.erase(preid);
+            }
+        }
+         ans+= (m*m)-sum;
+    }
+        cout<<ans<<endl;
+ }
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------
