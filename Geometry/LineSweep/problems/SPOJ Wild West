@@ -1,6 +1,7 @@
 Problem: there are players each have from 1 to m mark in each of 3 skills but there is a subset from them are bad players and i need
 to count the number of heros that are not bad that can beat all the bad players, a player can beat other player iff he has a higher mark 
 in at least one skill.
+techniques used: 3-D line sweep.
 Solution: okay imagine that the space of search has m^3 players which can be expressed as a volume of a cube of side length m 
 and if a bad player with skill (a,b,c) is found all the cubiod (a,b,c) can't be hero and all the rest of the space can be, okay
 so i need to get the union volume of cubiods of bad players and subtract from total space m^3 cube, okay we can do this by sweeping
