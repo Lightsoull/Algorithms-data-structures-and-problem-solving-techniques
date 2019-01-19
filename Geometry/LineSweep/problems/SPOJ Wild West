@@ -7,7 +7,7 @@ and if a bad player with skill (a,b,c) is found all the cubiod (a,b,c) can't be 
 so i need to get the union volume of cubiods of bad players and subtract from total space m^3 cube, okay we can do this by sweeping
 from top to buttom ( sweep on height from greater to smaller ) and at every layer has area of m*m so sum up to answer this area 
 subtracted by the area of the union of cubiods at that layer and move on.
-
+Complexity: mlogm
 CODE
 ----
 const int N=100009;
