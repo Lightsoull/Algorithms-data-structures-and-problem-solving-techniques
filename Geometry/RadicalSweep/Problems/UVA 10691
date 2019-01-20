@@ -1,0 +1,74 @@
+Problem: you are given points in 2D plane and you are needed to construct lines starting from orgin till inf length so that
+the distance between every point and a near line at most d.
+
+Solution: okay the line can't be assumed to be in a certain point, so i will assume that i will take a certain point so the line must be 
+with angle between a certain range so will calculate this range and move with this range in a radical motion.
+
+CODE
+----
+double fix(double x)
+{
+    if(dcmp(x,0)<0)
+        x+=PI*2;
+    if(dcmp(x,PI*2)>=0)
+        x-=PI*2;
+    return x;
+}
+bool cmp(pair<double, double> a, pair<double, double> b)
+{
+	return a.second < b.second;
+}
+int main()
+ {
+	int testcase;
+
+	scanf("%d", &testcase);
+	while (testcase--)
+    {
+		int n, d;
+		scanf("%d %d", &n, &d);
+
+		vector<pair<double, double>> A;
+
+		for (int i = 0; i < n; i++)
+        {
+			double x, y;
+			scanf("%lf %lf", &x, &y);
+			double dist = sqrt(x*x + y*y);
+			if (dist <= d)
+				continue;
+			double theta = fix(atan2(y, x));
+			double delta = fix(asin(d / dist));
+			double l = theta - delta;
+			double r = theta + delta;
+
+			A.push_back({l, r});
+		}
+
+		sort(A.begin(), A.end(), cmp);
+		n = A.size();
+		int ret = n;
+
+		for (int i = 0; i < n; i++)
+			A.push_back({A[i].first + 2*PI, A[i].second + 2*PI});
+
+		for (int i = 0; i < n; i++)
+        {
+			int cnt = 1;
+			double r = A[i].second;
+			for (int j = i+1; j < i+n; j++)
+            {
+				if (r < A[j].first - 1e-9)
+				{
+					cnt++;
+					r = A[j].second;
+				}
+			}
+			ret = min(ret, cnt);
+		}
+		printf("%d\n", ret);
+	}
+	
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------
