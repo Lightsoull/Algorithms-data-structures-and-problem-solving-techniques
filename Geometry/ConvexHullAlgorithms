@@ -74,7 +74,7 @@ another algorithm gets the smallest convex polygon to contain all the given poin
 Link for explanation: https://www.geeksforgeeks.org/convex-hull-set-2-graham-scan/
 
 Notes
-it can be used to get just a simple (concave or convex ) polygon using all the given points.
+it can be used to get just a simple (concave or convex ) polygon using all the given points but you need to edit some things.
 
 CODE
 ----
