@@ -245,77 +245,11 @@ and then sort all of the angles and get the max number of times a certain angle 
 O(n^2 logn)
 ---------------------------------------------------------------------------------------------------------------------------------------
 Example 3
-Problem: getting The convex hull of a set of points is the smallest convex polygon that surrounds the entire set.
-Solution:  An efficient method that is often used in challenges is the Graham scan [2], which requires a sort by angle.
-This isn’t as easy as it looks at first, since computing the actual angles is expensive and introduces problems with numeric
-error. A simpler yet equally efficient algorithm is due to Andrew [1], and requires only a sort by X for a line sweep 
-(although Andrew’s original paper sorts by Y and has a few optimizations I won’t discuss here).
-Andrew’s algorithm splits the convex hull into two parts, the upper and lower hull. Usually these meet at the ends, but
-if more than one points has minimal (or maximal) X coordinate, then they are joined by a vertical line segment. We’ll describe
-just how to construct the upper hull; the lower hull can be constructed in similar fashion, and in fact can be built in the same loop.
-To build the upper hull, we start with the point with minimal X coordinate, breaking ties by taking the largest Y coordinate.
-After this, points are added in order of X coordinate (always taking the largest Y value when multiple points have the same X value).
-Of course, sometimes this will cause the hull to become concave instead of convex:
-okay we keep joining the current point with the one with nearest x-axis till we reach the last point then we will return and check the
-last point with pervious point and preprevious point if they are convex or not if not then i will delete the previous point and so on
-this to build the upper of the hull and the same for the down layer.
-CODE
-----
-// Implementation of Andrew's monotone chain 2D convex hull algorithm.
-// Asymptotic complexity: O(n log n).
-// Practical performance: 0.5-1.0 seconds for n=1000000 on a 1GHz machine.
-#include <algorithm>
-#include <vector>
-using namespace std;
-
-typedef double coord_t;         // coordinate type
-typedef double coord2_t;  // must be big enough to hold 2*max(|coordinate|)^2
-
-struct Point {
-	coord_t x, y;
-
-	bool operator <(const Point &p) const {
-		return x < p.x || (x == p.x && y < p.y);
-	}
-};
-
-// 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
-// Returns a positive value, if OAB makes a counter-clockwise turn,
-// negative for clockwise turn, and zero if the points are collinear.
-coord2_t cross(const Point &O, const Point &A, const Point &B)
-{
-	return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
-}
-
-// Returns a list of points on the convex hull in counter-clockwise order.
-// Note: the last point in the returned list is the same as the first one.
-vector<Point> convex_hull(vector<Point> P)
-{
-	size_t n = P.size(), k = 0;
-	if (n <= 3) return P;
-	vector<Point> H(2*n);
-
-	// Sort points lexicographically
-	sort(P.begin(), P.end());
-
-	// Build lower hull
-	for (size_t i = 0; i < n; ++i) {
-		while (k >= 2 && cross(H[k-2], H[k-1], P[i]) <= 0) k--;
-		H[k++] = P[i];
-	}
-
-	// Build upper hull
-	for (size_t i = n-1, t = k+1; i > 0; --i) {
-		while (k >= t && cross(H[k-2], H[k-1], P[i-1]) <= 0) k--;
-		H[k++] = P[i-1];
-	}
-
-	H.resize(k-1);
-	return H;
-}
-O( nlogn )
+Andrew's Algorithm (explained in convex hull file)
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Example 4
+Graham scan algorithm (explained in convex hull file)
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
