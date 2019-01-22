@@ -1,0 +1,110 @@
+Problem: UVA 11612
+Problem: you are given a set of points and you want to construct a simple(non-complex) polygon using all the give points.
+techniques: the solution inspired from garham_scan_algorithm for doing convex polygon.
+Solution: i will pick a point which has the smallest x cordinate and there was many i will pick the one with smallest y cordinate and from
+this point let be O will move on the points by cross product but take care that the last point if there was many they must be sorted
+on the greater distance from point O first not the opposite as the rest.
+
+CODE
+----
+struct point
+{
+    ll x,y,i;
+    point(ll a,ll b,ll c)
+    {
+        x=a; y=b; i=c;
+    }
+};
+vector< point > p;
+int n;
+bool ok;
+void I()
+{
+    ok=0;
+    p.clear();
+}
+ll dist(point a,point b)
+{
+    return (b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y);
+}
+ll cross(point p1,point p2,point p3)
+{
+    return (p2.x - p1.x)*(p3.y - p1.y) - (p3.x - p1.x)*(p2.y - p1.y);
+}
+bool cmp(point a,point b)
+{
+    ll cp=cross(p[0],a,b);
+    if(cp==0)
+    {
+        return dist(p[0],a)<dist(p[0],b);
+    }
+    ok=1;
+    return cp>0;
+}
+bool cmp2(point a,point b)
+{
+    return dist(p[0],a)>dist(p[0],b);
+}
+void garham_scan_algo()
+{
+    int str=0;
+    for(int i=0;i<n;i++)
+    {
+        if((p[i].x<p[str].x)||(p[i].x==p[str].x&&p[i].y<p[str].y))
+            str=i;
+    }
+    point temp=p[0];
+    p[0]=p[str];
+    p[str]=temp;
+    sort(p.begin()+1,p.end(),cmp);
+    int en=-1;
+    for(int i=n-1;i>=2;i--)
+    {
+        if(cross(p[0],p[i],p[i-1])==0)
+        {
+            en=i;
+        }
+        else if(en!=-1)
+        {
+            sort(p.begin()+en-1,p.end(),cmp2);
+            break;
+        }
+        else
+            break;
+    }
+}
+int main()
+{
+
+    while(cin>>n)
+    {
+        I();
+        if(n==0)
+            break;
+        ll x,y;
+        for(int i=0;i<n;i++)
+        {
+            cin>>x>>y;
+            p.pb(point(x,y,i));
+        }
+
+        garham_scan_algo();
+        if(ok==0)
+            cout<<"no solution\n";
+        else
+        {
+            int str=-1;
+            for(int i=0;i<n&&str==-1;i++)
+                if(p[i].i==0)
+                  str=i;
+            cout<<"0";
+            for(int i=str+1;i<n;i++)
+                cout<<" "<<p[i].i;
+            for(int i=0;i<str;i++)
+                cout<<" "<<p[i].i;
+            cout<<" 0"<<endl;
+        }
+    }
+   } 
+  --------------------------------------------------------------------------------------------------------------------------------------
+}
