@@ -71,7 +71,13 @@ bool radicalsweep(int n,int a,int b)
             cntA--;
         else
             cntB--;
-
+        if(cross(O,p[i-1],p[i])<=0)
+        {
+            if(p[i].id==0)
+                cntA++;
+            else
+                cntB++;
+        }
         while(cross(O,p[i],p[cut])>0)
         {
             if(p[cut].id==0)
@@ -120,5 +126,6 @@ int main()
         cout<<(radicalsweep(n,a,b)==0? "NO\n":"YES\n");
     }
 }
+
 ----------------------------------------------------------------------------------------------------------------------------------------
 
