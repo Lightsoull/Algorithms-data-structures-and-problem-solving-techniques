@@ -1,0 +1,107 @@
+solution link: http://www.voidcn.com/article/p-zyichllk-co.html
+Solution: observe that
+1- the most best solution i could get is to pass by two turning points, it is always possible to pass through one turning point
+2- and observe that the best line will pass be two vertexes of the pipe.
+so by these observeations we can try every pair of vertexes and get the max x-cordinate that end at.
+
+CODE
+----
+const int N=22;
+struct point
+{
+    double x,y;
+    point(double a=0.0,double b=0.0)
+    {
+        x=a; y=b;
+    }
+    point operator-(const point &p)const
+    {
+        return point(x-p.x,y-p.y);
+    }
+    point operator+(const point &p)const
+    {
+        return point(x+p.x,y+p.y);
+    }
+    point operator*(const double p)const
+    {
+        return point(x*p,y*p);
+    }
+};
+point up[N],dw[N];
+double cross(point a,point b,point c)
+{
+    return (b.y-a.y)*(c.x-b.x)-(c.y-b.y)*(b.x-a.x);
+}
+double cp(point a,point b)
+{
+    return a.x*b.y-a.y*b.x;
+}
+double intersectSegments(point a, point b, point c, point d)
+{
+  double d1 = cp(a - b, d - c), d2 = cp(a - c, d - c), d3 = cp(a - b, a - c);
+
+  double t1 = d2 / d1;
+  point inter = a + (b - a) * t1;
+
+  return inter.x;
+}
+int n;
+void solve()
+{
+    double ans=up[0].x;
+
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+
+            int mx=max(i,j);
+            int K=n;
+            for(int k=0;k<n;k++)
+            {
+                if(cross(up[i],dw[j],up[k])*(cross(up[i],dw[j],dw[k]))>0)
+                {
+                   K=k;
+                   break;
+                }
+            }
+
+        if(K<=mx)
+          continue;
+        if(K==n)
+       {
+          cout<<"Through all the pipe.\n";
+          return ;
+       }
+       if(cross(up[i],dw[j],up[K-1])*(cross(up[i],dw[j],up[K]))<0)
+       {
+            ans=max(ans, intersectSegments(up[i],dw[j],up[K-1],up[K]));
+
+       }
+       else if(cross(up[i],dw[j],dw[K-1])*cross(up[i],dw[j],dw[K])<0)
+       {
+            ans=max(ans, intersectSegments(up[i],dw[j],dw[K-1],dw[K]));
+       }
+    }
+  }
+
+  cout<<fixed<<setprecision(2)<<ans<<endl;
+}
+int main()
+{
+
+    while(cin>>n)
+    {
+        if(n==0)
+            break;
+        double x,y;
+        for(int i=0;i<n;i++)
+        {
+            cin>>x>>y;
+            up[i]=point(x,y);
+            dw[i]=point(x,y-1);
+        }
+
+         solve();
+    }
+}
