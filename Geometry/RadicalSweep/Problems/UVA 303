@@ -4,6 +4,9 @@ Solution: observe that
 2- and observe that the best line will pass be two vertexes of the pipe.
 so by these observeations we can try every pair of vertexes and get the max x-cordinate that end at.
 
+Learnings
+1- to ensure that a cetain line AB passes between 2 point x and y so the product of cross product of A,B,x and A,B,y must be -ve.
+
 CODE
 ----
 const int N=22;
