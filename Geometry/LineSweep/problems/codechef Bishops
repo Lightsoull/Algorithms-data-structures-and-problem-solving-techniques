@@ -1,0 +1,296 @@
+Problem: you are given nxn grid and some k bishops and some m pieces, where the movement of bishop is in a diagonal but not overlapping
+with some other piece and i want to count the number of squares in 2d grid that convered with the bishops.
+Solution Link: https://discuss.codechef.com/questions/7698/tabishop-editorial
+solution: imagine that it is a chess board,note that the bishops that in black regions never overlaps with that in white regions so i will
+get the answer for the two cases indepently, imagine that the cell (1,1) is black,
+- if the sum of row and column values are even then it is black cell else white cell.
+- i will explain the solution for black region and the same will be for white one:
+now i will record the cells in black regions whther it is other piece or a bishop, i will rotate the grid 45 degree that the diagonals
+become vertical and horizontal lines and get the segments ( but take care that the segments may overlap so a void that ) and then
+sum up the length of all the segments so the remaining part is to subtract the intersection points this part can be done with line sweep
+enter the vertical start and end of all the horizontal segments and the vertical segments sort them and enter all the horizontal start
+and end of every vertical segments and horizontal segements if there is intersection between 2 segments it will be one horzontal and 
+one vertical and the horizontal must be in between the two horizontals of vertical start and end and the vertical must be between 
+two verticals of horizontal start and end so this will be done with line sweep.
+
+CODE
+----
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(ll num, int idx) {return ((num >> idx) & 1ll) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(ll num, int idx) {return num ^ (1ll<<idx);}
+void M(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+#define FOR(i,a,b) for (int i = (a); i <= (b); i++)
+#define maxm 511111
+
+struct tpos
+{
+	int u, v, t;
+};
+
+int n, k, m, np, na, nb, nt;
+tpos pos[maxm], p[maxm], a[maxm], b[maxm];
+int node[maxm * 4], t[maxm];
+vector <int> in[maxm], out[maxm];
+long long res;
+
+bool cmp_minus (tpos a, tpos b)
+{
+	return (a.u - a.v < b.u - b.v ||
+		   (a.u - a.v == b.u - b.v && a.u + a.v < b.u + b.v) );
+}
+
+bool cmp_plus (tpos a, tpos b)
+{
+	return (a.u + a.v < b.u + b.v ||
+		   (a.u + a.v == b.u + b.v && a.u - a.v < b.u - b.v) );
+}
+
+bool cmp_t(tpos a, tpos b)
+{
+    return a.t < b.t;
+}
+
+void prepare_a()
+{
+	sort(p + 1, p + 1 + np, cmp_minus);
+
+	na = 0;
+	FOR (i, 1, np)
+	if (p[i].t)
+    {
+		na ++ ;
+		a[na].t = p[i].u - p[i].v;
+		if (i == 1 || p[i - 1].u - p[i - 1].v !=  p[i].u - p[i].v)
+			a[na].u = p[i].u + p[i].v - 2 * min(p[i].u - 1, p[i].v - 1);
+		else a[na].u = p[i - 1].u + p[i - 1].v + 2;
+
+		if (i == np || p[i + 1].u - p[i + 1].v != p[i].u - p[i].v)
+			a[na].v = p[i].u + p[i].v + 2 * min(n - p[i].u, n - p[i].v);
+		else if (p[i + 1].t == 0)
+			a[na].v = p[i + 1].u + p[i + 1].v - 2;
+        else a[na].v = p[i].u + p[i].v;
+	}
+}
+
+void prepare_b()
+{
+	sort(p + 1, p + 1 + np, cmp_plus);
+
+	nb = 0;
+	FOR (i, 1, np)
+	if (p[i].t)
+    {
+		nb ++ ;
+		b[nb].t = p[i].u + p[i].v;
+
+		if (i == 1 || p[i - 1].u + p[i - 1].v !=  p[i].u + p[i].v)
+			b[nb].u = p[i].u - p[i].v - 2 * min(p[i].u - 1, n - p[i].v);
+		else b[nb].u = p[i - 1].u - p[i - 1].v + 2;
+
+		if (i == np || p[i + 1].u + p[i + 1].v != p[i].u + p[i].v)
+			b[nb].v = p[i].u - p[i].v + 2 * min(n - p[i].u, p[i].v - 1);
+		else if (p[i + 1].t == 0)
+			b[nb].v = p[i + 1].u - p[i + 1].v - 2;
+        else b[nb].v = p[i].u - p[i].v;
+	}
+}
+
+int get(int s, int l, int r, int u, int v)
+{
+	if (v < l || r < u) return 0;
+	if (u <= l && r <= v) return node[s];
+
+	return get(s * 2, l, (l + r) / 2, u, v) + get(s * 2 + 1, (l + r) / 2 + 1, r, u, v);
+}
+
+void update(int s, int l, int r, int u, int v)
+ {
+	if (u < l || r < u) return;
+
+	if (l == r)
+    {
+        node[s]+=v;
+        return;
+    }
+
+	update (s * 2, l, (l + r) / 2, u, v);
+	update (s * 2 + 1, (l + r) / 2 + 1, r, u, v);
+	node[s]=node[s*2]+node[s*2+1];
+}
+
+int find(int x)
+{
+	return (lower_bound(t + 1, t + 1 + nt, x) - t);
+}
+
+void call() {
+	//each bishop will control an 'x' area which consist of two segments
+	//one is the cells that have the same (x - y) as the bishop (processed in prepare_a)
+	//the other is the cells that have the same (x + y) as the bishop (processed in prepare_b)
+	prepare_a();
+	prepare_b();
+
+	//just sum up the length of all segments.
+	FOR (i, 1, na)
+	res += abs(a[i].v - a[i].u) / 2 + 1;
+	FOR (i, 1, nb)
+	res += abs(b[i].v - b[i].u) / 2 + 1;
+
+
+	//subtract the common cells
+
+	//reduce the values to <= 2*10^5 and apply interval tree
+	nt = 0;
+	FOR (i, 1, na)
+		t[++nt] = a[i].t;
+
+	FOR (i, 1, nb)
+	{
+		t[++nt] = b[i].u;
+		t[++nt] = b[i].v;
+	}
+
+	sort(t + 1, t + 1 + nt);
+	FOR (i, 1, na)
+		a[i].t = find(a[i].t);
+
+	FOR (i, 1, nb)
+	{
+		b[i].u = find(b[i].u);
+		b[i].v = find(b[i].v);
+	}
+
+	nt = 0;
+	FOR (i, 1, nb)
+		t[++nt] = b[i].t;
+
+	FOR (i, 1, na)
+	{
+		t[++nt] = a[i].u;
+		t[++nt] = a[i].v;
+	}
+
+	//using sweeping line
+	sort(t + 1, t + 1 + nt);
+	FOR (i, 1, nb)
+		b[i].t = find(b[i].t);
+
+	FOR (i, 1, nb)
+	{
+		a[i].u = find(a[i].u);
+		a[i].v = find(a[i].v);
+	}
+
+	FOR (i, 1, maxm - 1)
+	{
+		in[i].clear();
+		out[i].clear();
+	}
+
+	FOR (i, 1, nb)
+    {
+		in[b[i].u].push_back(b[i].t);
+		out[b[i].v].push_back(b[i].t);
+	}
+
+	clr(node,0);
+
+	sort(a + 1, a + 1 + na, cmp_t);
+	int pr = 1;
+
+	FOR (i, 1, 400000)
+	{
+		for (vector<int>::iterator it = in[i].begin(); it != in[i].end(); it++)
+			update(1, 1, 400000, *it, 1);
+
+		while (pr <= na && a[pr].t == i)
+        {
+			res -= get(1, 1, 400000, a[pr].u, a[pr].v);
+			pr++;
+		}
+
+		for (vector<int>::iterator it = out[i].begin(); it != out[i].end(); it++)
+			update(1, 1, 400000, *it, -1);
+	}
+}
+
+int main()
+{
+
+	scanf("%d%d%d", &n, &k, &m);
+	FOR (i, 1, k)
+	{
+		int u, v;
+		scanf("%d%d", &u, &v);
+		pos[i].u = u;
+		pos[i].v = v;
+		pos[i].t = 1;
+	}
+
+	FOR (i, 1, m)
+	{
+		int u, v;
+		scanf("%d%d", &u, &v);
+		pos[i + k].u = u;
+		pos[i + k].v = v;
+		pos[i + k].t = 0;
+	}
+
+	res = 0;
+
+	//count the black cells first (x + y) % 2 = 1
+	np = 0;
+	FOR (i, 1, m + k)
+	if ( (pos[i].u + pos[i].v) % 2 )
+		p[++np] = pos[i];
+
+	call();
+
+	//then do the same thing for the white cells.
+	np = 0;
+	FOR (i, 1, m + k)
+	if ( ((pos[i].u + pos[i].v) % 2) == 0)
+		p[++np] = pos[i];
+	call();
+
+	cout << res << endl;
+
+
+	return 0;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
