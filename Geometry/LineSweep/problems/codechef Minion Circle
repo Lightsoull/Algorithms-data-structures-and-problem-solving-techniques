@@ -1,0 +1,149 @@
+Problem link:https://www.codechef.com/problems/CIRCLE
+solution: first get the connected components that can't escape and get the most left(l), right(r) , up(u) , down(d) cordinates of its cells
+the component can escape if i take any column from l-1 to r+1 or any row from u-1 to d+1 so i will sort the lines and do line sweep
+vertically and horizontally, note the max number of components that could be id n+m+n/2+m/2 bec every row at most will let m+m/2 components
+to escape and every column at most will let n+n/2.
+
+CODE
+----
+const int N = 1e3 + 10;
+char g[N][N];
+
+int n, m,vis[N][N];
+
+int l,r,u,d;
+
+int dr[]={0, -1, 1, 0};
+int dc[]={1, 0, 0, -1};
+bool V(int r,int c)
+{
+    return r>=0&&r<n&&c>=0&&c<m;
+}
+int dfs(int rw, int cl)
+{
+    vis[rw][cl]=1;
+    int res = 0;
+    if(rw == n-1 || cl == m-1 || rw==0 || cl==0)
+    {
+        res=1;
+    }
+    l = min(cl, l);
+    r = max(cl, r);
+    d = max(rw, d);
+    u = min(rw, u);
+    for(int i=0;i<4;i++)
+    {
+        int nr = rw+dr[i];
+        int nc = cl+dc[i];
+        if(!V(nr,nc) || g[nr][nc] != 'W'||vis[nr][nc])
+            continue;
+         res|=  dfs(nr, nc);
+
+    }
+    return res;
+}
+
+const int IN = 0;
+const int OUT = 1;
+struct EVENT
+{
+    int pos,type, idx;
+};
+bool cmp(EVENT a, EVENT b)
+{
+    return make_tuple(a.pos, a.type,a.idx) < make_tuple(b.pos, b.type, b.idx);
+}
+int main()
+{
+    int t;
+    scanf("%d", &t);
+    while(t--)
+    {
+        scanf("%d %d", &n, &m);
+
+        for(int i=0;i<n;i++)
+            scanf("%s", g[i]);
+
+        vector<EVENT>event_x;
+        vector<EVENT>event_y;
+        int total_needed= 0 ,id=1;
+        clr(vis,0);
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(g[i][j] == 'W'&&vis[i][j]==0)
+                {
+                    l = N;
+                    r = -1;
+                    u = N;
+                    d = -1;
+                    int use = dfs(i, j);
+                    if(use==0)
+                    {
+                        total_needed++;
+                        l= (l==0?l:l-1);
+                        r=(r==m-1?r:r+1);
+                        u= (u==0?u:u-1);
+                        d= (d==n-1?d:d+1);
+                        event_x.push_back(EVENT{l, IN, id});
+                        event_x.push_back(EVENT{r, OUT, id});
+
+                        event_y.push_back(EVENT{u, IN, id});
+                        event_y.push_back(EVENT{d, OUT, id});
+                        id++;
+                    }
+                }
+            }
+        }
+        if(total_needed > m+n+n/2+m/2)
+        {
+            puts("NO");
+            continue;
+        }
+        set<int>used_indx;
+        sort(event_x.begin(), event_x.end(), cmp);
+        sort(event_y.begin(), event_y.end(), cmp);
+        bool can = false;
+        for(EVENT e:event_x)
+        {
+            if(e.type==IN)
+            {
+                used_indx.insert(e.idx);
+            }
+            else
+            {
+                used_indx.erase(e.idx);
+            }
+            int mx = 0;
+            int cur = 0;
+            for(EVENT e_up:event_y)
+            {
+                if(used_indx.find(e_up.idx) != used_indx.end())
+                    continue;
+                if(e_up.type == IN)
+                {
+                    cur++;
+                }
+                else
+                {
+                    cur--;
+                }
+                mx = max(mx, cur);
+            }
+            if(mx +(int)used_indx.size() == total_needed)
+                can = true;
+
+        }
+        can = can ||(!total_needed);
+        if(can)
+        {
+            puts("YES");
+        }
+        else
+        {
+            puts("NO");
+        }
+    }
+}
+---------------------------------------------------------------------------------------------------------------------------------------
