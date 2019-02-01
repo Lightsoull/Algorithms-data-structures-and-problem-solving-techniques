@@ -1,0 +1,217 @@
+solution: observe that every node that belongs to a cycle there is no difference in the max distance if i choosed it or any other
+node from its cycle so i will compress it and express it as the a node with the smallest number by dsu so it will become a tree and all
+its edges are bridges so its called bridge tree, then i will have another subproblem which is i am having a tree and want to calculate
+the longest path from each node, this subproblem can be solved by
+1- run dfs by taking any node as the root let it be A then calculte the longest
+path from it till end of the tree ( calculate the 1st longest path in F and the second one in S )
+2- run another dfs from the node A, every node will have 3 options 
+   1-the longest path can be from its children. w2
+   2-the longest path can be from some ancestor of its parent. w3
+   3-the longest path can be from some child of its parent except me. w1
+  so i will take the max and assign the value of up which represent the second case.
+  
+ CODE
+ ----
+ const int N=100009;
+int dfsN[N],lwlink[N],FF=1,par[N],rnk[N],vis[N];
+ll F[N],S[N],up[N],ans[N];
+vector< vector<int> > v;
+vector< vector< pair<int,ll> > > tree;
+map< pair<int,int> ,int> ed;
+vector< pair<int,int> > b;
+vector< int > st;
+void I()
+{
+    FF=1;
+    clr(dfsN,0);
+    clr(lwlink,0);
+    v.clear();
+    st.clear();
+    v.resize(N);
+    tree.clear();
+    tree.resize(N);
+    b.clear();
+    clr(F,0);
+    clr(S,0);
+    ed.clear();
+    clr(vis,0);
+    clr(up,0);
+
+    for(int i=1;i<N;i++)
+        par[i]=i,rnk[i]=1;
+}
+int getpar(int n)
+{
+    if(par[n]==n)
+        return n;
+    return par[n]=getpar(par[n]);
+}
+void lnk(int a,int b)
+{
+    a=getpar(a);
+    b=getpar(b);
+    if(a!=b)
+    {
+        if(a<b)
+        {
+            rnk[a]+=rnk[b];
+            rnk[b]=0;
+            par[b]=a;
+        }
+        else
+        {
+            rnk[b]+=rnk[a];
+            rnk[a]=0;
+            par[a]=b;
+        }
+    }
+}
+void dfs1(int no,int pre)
+{
+    dfsN[no]=FF;
+    lwlink[no]=FF++;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==0)
+        {
+            dfs1(nw,no);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+            if(lwlink[nw]>dfsN[no])
+            {
+                b.pb(mp(no,nw));
+            }
+            else
+            {
+                lnk(no,nw);
+            }
+        }
+        else if(nw!=pre)
+        {
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+    }
+}
+ll dfs2(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(tree[no]);i++)
+    {
+        int nw=tree[no][i].first;
+        ll  we=tree[no][i].second;
+        if(vis[nw])
+            continue;
+        ll ret=dfs2(nw)+we;
+        if(ret>F[no])
+        {
+            S[no]=F[no];
+            F[no]=ret;
+        }
+        else
+        {
+            if(ret>S[no])
+            {
+                S[no]=ret;
+            }
+        }
+    }
+    return F[no];
+}
+void dfs3(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(tree[no]);i++)
+    {
+        int nw=tree[no][i].first;
+        ll  we= tree[no][i].second;
+        if(vis[nw])
+            continue;
+        ll ww= F[nw]+we;
+        ll w1,w2,w3;
+        if(ww!=F[no])
+        {
+            w1=F[no]+we;
+        }
+        else
+        {
+            w1=S[no]+we;
+        }
+        w2=F[nw];
+        w3=up[no]+we;
+        up[nw]=max(w1,w3);
+        ans[nw]=max(w1,max(w2,w3));
+        dfs3(nw);
+    }
+}
+int main()
+{
+    M();
+    int T;
+    cin>>T;
+    int n,m;
+    while(T--)
+    {
+        I();
+        cin>>n>>m;
+        int f,t,w;
+        for(int i=0;i<m;i++)
+        {
+            cin>>f>>t>>w;
+            if(f==t)
+                continue;
+            v[f].pb(t);
+            v[t].pb(f);
+
+            if(ed[mp(f,t)]!=0)
+            ed[mp(f,t)]=min(w,ed[mp(f,t)]);
+            else
+             ed[mp(f,t)]=w;
+
+            ed[mp(t,f)]=ed[mp(f,t)];
+
+        }
+        dfs1(1,0);
+        int Node;
+        for(int i=0;i<sz(b);i++)
+        {
+            int f=getpar(b[i].first);
+            int t=getpar(b[i].second);
+            ll  w= ed[mp(b[i].first,b[i].second)];
+
+            tree[f].pb(mp(t,w));
+            tree[t].pb(mp(f,w));
+            Node=f;
+            vis[f]++;
+            vis[t]++;
+            if(vis[f]==1)
+                st.pb(f);
+            if(vis[t]==1)
+                st.pb(t);
+        }
+        clr(vis,0);
+        dfs2(Node);
+        clr(vis,0);
+        dfs3(Node);
+        ans[Node]=F[Node];
+        ll mi=1e15;
+        Node=N;
+        for(int i=0;i<sz(st);i++)
+        {
+            int no=st[i];
+            if(mi>ans[no])
+            {
+                mi=ans[no];
+                Node=no;
+            }
+            else if(mi==ans[no])
+            {
+                Node=min(Node,no);
+            }
+        }
+        if(sz(b)!=0)
+        cout<<Node<<" "<<mi<<endl;
+        else
+         cout<<"1 0\n";
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
