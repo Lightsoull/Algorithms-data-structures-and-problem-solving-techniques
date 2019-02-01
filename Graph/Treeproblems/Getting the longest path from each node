@@ -1,0 +1,90 @@
+-Problem: you have undirected tree and you are required to get the longest path from each node.
+-Solution:i am having a tree and want to calculate the longest path from each node, this subproblem can be solved by
+1- run dfs by taking any node as the root let it be A then calculte the longest
+path from it till end of the tree ( calculate the 1st longest path in F and the second one in S )
+2- run another dfs from the node A, every node will have 3 options 
+   1-the longest path can be from its children. w2
+   2-the longest path can be from some ancestor of its parent. w3
+   3-the longest path can be from some child of its parent except me. w1
+  so i will take the max and assign the value of up which represent the second case.
+complexity: O(nlogn)
+
+CODE
+----
+const int N=100009;
+int vis[N];
+ll F[N],S[N],up[N],ans[N];
+vector< vector< pair<int,ll> > > tree;
+
+ll dfs2(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(tree[no]);i++)
+    {
+        int nw=tree[no][i].first;
+        ll  we=tree[no][i].second;
+        if(vis[nw])
+            continue;
+        ll ret=dfs2(nw)+we;
+        if(ret>F[no])
+        {
+            S[no]=F[no];
+            F[no]=ret;
+        }
+        else
+        {
+            if(ret>S[no])
+            {
+                S[no]=ret;
+            }
+        }
+    }
+    return F[no];
+}
+void dfs3(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(tree[no]);i++)
+    {
+        int nw=tree[no][i].first;
+        ll  we= tree[no][i].second;
+        if(vis[nw])
+            continue;
+        ll ww= F[nw]+we;
+        ll w1,w2,w3;
+        if(ww!=F[no])
+        {
+            w1=F[no]+we;
+        }
+        else
+        {
+            w1=S[no]+we;
+        }
+        w2=F[nw];
+        w3=up[no]+we;
+        up[nw]=max(w1,w3);
+        ans[nw]=max(w1,max(w2,w3));
+        dfs3(nw);
+    }
+}
+int main()
+{
+
+        int n,m;
+        cin>>n>>m;
+        int f,t,w;
+        for(int i=0;i<m;i++)
+        {
+            cin>>f>>t>>w;
+            tree[f].pb(mp(t,w));
+            tree[t].pb(mp(f,w));
+        }
+
+        dfs2(1);
+        clr(vis,0);
+        dfs3(1);
+        ans[1]=F[1];
+
+        // ans array contain the value of longest path from ith node.
+}
+----------------------------------------------------------------------------------------------------------------------------------------
