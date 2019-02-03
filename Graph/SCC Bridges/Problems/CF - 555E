@@ -1,0 +1,273 @@
+solution: the idea is that any edge has any replacement ( not a bridge ) i don't care a bout it because i can set the orginal edge
+in a direction and its replacement in the other direction and grantee that it won't cause a problem the point is the edges that have
+no replacement is the critical edges because it must be only in one direction, okay so it will be wrong if there is an edge from A to B
+and i need it in the direction AB and BA right okay if i will need it in the dirction AB that means that there is a end at subtree of B 
+and if i need it BA so there is a start at subtree of B, i will increament every start by one and every end by one and the start of lca 
+will be decreamented by one crossponding to the end of the start and end of lca will be decremented by one crossponding to the start of
+the end if the lca node will have start value +ve then i will need a direction BA and if the lca node will have end value +ve then
+i will need a direction AB so if a start of a node is +ve and end of node is +ve then there is no solution.
+Notes
+1- take care of multiple edges, it won't matter if i have 2 or more multiple edges.
+2- take care that the graph intially can be not connected, that's why i am using the ID array.
+
+CODE
+----
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(ll num, int idx) {return ((num >> idx) & 1ll) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(ll num, int idx) {return num ^ (1ll<<idx);}
+void M(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=200009;
+int dfsN[N],lwlink[N],par[N],rnk[N],vis[N],F=1,p[20][N],n,m,ID[N],str[N],en[N],lv[N];
+vector< vector<int> > v(N),tree(N);
+map< pair<int,int> ,int> ed;
+vector<int> v1;
+vector< pair<int,int> > b;
+void I()
+{
+    for(int i=0;i<N;i++)
+        par[i]=i,rnk[i]=1;
+}
+int getpar(int n)
+{
+    if(par[n]==n)
+        return n;
+    return par[n]=getpar(par[n]);
+}
+
+void lnk(int a,int b)
+{
+    a=getpar(a);
+    b=getpar(b);
+
+    if(a!=b)
+    {
+        if(rnk[a]>rnk[b])
+        {
+            rnk[a]+=rnk[b];
+            rnk[b]=0;
+            par[b]=a;
+        }
+        else
+        {
+            rnk[b]+=rnk[a];
+            rnk[a]=0;
+            par[a]=b;
+        }
+    }
+}
+int id;
+void dfs(int no,int p)
+{
+    dfsN[no]=F;
+    lwlink[no]=F++;
+    ID[no]=id;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==0)
+        {
+            dfs(nw,no);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+
+            if(lwlink[nw]>dfsN[no])
+            {
+                b.pb(mp(no,nw));
+            }
+            else
+                lnk(no,nw);
+        }
+        else if(nw!=p||(nw==p&&ed[mp(no,nw)]>1))
+        {
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+
+        }
+    }
+}
+void dfs2(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(tree[no]);i++)
+    {
+        int nw=tree[no][i];
+        if(vis[nw])
+            continue;
+        lv[nw]=lv[no]+1;
+        p[0][nw]=no;
+        dfs2(nw);
+    }
+}
+void buildlca()
+{
+    for(int i=1;(1<<i)<n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            if(p[i-1][j]==-1)
+                continue;
+            p[i][j]=p[i-1][p[i-1][j]];
+        }
+    }
+}
+int getlca(int a,int b)
+{
+    if(lv[a]>lv[b])
+    {
+        swap(a,b);
+    }
+    int mx=log2(lv[b])+eps;
+
+    for(int i=mx;i>=0;i--)
+    {
+        if(lv[b]-(1<<i)>=lv[a])
+        {
+            b=p[i][b];
+        }
+    }
+    if(b==a)
+        return a;
+    for(int i=mx;i>=0;i--)
+    {
+        if(p[i][a]!=-1&&p[i][a]!=p[i][b])
+        {
+            a=p[i][a];
+            b=p[i][b];
+        }
+    }
+    return p[0][a];
+
+}
+bool ok=1;
+void dfs3(int no)
+{
+    vis[no]=1;
+
+    for(int i=0;i<sz(tree[no]);i++)
+    {
+        int nw=tree[no][i];
+        if(vis[nw])
+            continue;
+        dfs3(nw);
+        str[no]+=str[nw];
+        en[no]+=en[nw];
+    }
+    if(str[no]&&en[no])
+    {
+       ok=0;
+    }
+}
+int main()
+{
+    I();
+    int q;
+    cin>>n>>m>>q;
+    int f,t;
+    for(int i=0;i<m;i++)
+    {
+        cin>>f>>t;
+        v[f].pb(t);
+        v[t].pb(f);
+        ed[mp(f,t)]++;
+        ed[mp(t,f)]++;
+    }
+    id=0;
+    for(int i=1;i<=n;i++)
+     if(dfsN[i]==0)
+     {
+         id++;
+        dfs(i,0);
+     }
+    clr(vis,0);
+   // cout<<sz(b)<<endl;
+    for(int i=0;i<sz(b);i++)
+    {
+        int f=getpar(b[i].first);
+        int t=getpar(b[i].second);
+        tree[f].pb(t);
+        tree[t].pb(f);
+        vis[f]++;
+        vis[t]++;
+        if(vis[f]==1)
+            v1.pb(f);
+        if(vis[t]==1)
+            v1.pb(t);
+    }
+    clr(vis,0);
+    clr(p,-1);
+    for(int i=0;i<sz(v1);i++)
+    {
+      if(vis[v1[i]]==0)
+       dfs2(v1[i]);
+    }
+    buildlca();
+    while(q--)
+    {
+        cin>>f>>t;
+        if((ID[f]!=ID[t])||(ok==0))
+        {
+            ok=0;
+            continue;
+        }
+         f=getpar(f);
+         t=getpar(t);
+        int lca=getlca(f,t);
+        str[f]++;
+        en[t]++;
+        str[lca]--;
+        en[lca]--;
+
+    }
+    if(ok==0)
+    {
+        cout<<"NO\n";
+        return 0;
+    }
+    clr(vis,0);
+    for(int i=0;i<sz(v1);i++)
+    {
+      if(vis[v1[i]]==0)
+       dfs3(v1[i]);
+    }
+
+    if(ok==0)
+    {
+        cout<<"NO\n";
+        return 0;
+    }
+    cout<<"YES\n";
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------
