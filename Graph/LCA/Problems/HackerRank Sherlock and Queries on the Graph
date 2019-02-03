@@ -1,0 +1,196 @@
+Solution: first of all the paths from node A to node B will have the same bridges which i care a bout so i will compress the graph
+to have only the bridges ( bridge tree ), now i have another subproblem if i am having a tree and if i connected an edge from c to d 
+the path from a to b (the length of the path is the intial bridges number i have) how it will be affected if i connect the edge c to d
+the effect is the number of edges that in the cycle that caused by edge cd and included in the path from a to b.
+
+CODE
+----
+const int N=100009;
+int lwlink[N],dfsN[N],par[N],rnk[N],F=1,p[N][20],vis[N],lv[N];
+vector< vector<int> > v(N),tree(N);
+map< pair<int,int> ,int> ed;
+vector< pair<int,int> > b;
+void I()
+{
+    clr(p,-1);
+    for(int i=0;i<N;i++)
+        par[i]=i,rnk[i]=1;
+}
+int getpar(int n)
+{
+    if(par[n]==n)
+        return n;
+    return par[n]=getpar(par[n]);
+}
+void lnk(int a,int b)
+{
+    a=getpar(a);
+    b=getpar(b);
+    if(a!=b)
+    {
+        if(rnk[a]>rnk[b])
+        {
+            rnk[a]+=rnk[b];
+            rnk[b]=0;
+            par[b]=a;
+        }
+        else
+        {
+            rnk[b]+=rnk[a];
+            rnk[a]=0;
+            par[a]=b;
+        }
+    }
+}
+void dfs(int no,int p)
+{
+    dfsN[no]=F;
+    lwlink[no]=F++;
+
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==0)
+        {
+            dfs(nw,no);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+
+            if(lwlink[nw]>dfsN[no])
+            {
+                b.pb(mp(no,nw));
+            }
+            else
+            {
+                lnk(no,nw);
+            }
+        }
+        else if((nw!=p)||(nw==p&&ed[mp(nw,p)]>1))
+        {
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+    }
+
+}
+void dfs2(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(tree[no]);i++)
+    {
+        int nw=tree[no][i];
+        if(vis[nw])
+            continue;
+        lv[nw]=lv[no]+1;
+        p[nw][0]=no;
+        dfs2(nw);
+    }
+}
+void buildlca(int n)
+{
+    for(int i=1;(1<<i)<n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            if(p[j][i-1]!=-1)
+                p[j][i]=p[p[j][i-1]][i-1];
+        }
+    }
+}
+int getlca(int a,int b)
+{
+   if(lv[a]>lv[b])
+   {
+       swap(a,b);
+   }
+
+   int mx=log2(lv[b])+eps;
+
+   for(int i=mx;i>=0;i--)
+   {
+       if(lv[b]-(1<<i)>=lv[a])
+       {
+           b=p[b][i];
+       }
+   }
+   if(b==a)
+    return a;
+
+   for(int i=mx;i>=0;i--)
+   {
+       if(p[a][i]!=-1&&p[a][i]!=p[b][i])
+       {
+           a=p[a][i];
+           b=p[b][i];
+       }
+   }
+   return p[a][0];
+
+}
+int getdist(int a,int b)
+{
+    return lv[a]+lv[b]-2*lv[getlca(a,b)];
+}
+int getcross(int no,int a,int b)
+{
+    int lca1=getlca(no,a);
+    int lca2=getlca(no,b);
+    int lca3=getlca(a,b);
+
+    if(lv[lca2]>lv[lca1])
+        return lca2;
+    else if(lv[lca1]>lv[lca2])
+        return lca1;
+    else
+    {
+        return lca3;
+    }
+
+}
+int main()
+{
+    I();
+    int n,m,q;
+    cin>>n>>m>>q;
+
+    for(int i=0;i<m;i++)
+    {
+        int f,t;
+        cin>>f>>t;
+        if(f==t)
+            continue;
+        v[f].pb(t);
+        v[t].pb(f);
+        ed[mp(f,t)]++;
+        ed[mp(t,f)]++;
+    }
+    dfs(1,0);
+    int Node;
+    for(int i=0;i<sz(b);i++)
+    {
+        int f=getpar(b[i].first);
+        int t=getpar(b[i].second);
+
+        tree[f].pb(t);
+        tree[t].pb(f);
+        Node=f;
+    }
+
+    dfs2(Node);
+    buildlca(n);
+
+    while(q--)
+    {
+        int a,b,c,d;
+        cin>>c>>d>>a>>b;
+
+        a=getpar(a);
+        b=getpar(b);
+        c=getpar(c);
+        d=getpar(d);
+        int ans=getdist(a,b);
+        int F= getcross(c,a,b);
+        int S= getcross(d,a,b);
+        ans-= getdist(F,S);
+
+        cout<<ans<<endl;
+    }
+}
