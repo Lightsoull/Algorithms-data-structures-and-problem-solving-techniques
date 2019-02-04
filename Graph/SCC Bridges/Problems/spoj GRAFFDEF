@@ -1,0 +1,106 @@
+Solution: okay so if i want to win the path between the 2 nodes must not contain a single bridge so i will sum up the number of such
+choices in res and subtract it from total choices to get the number of choices if i want lose, so the probabilty of losing is the total
+number of losing choices divided by the total number of choices.
+
+CODE
+----
+const int N=100009;
+int lwlink[N],dfsN[N],par[N],rnk[N],F=1;
+vector< vector<int> > v(N),tree(N);
+vector< pair<int,int> > b;
+map<int,int> arr;
+void I()
+{
+    for(int i=0;i<N;i++)
+        par[i]=i,rnk[i]=1;
+}
+int getpar(int n)
+{
+    if(par[n]==n)
+        return n;
+    return par[n]=getpar(par[n]);
+}
+void lnk(int a,int b)
+{
+    a=getpar(a);
+    b=getpar(b);
+    if(a!=b)
+    {
+        if(rnk[a]>rnk[b])
+        {
+            rnk[a]+=rnk[b];
+            rnk[b]=0;
+            par[b]=a;
+        }
+        else
+        {
+            rnk[b]+=rnk[a];
+            rnk[a]=0;
+            par[a]=b;
+        }
+    }
+}
+void dfs(int no,int p)
+{
+    dfsN[no]=F;
+    lwlink[no]=F++;
+
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==0)
+        {
+            dfs(nw,no);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+
+            if(lwlink[nw]>dfsN[no])
+            {
+                b.pb(mp(no,nw));
+            }
+            else
+            {
+                lnk(no,nw);
+            }
+        }
+        else if(nw!=p)
+        {
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+    }
+
+}
+
+int main()
+{
+    I();
+    int n,m;
+    cin>>n>>m;
+
+    for(int i=0;i<m;i++)
+    {
+        int f,t;
+        cin>>f>>t;
+
+        v[f].pb(t);
+        v[t].pb(f);
+
+    }
+    dfs(1,0);
+    for(int i=1;i<=n;i++)
+    {
+        int p=getpar(i);
+        arr[p]++;
+    }
+    ll tot= (1ll*n*(n-1))/2;
+    ll res=0;
+    for(auto it=arr.begin();it!=arr.end();it++)
+    {
+        ll cnt=it->second;
+        res+= (cnt*(cnt-1))/2;
+    }
+    ll ans= tot-res;
+
+    cout<<fixed<<setprecision(5)<<(ans+0.0)/tot<<endl;
+
+
+}
