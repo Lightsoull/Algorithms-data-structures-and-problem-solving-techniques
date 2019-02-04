@@ -1,0 +1,121 @@
+Solution: if there exist a single bridge then there is no answer, okay now the next subproblem is how to put the edges directions 
+which can be done by moving with the dfs order and put the edge directions but take care that i may assign a direction to an edge 
+i assigned to it before that's why i am using vised map.
+
+CODE
+----
+const int N=200009;
+int lwlink[N],dfsN[N],par[N],rnk[N],F=1,vis[N];
+vector< vector<int> > v(N),tree(N);
+vector< pair<int,int> > b;
+vector< pair<int,int>> ed;
+map< pair<int,int> ,int> vised;
+void I()
+{
+    for(int i=0;i<N;i++)
+        par[i]=i,rnk[i]=1;
+}
+int getpar(int n)
+{
+    if(par[n]==n)
+        return n;
+    return par[n]=getpar(par[n]);
+}
+void lnk(int a,int b)
+{
+    a=getpar(a);
+    b=getpar(b);
+    if(a!=b)
+    {
+        if(rnk[a]>rnk[b])
+        {
+            rnk[a]+=rnk[b];
+            rnk[b]=0;
+            par[b]=a;
+        }
+        else
+        {
+            rnk[b]+=rnk[a];
+            rnk[a]=0;
+            par[a]=b;
+        }
+    }
+}
+void dfs(int no,int p)
+{
+    dfsN[no]=F;
+    lwlink[no]=F++;
+
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==0)
+        {
+            dfs(nw,no);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+
+            if(lwlink[nw]>dfsN[no])
+            {
+                b.pb(mp(no,nw));
+            }
+            else
+            {
+                lnk(no,nw);
+            }
+        }
+        else if(nw!=p)
+        {
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+    }
+
+}
+void dfs2(int no,int p)
+{
+
+    vis[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+         if(vised[mp(no,nw)])
+            continue;
+        vised[mp(no,nw)]=1;
+        vised[mp(nw,no)]=1;
+        if(nw!=p)
+        ed.pb(mp(no,nw));
+
+        if(vis[nw])
+            continue;
+
+        dfs2(nw,no);
+    }
+}
+int main()
+{
+    M();
+    I();
+    int n,m;
+    cin>>n>>m;
+
+    for(int i=0;i<m;i++)
+    {
+        int f,t;
+        cin>>f>>t;
+
+        v[f].pb(t);
+        v[t].pb(f);
+    }
+    dfs(1,0);
+
+    if(sz(b)!=0)
+    {
+        cout<<"0\n";
+        return 0;
+    }
+
+    dfs2(1,0);
+    for(int i=0;i<sz(ed);i++)
+        cout<<ed[i].first<<" "<<ed[i].second<<endl;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
