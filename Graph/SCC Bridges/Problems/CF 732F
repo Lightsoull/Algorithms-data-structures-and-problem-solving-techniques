@@ -1,0 +1,224 @@
+Solution: i will binary search on the min r and check, to check whether a value can be the min r, i will build a bridge tree each connected
+component which express a node in the bridge tree every node in this connected component will see the number of nodes in this connected 
+component and can see other connected component if the edge between them is dircted from it to the other one (1), the leaf node if its
+connected component nodes is less than the decided binary search value then the edge from it to its parent must be directed from it
+to its parent it must be there is no other choices use this fact and try to apply it to all the tree from buttom to up (2), then at the
+end i will do dfs3 to assign the edges directions the edges that in the connected components since the bridges edges directions are
+assigned.
+
+CODE
+----
+const int N=400009;
+int dfsN[N],lwlink[N],F=1,vis[N],vised[N],par[N],rnk[N];
+vector< vector<pair<int,int>> > tree(N),v(N);
+vector< pair<int,int> > b;
+int needed[N];
+map< pair<int,int> ,int> mb;
+vector<int> v1;
+vector<int> Oarr(N),arr(N);
+vector<pair<int,int>> Fed(N),ed(N);
+pair<int,int> rmb[N];
+void I()
+{
+    for(int i=0;i<N;i++)
+     par[i]=i,rnk[i]=1;
+}
+int getpar(int n)
+{
+    if(par[n]==n)
+        return n;
+    return par[n]=getpar(par[n]);
+}
+void lnk(int a,int b)
+{
+    a=getpar(a);
+    b=getpar(b);
+    if(a!=b)
+    {
+        if(rnk[a]>rnk[b])
+        {
+            par[b]=a;
+            rnk[a]+=rnk[b];
+            rnk[b]=0;
+        }
+        else
+        {
+            rnk[b]+=rnk[a];
+            par[a]=b;
+            rnk[a]=0;
+        }
+    }
+}
+void dfs(int no,int p)
+{
+    dfsN[no]=F;
+    lwlink[no]=F++;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i].first;
+        if(dfsN[nw]==0)
+        {
+            dfs(nw,no);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+
+            if(lwlink[nw]>dfsN[no])
+            {
+                b.pb(mp(no,nw));
+            }
+            else
+            {
+                lnk(no,nw);
+            }
+        }
+        else if(nw!=p)
+        {
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+    }
+}
+void dfs2(int no,int val)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(tree[no]);i++)
+    {
+        int nw=tree[no][i].first;
+        int id=tree[no][i].second;
+        if(vis[nw])
+            continue;
+        dfs2(nw,val);
+        if(needed[nw]>0)
+        {
+            needed[nw]=max(0,needed[nw]-arr[no]);
+            needed[no]=max(needed[no],needed[nw]);
+            needed[nw]=0;
+            int fr=getpar(rmb[id].first);
+            int to=getpar(rmb[id].second);
+            if(no==fr&&nw==to)
+                ed[id]=mp(rmb[id].second,rmb[id].first);
+            else
+                ed[id]=mp(rmb[id].first,rmb[id].second);
+        }
+        else
+        {
+            arr[no]+=arr[nw];
+            needed[no]=max(0,needed[no]-arr[nw]);
+            int fr=getpar(rmb[id].first);
+            int to=getpar(rmb[id].second);
+            if(no==fr&&nw==to)
+                ed[id]=mp(rmb[id].first,rmb[id].second);
+            else
+                ed[id]=mp(rmb[id].second,rmb[id].first);
+        }
+    }
+    int num=max(0,val-arr[no]);
+    needed[no]=max(needed[no],num);
+
+}
+bool check(int mid)
+{
+    clr(vis,0);
+    clr(needed,0);
+    arr=Oarr;
+    ed.clear();
+    ed.resize(N);
+    dfs2(v1[0],mid);
+    for(int i=0;i<sz(v1);i++)
+    {
+        if(needed[v1[i]])
+            return 0;
+    }
+    return 1;
+}
+int BS(int l,int r)
+{
+    int ans=0;
+    while(l<=r)
+    {
+        int mid=(l+r)/2;
+
+        if(check(mid))
+        {
+            l=mid+1;
+            ans=mid;
+            Fed=ed;
+
+        }
+        else
+        {
+            r=mid-1;
+        }
+    }
+    return ans;
+}
+void dfs3(int no,int p)
+{
+    vis[no]=1;
+
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i].first;
+        int id=v[no][i].second;
+        if(nw==p)
+            continue;
+        if(vised[id])
+            continue;
+        vised[id]=1;
+        if(Fed[id].first==0)
+        {
+            Fed[id]=mp(no,nw);
+        }
+        if(vis[nw])
+            continue;
+        dfs3(nw,no);
+    }
+}
+int main()
+{
+    M();
+    I();
+    int n,m;
+    cin>>n>>m;
+
+    for(int i=0;i<m;i++)
+    {
+        int f,t;
+        cin>>f>>t;
+        v[f].pb(mp(t,i));
+        v[t].pb(mp(f,i));
+        mb[mp(f,t)]=i;
+        mb[mp(t,f)]=i;
+        rmb[i]=mp(f,t);
+    }
+    dfs(1,0);
+    for(int i=0;i<sz(b);i++)
+    {
+        int f=getpar(b[i].first);
+        int t=getpar(b[i].second);
+        int id=mb[mp(b[i].first,b[i].second)];
+        tree[f].pb(mp(t,id));
+        tree[t].pb(mp(f,id));
+        Oarr[f]=rnk[f];
+        Oarr[t]=rnk[t];
+        vis[f]++;
+        vis[t]++;
+        if(vis[f]==1)
+            v1.pb(f);
+        if(vis[t]==1)
+            v1.pb(t);
+
+    }
+    int res=0;
+    if(sz(b)!=0)
+    {
+     res=BS(1,N);
+    }
+    else
+    {
+        res=n;
+    }
+    cout<<res<<endl;
+    clr(vis,0);
+    dfs3(1,0);
+    for(int i=0;i<m;i++)
+        cout<<Fed[i].first<<" "<<Fed[i].second<<endl;
+}
