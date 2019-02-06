@@ -1,0 +1,180 @@
+Solution: observe that the paths from S to T must pass with certain edges which are the bridges which i can cut from any one of them 
+or it will pass with one of the two edges that i will need to cut bec else there won't be a solution, so i will try to cut each of the 
+pervious kinds of edges if this cut will result to divide S and T then it was a bridge and can be the answer else i will need to cut other
+edge and it must be a bridge so i will get the min cost bridge that connects S to T which can be get it by building a bridge tree.
+
+CODE
+----
+const int N=1001;
+const int M=30001;
+int n,m,S,T;
+int best=INT_MAX;
+int id1=-1,id2=-1,forbid,vis[M],timer,dfsN[N],lwlink[N],par[N],rnk[N];
+vector< vector< pair<int,int> > > v(N),tree(N);
+int cost[M];
+vector<int> path,Br;
+vector< pair<int,pair<int,int> > > B;
+bool dfs(int no)
+{
+    if(no==T)
+        return true;
+    vis[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i].first;
+        int id=v[no][i].second;
+        if(vis[nw])
+            continue;
+        path.pb(id);
+        bool ret=dfs(nw);
+        if(ret==true)
+            return true;
+        path.pop_back();
+    }
+    return false;
+}
+bool reach;
+int visID=1;
+int getpar(int n)
+{
+    if(par[n]==n)
+        return n;
+    return par[n]=getpar(par[n]);
+}
+void lnk(int a,int b)
+{
+    a=getpar(a);  b=getpar(b);
+    if(a!=b)
+    {
+        if(rnk[a]>rnk[b])
+            rnk[a]+=rnk[b],rnk[b]=0,par[b]=a;
+        else
+            rnk[b]+=rnk[a],rnk[a]=0,par[a]=b;
+    }
+}
+void dfs1(int no)
+{
+    if(no==T)
+        reach=1;
+    dfsN[no]=timer;
+    lwlink[no]=timer++;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i].first;
+        int id=v[no][i].second;
+
+        if(id==forbid||vis[id]==visID)
+            continue;
+        vis[id]=visID;
+        if(dfsN[nw]==0)
+        {
+            dfs1(nw);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+            if(lwlink[nw]>dfsN[no])
+                B.pb(mp(id,mp(no,nw)));
+            else
+                lnk(no,nw);
+        }
+        else
+        {
+           lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+    }
+}
+void I()
+{
+    for(int i=0;i<N;i++)
+        par[i]=i,rnk[i]=1;
+}
+bool dfs2(int no,int Tar)
+{
+    if(no==Tar)
+        return 1;
+    vis[no]=visID;
+    for(int i=0;i<sz(tree[no]);i++)
+    {
+        int nw=tree[no][i].first;
+        int id=tree[no][i].second;
+        if(vis[nw]==visID)
+            continue;
+        Br.pb(id);
+        bool ret=dfs2(nw,Tar);
+        if(ret==1)
+            return 1;
+        Br.pop_back();
+    }
+    return 0;
+}
+void solve()
+{
+     timer=1;
+     visID++;
+     clr(dfsN,0);
+     clr(lwlink,0);
+     B.clear();
+     Br.clear();
+     tree.clear();
+     tree.resize(N);
+     I();
+     reach=0;
+     dfs1(S);
+     if(reach==0)
+     {
+         if(cost[forbid]<best)
+         {
+             best=cost[forbid];
+             id1=forbid;
+             id2=-1;
+         }
+         return ;
+     }
+     for(int i=0;i<sz(B);i++)
+     {
+         int f=getpar(B[i].second.first),t=getpar(B[i].second.second);
+         tree[f].pb(mp(t,B[i].first));  tree[t].pb(mp(f,B[i].first));
+     }
+     visID++;
+     dfs2(getpar(S),getpar(T));
+     for(int i=0;i<sz(Br);i++)
+     {
+         if(cost[Br[i]]+cost[forbid]<best)
+         {
+             best=cost[Br[i]]+cost[forbid];
+             id1=forbid;
+             id2=Br[i];
+         }
+     }
+}
+int main()
+{
+    FS();
+    cin>>n>>m>>S>>T;
+    int f,t,w;
+    for(int i=0;i<m;i++)
+    {
+        cin>>f>>t>>w;
+        v[f].pb(mp(t,i));
+        v[t].pb(mp(f,i));
+        cost[i]=w;
+    }
+    if(dfs(S)==0)
+    {
+        cout<<"0\n0\n";
+        return 0;
+    }
+    for(int i=0;i<sz(path);i++)
+    {
+        forbid=path[i];
+        solve();
+    }
+    if(best==INT_MAX)
+        cout<<"-1\n";
+    else
+    {
+        if(id2==-1)
+            cout<<best<<"\n1\n"<<id1+1<<endl;
+        else
+            cout<<best<<"\n2\n"<<id1+1<<" "<<id2+1<<endl;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
