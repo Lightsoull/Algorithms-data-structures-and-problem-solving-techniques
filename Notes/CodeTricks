@@ -392,6 +392,28 @@ but take care this range up to long long only and if there is still precision ro
 If you are upper_bound on vector of doubles on a val write it val+eps.
 If you are lower_bound on vector of doubles on a val write it val-eps.
 ----------------------------------------------------------------------------------------------------------------------------------------
+If you want to get the path from node to node in dfs and return if there is a path or not.
+bool dfs(int no)
+{
+    if(no==Target)
+        return true;
+    vis[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(vis[nw])
+            continue;
+        path.pb(nw);
+        bool ret=dfs(nw);
+        if(ret==true)
+            return true;
+        path.pop_back();
+    }
+    return false;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+there is a trick instead of clearing the vis array just assign a visID for each time, Note don't start the visID with zero.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
