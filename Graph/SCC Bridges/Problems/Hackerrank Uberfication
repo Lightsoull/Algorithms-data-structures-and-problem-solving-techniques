@@ -1,0 +1,111 @@
+Solution: to have exactly one path in a graph between 2 nodes then every edge in this path must be a bridge so i will get all the bridges
+and build a tree using them, the second part is to get the total distance okay if i have an edge AB with weight w the number of times
+this edge is used is arr[B]*(N-arr[B])*w where N is the total nodes in the tree and arr[B] is the sum of nodes in the subtree of B.
+
+CODE
+----
+const int N=50009;
+const int M=150009;
+int lwlink[N],dfsN[N],timer,vis[N];
+vector< pair<int,int> > B;
+vector< vector<int> > v,tree;
+ll ans,arr[N],m,n;
+void I()
+{
+    B.clear();
+    v.clear();
+    tree.clear();
+    v.resize(N);
+    tree.resize(N);
+    clr(dfsN,0);
+    clr(lwlink,0);
+    timer=1;
+    clr(vis,0);
+    clr(arr,0);
+}
+void dfs(int no,int p)
+{
+    dfsN[no]=lwlink[no]=timer++;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==0)
+        {
+           dfs(nw,no);
+           lwlink[no]=min(lwlink[no],lwlink[nw]);
+           if(lwlink[nw]>dfsN[no])
+                B.pb(mp(no,nw));
+
+        }
+        else if(nw!=p)
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+    }
+}
+void dfs2(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(tree[no]);i++)
+    {
+        int nw=tree[no][i];
+        if(vis[nw])
+            continue;
+        dfs2(nw);
+        arr[no]+=arr[nw];
+    }
+    arr[no]++;
+}
+void dfs3(int no,int root)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(tree[no]);i++)
+    {
+        int nw=tree[no][i];
+        if(vis[nw])
+            continue;
+        ans+= (arr[root]-arr[nw])*(arr[nw]);
+        dfs3(nw,root);
+
+    }
+
+}
+int main()
+{
+
+    int T;
+    cin>>T;
+    while(T--)
+    {
+        cin>>n>>m;
+        I();
+        int f,t;
+        for(int i=0;i<m;i++)
+        {
+            cin>>f>>t;
+            v[f].pb(t); v[t].pb(f);
+        }
+        dfs(1,0);
+        for(int i=0;i<sz(B);i++)
+        {
+            int f=B[i].first,t=B[i].second;
+            tree[f].pb(t);
+            tree[t].pb(f);
+        }
+
+        ans=0;
+        for(int i=1;i<=n;i++)
+        {
+            if(vis[i]==0)
+            {
+                dfs2(i);
+            }
+        }
+        clr(vis,0);
+        for(int i=1;i<=n;i++)
+        {
+            if(vis[i]==0)
+                dfs3(i,i);
+        }
+        cout<<ans<<endl;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
