@@ -1,4 +1,4 @@
-
+Link: https://www.hackerearth.com/blog/algorithms/tower-hanoi-recursion-game-algorithm-explained/
 For n disks, total 2^n – 1 moves are required.
 For n disks, total 2^n+1 – 1 function calls are made.
 
