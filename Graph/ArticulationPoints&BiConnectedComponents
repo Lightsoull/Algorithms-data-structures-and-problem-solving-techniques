@@ -124,7 +124,7 @@ void get_bcc(int idx)
 {
 	vector<int> componente;
 	while(!pilha.empty())
-    {
+        {
 		int davez = pilha.top();
 		pilha.pop();
 		componente.push_back(davez);
@@ -137,14 +137,14 @@ void dfs_tarjan(int v,int p)
 	num[v] = low[v] = ++dfsCount;
 	int children = 0;
 	for(int i = 0;i<grafo[v].size();i++)
-    {
+        {
 		int idx = grafo[v][i];
 		int u = (e1[idx] != v) ? e1[idx] : e2[idx];
 		if(u == p) 
 		continue;
     
 		if(num[u] == 0)
-        {
+                {
 			children++;
 			pilha.push(idx);
 			dfs_tarjan(u,v);
@@ -159,12 +159,12 @@ void dfs_tarjan(int v,int p)
 			low[v] = min(low[v],low[u]);
 		}
 		else
-        {
+               {
 			low[v] = min(low[v],num[u]);
 		}
 	}
 	if(p == -1)
-    {
+        {
 		articulation[v] = (children > 1);
 	}
 }
@@ -174,14 +174,15 @@ int main()
     // m edges
 	cin>>n>>m;
 	for(int i = 1;i<=m;i++)
-    {
+        {
 		cin>>e1[i]>>e2[i];
 		grafo[e1[i]].push_back(i);
 		grafo[e2[i]].push_back(i);
 	}
 	dfs_tarjan(1,-1);
+	// blockComp intially = 0
 	for(int i = 1;i<=n;i++)
-    {
+        {
 		if(articulation[i]) 
 		biconnectedId[i] = ++blockComp;
 	}
