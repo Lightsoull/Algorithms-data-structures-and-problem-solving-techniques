@@ -110,6 +110,140 @@ int main()
     dfs(1,0);
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
+Link: https://en.wikipedia.org/wiki/Biconnected_component
+- Block-Cut Tree: Every graph can be represented as a Block Cut tree, every graph can be presented as articulation points connecting
+biconnected components and the block cut tree connects the articulation point with the biconnected components that it connects.
+CODE
+----
+vector<int> grafo[MAXN];
+vector<int> arvore[MAXN];
+vector<int> blockCut[MAXN];
+vector<vector<int> > perdi;
+stack<int> pilha;
+void get_bcc(int idx)
+{
+	vector<int> componente;
+	while(!pilha.empty())
+    {
+		int davez = pilha.top();
+		pilha.pop();
+		componente.push_back(davez);
+		if(davez == idx) break;
+	}
+	perdi.push_back(componente);
+}
+void dfs_tarjan(int v,int p)
+{
+	num[v] = low[v] = ++dfsCount;
+	int children = 0;
+	for(int i = 0;i<grafo[v].size();i++)
+    {
+		int idx = grafo[v][i];
+		int u = (e1[idx] != v) ? e1[idx] : e2[idx];
+		if(u == p) 
+		continue;
+    
+		if(num[u] == 0)
+        {
+			children++;
+			pilha.push(idx);
+			dfs_tarjan(u,v);
+			if(low[u] > num[v])
+			 isbridge[idx] = 1;
+        
+			if(low[u] >= num[v])
+			{
+				articulation[v] = 1;
+				get_bcc(idx);
+			}
+			low[v] = min(low[v],low[u]);
+		}
+		else
+        {
+			low[v] = min(low[v],num[u]);
+		}
+	}
+	if(p == -1)
+    {
+		articulation[v] = (children > 1);
+	}
+}
+int main()
+{
+    // n nodes from 1 to n
+    // m edges
+	cin>>n>>m;
+	for(int i = 1;i<=m;i++)
+    {
+		cin>>e1[i]>>e2[i];
+		grafo[e1[i]].push_back(i);
+		grafo[e2[i]].push_back(i);
+	}
+	dfs_tarjan(1,-1);
+	for(int i = 1;i<=n;i++)
+    {
+		if(articulation[i]) 
+		biconnectedId[i] = ++blockComp;
+	}
+	while(!perdi.empty())
+	{
+		vector<int> componente = perdi.back();
+		perdi.pop_back();
+		blockComp++;
+		for(int pos = 0;pos<componente.size();pos++){
+			int u = e1[componente[pos]],v = e2[componente[pos]];
+			if(!articulation[u]) biconnectedId[u] = blockComp;
+			if(!articulation[v]) biconnectedId[v] = blockComp;
+			if(articulation[u]){
+				blockCut[biconnectedId[u]].push_back(blockComp);
+				blockCut[blockComp].push_back(biconnectedId[u]);
+			}
+			if(articulation[v]){
+				blockCut[biconnectedId[v]].push_back(blockComp);
+				blockCut[blockComp].push_back(biconnectedId[v]);
+			}
+		}
+	}
+	for(int i = 1;i<=blockComp;i++)
+	{
+		sort(blockCut[i].begin(),blockCut[i].end());
+		blockCut[i].erase(unique(blockCut[i].begin(),blockCut[i].end()),blockCut[i].end());
+	}
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
