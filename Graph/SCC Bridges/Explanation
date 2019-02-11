@@ -7,6 +7,9 @@ Getting the bridge edges: the idea is that if edge u to v is a bridge edge so th
 getting bridge tree: by using DSU every non bridge edge will be linked to each other and the bridge edges won't be linked so by just 
 getting the parent of each node of the bridge edges we can build the bridge tree.
 
+Note
+to know whether this edge is a bridge or not, if its two nodes of different components then it is bridge else no.
+
 CODE
 void dfs(int no,int pre)
 {
