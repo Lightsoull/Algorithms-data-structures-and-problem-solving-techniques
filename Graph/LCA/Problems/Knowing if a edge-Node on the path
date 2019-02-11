@@ -1,0 +1,64 @@
+
+1- if i am having a tree and there is a simple path between node u and node v and i want to know whther the edge g1g2 part of this path or not.
+// zero means on path.
+// one means not on path.
+int path(int u,int v,int g1,int g2)
+{
+	if(level[g1] > level[g2]) 
+    swap(g1,g2);
+	int ancestor = getLCA(u,v);
+	if(ancestor == g1)
+  {
+		if(getLCA(u,g2) == g2 || getLCA(v,g2) == g2) 
+       return 0;
+		return 1;
+	}
+	if(getLCA(g1,ancestor) == ancestor && (getLCA(g2,v) == g2 || getLCA(g2,u) == g2))
+  {
+		return 0;
+	}
+	return 1;
+}
+------------------------------------------------------------------------------------------------------------------------------------
+2-1- if i am having a tree and there is a simple path between node a and node b and i want to know whther the node c part of this path 
+or not.
+// zero means on path
+// one means not on path
+int check(int a,int b,int c)
+{
+	int ancestral = LCA(a,b);
+	if(ancestral == c) 
+     return 0;
+	int precalc = LCA(c,ancestral);
+	if(precalc != ancestral)
+    return 1;
+	if(LCA(a,c) == c)
+  {
+		return 0;
+	}
+	if(LCA(b,c) == c)
+  {
+		return 0;
+	}
+	return 1;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
