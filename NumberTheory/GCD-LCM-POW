@@ -1,3 +1,9 @@
+/*
+some gcd/lcm properties
+Link: http://www.cut-the-knot.org/arithmetic/GcdLcmProperties.shtml
+*/
+
+
 int gcd(int a, int b) 
 {
     if(b==0)
