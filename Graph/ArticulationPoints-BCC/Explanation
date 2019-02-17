@@ -1,0 +1,244 @@
+-Articulation points: if i have an undirected connected graph, is the point that if i removed it the graph will be no longer connected 
+it is like the bridge but here it is a node.
+Notes
+1- if the graph have bridges then off course it will have articulation points but if it haven't that doesn't mean it hasn't articulation 
+points eg case  1-2 2-3 3-4 4-1 1-5 5-6 6-1 here node 1 is articulation point and the graph have no bridges.
+2- the articulation point can't be a leaf.
+3- the articulation point means that its childrens can't go to another component without moving through it.
+4- so if the lwlink[nw] >= dfsN[no] then (no) is an articulation point.
+5- but there is a problem which is the root will always satisfy this role and the root may be not an articulation point, okay to deal with 
+that we have to introduce BiConnectedComponents (BCC) so learn it below first, okay if the root member of more than 2 BCC then it is
+an articulation point else it is not.
+
+BiConnected Components (BCC): it is a component of nodes that doesn't contain any articulation point so when i remove any node from it, it
+remains connected, when i get a graph and remove all the articulation points in it the graph will be divided in to some BCCs.
+BCC properties
+1- an edge is a BCC
+2- there is 2 vertex disjoint paths between two vertexes, so there is a simple cycle between two vertexes.
+the BCC function is very large 10 nodes can create 9,000,000 BCCs
+
+CODE for getting the articulation points
+// this code assume that the graph is connected and there is no multiple edges or self loops.
+int timer=0;
+set< int > articulation;  // i will use set bec the same node may enter various times
+bool root=false;
+void dfs(int no,int par)
+{
+    dfsN[no]=lwlink[no]=timer++;
+    
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==-1)
+        {
+            dfs(nw,no);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+            if(lwlink[nw]>=dfsN[no])
+            {
+                if(dfsN[no]==0&&root==false)
+                    root=true;
+                else
+                articulation.insert(no);
+            }
+        }
+        else if(nw!=p)
+            lwlink[no]=min(lwlink[no],dfsN[nw]);
+    }
+}
+---------------------------------------------------------------
+CODE for getting the BCCs
+Note
+- Every entrance in if(dfsN[nw]==-1) this condition means that the no node is involved in a new BCC.
+- i assume that there is multiple edges.
+- i assume that the root is articulation point, if not just remove its component.
+- i will use set bec the same node may enter various times.
+
+const int N=100009;
+int timer=0;
+set< int > articulation;  
+stack< pair<int,int> > comp;
+int vis[N];
+bool root=false;
+void dfs(int no,int par)
+{
+    dfsN[no]=lwlink[no]=++timer;
+    
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i].first;
+        int edgeid=v[no][i].second;
+        if(vis[edgeid]==0)
+         comp.push(mp(no,nw));
+        vis[edgeid]=1;
+        
+        if(dfsN[nw]==-1)
+        {
+            dfs(nw,no);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+            if(lwlink[nw]>=dfsN[no])
+            {
+                if(dfsN[no]==0&&root==false)
+                    root=true;
+                else
+                articulation.insert(no);
+                
+                do
+                {
+                    int F=comp.top().first; int S=comp.top().second;
+                    comp.pop();
+                    
+                }
+                while(!(F==no&&S==nw))
+                
+            }
+        }
+        else if(vis[edgeid]==0)
+            lwlink[no]=min(lwlink[no],dfsN[nw]);
+    }
+}
+// n nodes, m edges, nodes from 1 to n
+int main()
+{
+    cin>>n>>m;
+    
+    for(int i=0;i<m;i++)
+    {
+        cin>>f>>t;
+        v[f].pb(mp(t,i));
+        v[t].pb(mp(f,i));
+    }
+    dfs(1,0);
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Link: https://en.wikipedia.org/wiki/Biconnected_component
+- Block-Cut Tree: Every graph can be represented as a Block Cut tree, every graph can be presented as articulation points connecting
+biconnected components and the block cut tree connects the articulation point with the biconnected components that it connects.
+CODE
+----
+const int N=10009;
+const int M=100009;
+int dfsN[N],lwlink[N],vis[M],n,m;
+stack< pair<int,int> > comp;
+int art[N],timer,root;
+vector< vector< pair<int,int> > > rC;
+vector< vector< pair<int,int> > > v;
+vector< vector<int> > blocktree;
+int blockcutid[N];
+void I()
+{
+    clr(art,0);
+    rC.clear();
+    clr(vis,0);
+    clr(dfsN,0);
+    clr(lwlink,0);
+    ans.clear();
+    timer=1;
+    root=0;
+    blocktree.clear();
+    blocktree.resize(N);
+    v.clear();
+    v.resize(N);
+}
+void dfs(int no)
+{
+    dfsN[no]=lwlink[no]=timer++;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i].first;
+        int id=v[no][i].second;
+        if(vis[id])
+            continue;
+        vis[id]=1;
+        comp.push(mp(no,nw));
+        if(dfsN[nw]==0)
+        {
+            dfs(nw);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+            if(lwlink[nw]>=dfsN[no])
+            {
+                if(dfsN[no]==1&&root==0)
+                    root=1;
+                else
+                    art[no]=1;
+
+                vector< pair<int,int> > C;
+                int f,s;
+                do
+                {
+                    f=comp.top().first; s=comp.top().second;
+                    C.pb(mp(f,s));
+                    comp.pop();
+                }while(!(f==no&&s==nw));
+                rC.pb(C);
+            }
+        }
+        else
+            lwlink[no]=min(lwlink[no],dfsN[nw]);
+    }
+}
+int main()
+{
+    // n nodes from 0 to n-1
+    // m edges
+        I();
+        cin>>n>>m;
+        int f,t,id=0;
+        
+        for(int i=0;i<m;i++)
+        {
+            cin>>f>>t;
+            v[f].pb(mp(t,i));
+            v[t].pb(mp(f,i));
+        }
+
+        dfs(0);
+
+        int blockid=1;
+
+        for(int i=0;i<n;i++)
+        {
+            if(art[i])
+                blockcutid[i]=blockid++;
+        }
+        for(int i=0;i<sz(rC);i++)
+        {
+            for(int j=0;j<sz(rC[i]);j++)
+            {
+                int f= rC[i][j].first;
+                int t= rC[i][j].second;
+
+                if(art[f]==0)
+                {
+                    blockcutid[f]=blockid;
+                }
+                if(art[t]==0)
+                {
+                    blockcutid[t]=blockid;
+                }
+                if(art[f])
+                {
+                    blocktree[blockcutid[f]].pb(blockid);
+                    blocktree[blockid].pb(blockcutid[f]);
+                }
+                if(art[t])
+                {
+                    blocktree[blockcutid[t]].pb(blockid);
+                    blocktree[blockid].pb(blockcutid[t]);
+                }
+            }
+            blockid++;
+        }
+
+        for(int i=1;i<=blockid;i++)
+        {
+            sort(all(blocktree[i]));
+            auto it=unique(all(blocktree[i]));
+            if(it!=blocktree[i].end())
+            blocktree[i].erase(it,blocktree[i].end());
+
+        }
+
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
