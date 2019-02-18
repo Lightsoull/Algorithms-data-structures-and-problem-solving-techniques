@@ -179,6 +179,10 @@ whether the max of the array is less or equal to t if so it works you can use th
 ----------------------------------------------------------------------------------------------------------------------------------------
 If a ^ b = c and i have only a and c so b = a ^ c
 ----------------------------------------------------------------------------------------------------------------------------------------
+If i am having array of numbers and want to get some subarray that the mean of it max, mean= sum of values/number of values.
+observe that if i have 2 numbers a and b and a=b then mean 2*a/2 = a so if b is less than a then the mean will be smaller so the max
+number of this array is the max mean.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
