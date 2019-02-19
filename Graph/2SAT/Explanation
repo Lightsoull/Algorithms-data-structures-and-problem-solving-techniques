@@ -1,1 +1,217 @@
+Some Prequists
+1- There is a relation called logical implication: it is like and / or relations it has the simbol ( arrow ) A arrow B means that A 
+implies B means that A to occur depends on the occurance of B.
+its Truth Table
+A  implies B
+0          1   True
+0          0   True
+1          0   False
+1          1   True
+and it is equivalent to of A implies B is not B implies not A.
+2- Implication Graph: imagine if i have some relations eg A implies B , B implies C and C implies D a single implication can be represented
+as a directed edge from A to B , from B to C , from C to D. so Implication graph is a directed graph represents the implies relations 
+between the nodes.
+Properties of Implication graph
+1- if A and D are on the same path then there is a direct implication relation between them.
+2- if x implies !x then x must be zero, if !x implies x then x must be one So x and !x can't be on one cycle because x can't be zero and
+one at the same time.
+3- Each cycle in this graph will have only one value whether zero or one, because if A implies B , B implies C and C is zero then B have
+to be zero and A have to be also zero, and if A is one B have to be one and also C have to be one. so if i am in a cycle so it will go 
+from start forward and backward.
+4- If we have cycle with value X,There must be other cycle with 
+1-complement node 
+2-Cycle edges will be switched edges
+3-All this cycle is !X
+
+2- Conjunctive normal form (CNF): is some expression where it is and of some oRs eg (x1 or x2 ) and (x3 or !x1) and ....
+----------------------------------------------------------------------------------------------------------
+Finally our topic.
+- 2 satisfability (2SAT): given a CNF and the oR between only two terms (if there is more than 2 terms it can't be solved 
+by 2SAT it will be solved in expontial order) and the question is if this CNF is satisfy or not.
+To solve this we need to force ( x1 or x2 ) to be true how could it be done in form of implifications, this can be represented
+as !x1 implies x2 (means x1=0 and x2=1) and !x2 implies x1 (means x2=0 and x1=1) and for the case that both x1 and x2 are ones 
+it will be done when the pervious two implifications are achieved.
+So build the implification graph which consists of n*2 nodes bec for each node there is its not.
+Not node there is 2 ways to do it :
+1- for ith node the node is 2*i and its not is 2*i+1, and to get the not node of x node just xor x with one.
+2- for ith node the node i and its not is i+n.
+and for each bracket (x1 or x2) there will be 2 directed edges edge(!x1,x2) and edge(!x2,x1).
+
+Explantion for CODE to check for satisfability
+1-build graph
+2-for each node that it is not (not node) if there is a path from it to its not and from its not to it then there is no satisfability
+else there is satisfability.
+To check if there is a path from node1 to node2 and from node2 to node1 can be done 
+1-in n^3 by floyed transtive closure.
+2-in nlogn by SCC tarjan bec if there is a path from node1 to node2 and from node2 to node1 then node1 and node2 are in the same
+SCC component.
+
+CODE SCC tarjan
+const int N=3*2009;
+const int M=5000009;
+int dfsN[N],lwlink[N],timer=1,n,m,nodecomp[N];
+vector< vector<int> > v(N),comp;
+stack<int> stk;
+bool instack[N];
+void dfs(int no)
+{
+    dfsN[no]=lwlink[no]=timer++;
+    stk.push(no);
+    instack[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+
+        if(dfsN[nw]==0)
+        {
+            dfs(nw);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+        else if(instack[nw])
+            lwlink[no]=min(lwlink[no],dfsN[nw]);
+    }
+
+    if(dfsN[no]==lwlink[no])
+    {
+        int x=-1;
+        comp.pb(vector<int>());
+        while(x!=no)
+        {
+            x=stk.top();
+            stk.pop();
+            instack[x]=0;
+            comp.back().pb(x);
+            nodecomp[x]=sz(comp)-1;
+        }
+    }
+
+}
+int Not(int x)
+{
+    return n+x;
+}
+int get_value(int x)
+{
+    int c1= nodecomp[x];
+    int c2= nodecomp[Not(x)];
+
+    if(c1==c2)
+        return -1;
+ return 0;
+}
+int main()
+{
+    cin>>n>>m;
+    int x1,x2;
+    for(int i=0;i<m;i++)
+    {
+        cin>>x1>>x2;
+        v[Not(x2)].pb(x1);
+        v[Not(x1)].pb(x2);
+    }
+    for(int i=1;i<=n+n;i++)
+      if(dfsN[i]==0)
+        dfs(i);
+ 
+    bool IsStatifability = 1;
+    for(int i=1;i<=n&&IsStatifability;i++)
+    {
+        if(get_value(i)==-1)
+         IsStatifability=0;
+    }
+   
+}
+---------------------------------------------------------------------------------------------------
+CODE by floyed transitive closure
+const int N=3*2009;
+const int M=5000009;
+int v[N][N];
+void floyed_transitive_closure(int n)
+{
+    for(int k=1;k<=n;k++)
+    {
+        for(int i=1;i<=n;j++)
+        {
+            for(int j=1;j<=n;j++)
+            {
+                v[i][j]|= v[i][k]&&v[k][j];
+            }
+        }
+    }
+}
+int Not(int x)
+{
+    return n+x;
+}
+int get_value(int x)
+{
+    int c1= v[x][Not(x)];
+    int c2= v[Not(x)][x];
+
+    if(c1&&c2)
+        return -1;
+ return 0;
+}
+int main()
+{
+    cin>>n>>m;
+    int x1,x2;
+    for(int i=0;i<m;i++)
+    {
+        cin>>x1>>x2;
+        v[Not(x2)][x1]=1;
+        v[Not(x1)][x2]=1;
+    }
+    floyed_transitive_closure();
+    bool IsStatifability = 1;
+
+    for(int i=1;i<=n&&IsStatifability;i++)
+    {
+        if(get_value(i)==-1)
+         IsStatifability=0;
+    }
+   
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
