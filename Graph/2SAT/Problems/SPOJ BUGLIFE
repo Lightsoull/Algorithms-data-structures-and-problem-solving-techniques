@@ -1,0 +1,142 @@
+/*
+Explanation: an edge x1x2 expressing that there is a relation between x1 and x2 and according to proffessor assumtion if this relation
+is right then this equation must occur ( ( x1 or x2 ) and ( (not x1) or (not x2) ) ) so i will represent a single edge with 4 edges 2 edges
+for each bracket and see if there is contradiction or not.
+*/
+CODE
+----
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=3*2009;
+const int M=5000009;
+int dfsN[N],lwlink[N],timer=1,n,m,nodecomp[N];
+vector< vector<int> > v,comp;
+stack<int> stk;
+bool instack[N];
+void I()
+{
+   clr(dfsN,0);
+   clr(lwlink,0);
+   timer=1;
+   comp.clear();
+   v.clear();
+   v.resize(N);
+   clr(instack,0);
+}
+void dfs(int no)
+{
+    dfsN[no]=lwlink[no]=timer++;
+    stk.push(no);
+    instack[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+
+        if(dfsN[nw]==0)
+        {
+            dfs(nw);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+        else if(instack[nw])
+            lwlink[no]=min(lwlink[no],dfsN[nw]);
+    }
+
+    if(dfsN[no]==lwlink[no])
+    {
+        int x=-1;
+        comp.pb(vector<int>());
+        while(x!=no)
+        {
+            x=stk.top();
+            stk.pop();
+            instack[x]=0;
+            comp.back().pb(x);
+            nodecomp[x]=sz(comp)-1;
+        }
+    }
+
+}
+int Not(int x)
+{
+    return n+x;
+}
+int get_value(int x)
+{
+    int c1= nodecomp[x];
+    int c2= nodecomp[Not(x)];
+
+    if(c1==c2)
+        return -1;
+ return 0;
+}
+int main()
+{
+    int T,cs=1;
+    cin>>T;
+    while(T--)
+    {
+        I();
+        cin>>n>>m;
+        int x1,x2;
+        for(int i=0;i<m;i++)
+        {
+            cin>>x1>>x2;
+
+            v[x1].pb(Not(x2));
+            v[x2].pb(Not(x1));
+            v[Not(x2)].pb(x1);
+            v[Not(x1)].pb(x2);
+        }
+      for(int i=1;i<=n+n;i++)
+        if(dfsN[i]==0)
+           dfs(i);
+        bool IsStatifability = 1;
+
+        for(int i=1;i<=n&&IsStatifability;i++)
+        {
+            if(get_value(i)==-1)
+                IsStatifability=0;
+        }
+        cout<<"Scenario #"<<cs++<<":\n";
+        if(IsStatifability)
+            cout<<"No suspicious bugs found!\n";
+        else
+            cout<<"Suspicious bugs found!\n";
+    }
+}
