@@ -41,6 +41,12 @@ Explantion for CODE to check for satisfability
 1-build graph
 2-for each node that it is not (not node) if there is a path from it to its not and from its not to it then there is no satisfability
 else there is satisfability.
+But why this?
+okay if i am having this bracket (x1 or x2) and put the two edges edge(!x1,x2) and edge(!x2,x1) when this two edges fail when x2 and x1
+forced to equal to zero and this happens when there is an edge(x1,!x1) and edge(x2,!x2) observe that when i have those two edges
+and the pervious 2 edges there will be a path from x1 to !x1 and from !x1 to x1 and the same for x2, so that's why i detect the 
+un stasfability by checking if there is a path between a node and its not and its not to the node.
+
 To check if there is a path from node1 to node2 and from node2 to node1 can be done 
 1-in n^3 by floyed transtive closure.
 2-in nlogn by SCC tarjan bec if there is a path from node1 to node2 and from node2 to node1 then node1 and node2 are in the same
