@@ -1,0 +1,178 @@
+/*
+Explanation: every tower will move in to one of the four orienations in other words it will move (up or down) and (left or right) okay
+by the pervious equation i can let every tower moves but the point is that i have some conditions
+1- no tower attacks other tower.
+2- all the attackers('n') must die.
+okay first from the pervious equation i will need 2 variables one for vertical motion and the other for horizontal motion i will express 
+the vertical motion id as t (the tower number) and the horizontal motion as t+numberoftowers the variable will be 2*id and its not will
+be 2*id+1.
+okay now to make sure that the first condition occurs i will test the motion in a certain direction from the four dirctions if it fails
+( means it can reach a tower) then i will force this variable to move in the opposite dircetion.
+okay now to make sure that the second condition occurs okay i will get for each attacker the variable id and its direction that attacks 
+it, observe that the attacker can be reached from at most 2 directions bec it can't be reached from 2 vertical directions or 2 horizontal 
+directions bec at that case 2 towers will hit each other, so if the attacker will be reached from one dirction i will force it, if it
+will be reached from 2 i will ORing between them.
+okay but if a certain tower won't hit any attacker and it will never hit a tower it won't be involved in the equation this is right?
+yes it is right because if A and B and 1 = A and B , so it won't matter.
+
+CODE
+----
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define   pb         push_back
+#define   mp         make_pair
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+using namespace std;
+const int N=40009;
+const int M=109;
+string st;
+int lwlink[N],dfsN[N],marked[N],Ncomp[N],m,n,timer=1,vis[N];vector<string> v;vector< vector<int> > adj(N),comp;
+int dr[]={-1,1,0,0};
+int dc[]={0,0,1,-1};
+vector< vector<pair<int,int> > > attackedby(N);
+int enemy[M][M],tower[M][M],tw,en,cmp_root[N],instack[N];vector<int> topo;stack<int> stk;
+bool searchh(int r,int c,int d,int towerid,int ot)
+{
+    if(r<0||r>=n||c<0||c>=m||v[r][c]=='#')return true;
+    if(v[r][c]=='T')return false;
+    bool ret=searchh(r+dr[d],c+dc[d],d,towerid,ot);
+    if(ret&&v[r][c]=='n')attackedby[enemy[r][c]].pb(mp(towerid,ot));
+    return ret;
+}
+void force(int id,int ot)
+{
+    int u= id*2+ot;adj[u^1].pb(u);
+}
+void addor(int id1,int ot1,int id2,int ot2)
+{
+    int u1= id1*2+ot1;
+    int u2= id2*2+ot2;adj[u1^1].pb(u2);adj[u2^1].pb(u1);
+}
+void dfs(int no)
+{
+    dfsN[no]=lwlink[no]=timer++;
+    instack[no]=1;
+    stk.push(no);
+    for(int i=0;i<sz(adj[no]);i++)
+    {
+        int nw= adj[no][i];
+        if(dfsN[nw]==0)
+        {
+            dfs(nw);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+        else if(instack[nw]==1)
+             lwlink[no]=min(lwlink[no],dfsN[nw]);
+    }
+    if(lwlink[no]==dfsN[no])
+    {
+        int x=-1;
+        comp.pb(vector<int>());
+        while(x!=no)
+        {
+            x=stk.top();stk.pop();comp.back().pb(x);
+            Ncomp[x]=sz(comp)-1;instack[x]=0;
+        }
+    }
+    cmp_root[Ncomp[no]]=no;
+}
+void dfs2(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(comp[no]);i++)
+    {
+        int nw=comp[no][i];
+        for(int j=0;j<sz(adj[nw]);j++)
+        {
+            int nwc= Ncomp[adj[nw][j]];
+            if(vis[nwc])
+                continue;
+            dfs2(nwc);
+        }
+    }
+    topo.pb(no);
+}
+void solve()
+{
+    for(int i=0;i<sz(topo);i++)
+    {
+        int nw=topo[i];
+        if(marked[nw]==-1)
+        {
+            marked[nw]=1;
+            marked[Ncomp[ cmp_root[nw]^1] ]=0;
+        }
+    }
+}
+int main()
+{
+    cin>>n>>m;
+    for(int i=0;i<n;i++)
+    {
+        cin>>st;v.pb(st);
+    }
+    tw=1; en=1;
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        {
+            if(v[i][j]=='T') tower[i][j]=tw++;
+            if(v[i][j]=='n') enemy[i][j]=en++;
+        }
+    }
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        {
+            if(v[i][j]=='T')
+            {
+                for(int d=0;d<4;d++)
+                {
+                    int towerid=tower[i][j]+ (d>=2)*tw;
+                    if(!searchh(i+dr[d],j+dc[d],d,towerid,(d%2)))
+                        force(towerid,(d%2)^1);
+                }
+             }
+         }
+    }
+    for(int i=1;i<en;i++)
+    {
+        if(sz(attackedby[i])==1)  force(attackedby[i][0].first,attackedby[i][0].second);
+        else if(sz(attackedby[i])==2)
+        addor(attackedby[i][0].first,attackedby[i][0].second,attackedby[i][1].first,attackedby[i][1].second);
+    }
+    for(int i=1;i<=4*tw+1;i++)
+    {
+        if(dfsN[i]==0)
+          dfs(i);
+    }
+    clr(vis,0);
+    for(int i=0;i<sz(comp);i++)
+    {
+        if(vis[i]==0)
+        {
+            dfs2(i);
+        }
+    }
+    clr(marked,-1);
+    solve();
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        {
+          int t=tower[i][j];
+         if(marked[Ncomp[t*2]]==1&&marked[Ncomp[(t+tw)*2]]==1)      v[i][j]='3';
+         if(marked[Ncomp[t*2+1]]==1&&marked[Ncomp[(t+tw)*2]]==1)    v[i][j]='2';
+         if(marked[Ncomp[t*2]]==1&&marked[Ncomp[(t+tw)*2+1]]==1)    v[i][j]='4';
+         if(marked[Ncomp[t*2+1]]==1&&marked[Ncomp[(t+tw)*2+1]]==1)  v[i][j]='1';
+        }
+    }
+    for(int i=0;i<n;i++)
+    {
+        cout<<v[i]<<endl;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
