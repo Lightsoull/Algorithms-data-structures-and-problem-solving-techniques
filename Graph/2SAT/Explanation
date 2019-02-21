@@ -53,6 +53,7 @@ To check if there is a path from node1 to node2 and from node2 to node1 can be d
 SCC component.
 
 CODE SCC tarjan
+---------------
 const int N=3*2009;
 const int M=5000009;
 int dfsN[N],lwlink[N],timer=1,n,m,nodecomp[N];
@@ -90,6 +91,7 @@ void dfs(int no)
             nodecomp[x]=sz(comp)-1;
         }
     }
+    comp_root[ nodecomp[no] ] = no;
 
 }
 int Not(int x)
@@ -127,6 +129,55 @@ int main()
     }
    
 }
+----------------------------------------------------
+CODE for assigning the values of the nodes to zero or one to satisify the equation.
+1- first get the SCCs.
+2- traverse the SCCs tree and get the topological sort order of the components.
+3- assign.
+CODE
+----
+traversing the SCC tree and getting the topological sort order of the components.
+void dfs(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(comp[no]);i++)
+    {
+        int nw=comp[no][i];
+        for(int j=0;j<sz(v[nw]);j++)
+        {
+            int nwc= nodecomp[v[nw][j]];
+            if(vis[nwc])
+                continue;
+            dfs(nwc);
+        }
+    }
+    topo.pb(no);
+}
+void assign()
+{
+    for(int i=0;i<sz(topo);i++)
+    {
+        int nw=topo[i];
+        if(marked[nw]==-1)
+        {
+            marked[nw]=1;
+            marked[nodecomp[ Not(cmp_root[nw]) ] ]=0;
+        }
+    }
+    
+    for(int i=0;i<nodes;i++)
+      value[i]=marked[ nodecomp[i] ];
+}
+at main
+    clr(vis,0);
+    for(int i=0;i<sz(comp);i++)
+    {
+        if(vis[i]==0)
+        {
+            dfs(i);
+        }
+    }
+    assign();
 ---------------------------------------------------------------------------------------------------
 CODE by floyed transitive closure
 const int N=3*2009;
@@ -179,7 +230,13 @@ int main()
    
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Notes
+1- To force a variable x to be true ( x or x )= edge(!x,x)
+ - To force a variable x to be false ( !x or !x )=edge(x,!x)
+2- thinking hit: To the variables needed write the equation and see what is the needed variables and assign an id for them and create
+   2 vertions of them the not variable and variable .
+3- Anding with one doesn't affect the result so if a bracket would be always one can be not paricipate in the equation.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
