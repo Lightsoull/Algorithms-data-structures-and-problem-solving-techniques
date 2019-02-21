@@ -1,0 +1,164 @@
+/*
+explanation: first observe that it won't matter in which order i choose the cites and there is no benefit to choose some city more
+then one time so the remaining part is to decide which city to choose okay i want at the end to make all the edges with 1.
+assume that i have edge between n1 and n2
+if the edge is intially equal to zero it can be one iff (n1 or n2) and (!n1 || !n2).
+if the edge is intially equal to one it can be one iff !( (n1 and !n2) or (n2 and !n1) ) = (!n1 or n2) and (!n2 or n1).
+So i will see if it is satify or not and then assign the values.
+*/
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=209;
+int lwlink[N],dfsN[N],vis[N],instack[N],mark[N],timer=1,nodecomp[N],comp_root[N],assigned[N];
+stack<int> stk;
+vector< int > ans,topo;
+vector< vector<int> > v(N),comp;
+void dfs(int no)
+{
+    dfsN[no]=lwlink[no]=timer++;
+    instack[no]=1; stk.push(no);
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==0)
+        {
+            dfs(nw);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+        else if(instack[nw]==1)
+            lwlink[no]=min(lwlink[no],dfsN[nw]);
+    }
+    if(dfsN[no]==lwlink[no])
+    {
+        int x=-1;
+        comp.pb(vector<int>());
+        while(x!=no)
+        {
+            x=stk.top(); stk.pop(); instack[x]=0;
+            comp.back().pb(x); nodecomp[x]=sz(comp)-1;
+        }
+    }
+    comp_root[nodecomp[no]]=no;
+}
+bool issat(int n)
+{
+    for(int i=2;i<=n*2;i+=2)
+        if(nodecomp[i]==nodecomp[i^1])
+          return 0;
+    return 1;
+}
+void dfs2(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(comp[no]);i++)
+    {
+        int nw=comp[no][i];
+        for(int j=0;j<sz(v[nw]);j++)
+        {
+            int nwc= nodecomp[v[nw][j]];
+            if(vis[nwc])
+                continue;
+            dfs2(nwc);
+        }
+    }
+    topo.pb(no);
+}
+void solve(int n)
+{
+    for(int i=0;i<sz(topo);i++)
+    {
+        int nw=topo[i];
+        if(mark[nw]==-1)
+        {
+            mark[nw]=1;
+            mark[ nodecomp[comp_root[nw]^1] ]=0;
+        }
+    }
+    for(int i=2;i<=n*2+1;i++)
+        assigned[i]=mark[nodecomp[i]];
+}
+void addor(int a,int b)
+{
+    v[a^1].pb(b);
+    v[b^1].pb(a);
+}
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+    int n1,n2,w;
+    for(int i=0;i<m;i++)
+    {
+        cin>>n1>>n2>>w;
+        if(w==0)
+        {
+            addor(n1*2,n2*2);
+            addor(n1*2+1,n2*2+1);
+        }
+        else
+        {
+            addor(n1*2,n2*2+1);
+            addor(n2*2,n1*2+1);
+
+        }
+    }
+
+    for(int i=2;i<=n*2+1;i++)
+        if(dfsN[i]==0)
+         dfs(i);
+    if(issat(n)==0)
+    {
+        cout<<"Impossible\n";
+        return 0;
+    }
+    for(int i=0;i<sz(comp);i++)
+        if(vis[i]==0)
+          dfs2(i);
+    //cout<<sz(topo)<<endl;
+    clr(mark,-1);
+    solve(n);
+    for(int i=1;i<=n;i++)
+    {
+        if(assigned[i*2]==1)
+         ans.pb(i);
+    }
+    cout<<sz(ans)<<endl;
+    for(int i=0;i<sz(ans);i++)
+        cout<<ans[i]<<" ";
+}
