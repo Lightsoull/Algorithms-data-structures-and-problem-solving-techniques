@@ -1,0 +1,160 @@
+/*
+Explanation: the cells that have no assigned value could be assigned in the way i want to let the first grid equals to the second one 
+so it is not a problem the problem is how to let the assigned values of the first grid equals to the second grid, okay observe that
+the values are only 1 and -1 so if both values are equal to let the first value equal to the second choose the first value row and column
+or don't choose the row and the column, and if the values are not equal you will have to choose only the first value row or the first value 
+column, so i will create those equations and build the implication graph and see if it is sat or not.
+but i can't do so for every query bec it will be TL so here observe that if at a certain query it is not sat all the queries after it will
+be no sat too so i will binary search for the first query the result to it is no.
+but the cordinates are too large okay will map each row value and column value to an id and work normally.
+*/
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=1000009;
+int dfsN[N],lwlink[N],nodecomp[N],instack[N],instackid=1,dfsNid=1,idx;
+int timer=1,comp=0,q;
+stack<int> stk;
+ll R[N],C[N];
+int A[N],B[N];
+vector< vector<int> > v;
+map<ll,int> mbrow,mbcol;
+void addor(int a,int b)
+{
+    v[a^1].pb(b);
+    v[b^1].pb(a);
+}
+void dfs(int no)
+{
+    lwlink[no]=dfsN[no]=timer++;
+    instack[no]=1; stk.push(no);
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==0)
+        {
+            dfs(nw);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+        else if(instack[nw]==1)
+          lwlink[no]=min(lwlink[no],dfsN[nw]);
+    }
+    if(dfsN[no]==lwlink[no])
+    {
+        ll x=-1;
+        comp++;
+        while(x!=no)
+        {
+            x=stk.top(); stk.pop(); instack[x]=0;
+            nodecomp[x]=comp-1;
+        }
+    }
+}
+bool check(int mid)
+{
+
+    clr(dfsN,0);
+    timer=1;
+    comp=0;
+    v.clear();
+    v.resize(N);
+    for(int i=1;i<=mid;i++)
+    {
+        int r=mbrow[R[i]]; int c=mbcol[C[i]]; int a=A[i]; int b=B[i];
+
+        if(a==b)
+        {
+            addor(c*2+1,r*2);
+            addor(r*2+1,c*2);
+        }
+        else
+        {
+            addor(c*2,r*2);
+            addor(c*2+1,r*2+1);
+        }
+    }
+    for(int i=2;i<=2*idx+1;i++)
+    {
+        if(dfsN[i]==0)
+            dfs(i);
+    }
+    for(int i=2;i<=2*idx;i+=2)
+    {
+        if(nodecomp[i]==nodecomp[i^1])
+            return 1;
+    }
+    return 0;
+}
+int BS(int l,int r)
+{
+    int ans=q+1;
+   while(l<=r)
+   {
+    int mid=(l+r)/2;
+    if(check(mid))
+    {
+        r=mid-1;
+        ans=mid;
+    }
+    else
+    {
+        l=mid+1;
+    }
+   }
+   return ans;
+}
+int main()
+{
+    scanf("%d",&q);
+    idx=1;
+    for(int i=1;i<=q;i++)
+    {
+        scanf("%I64d",&R[i]); scanf("%I64d",&C[i]);
+        scanf("%d",&A[i]); scanf("%d",&B[i]);
+        if(mbrow.find(R[i])==mbrow.end())
+            mbrow[R[i]]=idx++;
+
+        if(mbcol.find(C[i])==mbcol.end())
+            mbcol[C[i]]=idx++;
+    }
+    int id=BS(1,q);
+    for(int i=1;i<id;i++)
+         printf("Yes\n");
+    for(int i=id;i<=q;i++)
+        printf("No\n");
+}
