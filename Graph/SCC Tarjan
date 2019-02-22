@@ -19,6 +19,11 @@ is when you traverse the graph with dfs when you entering a new node put a numbe
 
 -Lowest Link Number
 it is the dfs number of the farest ancestor of my current node
+
+Notes
+if you have multiple test cases, you don't have to clear lwlink array.
+you must clear dfsN with zero.
+you don't have to clear instack array or stack.
 ----------------------------------------------------------------------------------------------------------------------------------------
 -SCC In  undirected graph
 so simpliy start dfs from each unvisited node and count
