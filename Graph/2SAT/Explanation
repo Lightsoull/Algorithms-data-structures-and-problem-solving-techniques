@@ -236,6 +236,10 @@ Notes
 2- thinking hit: To the variables needed write the equation and see what is the needed variables and assign an id for them and create
    2 vertions of them the not variable and variable .
 3- Anding with one doesn't affect the result so if a bracket would be always one can be not paricipate in the equation.
+4- When you assign the values (0/1) to the variables, it is just one possible assigning that let the variable values satisify and there
+is alot of other assignments that will let the variable values satisify too but through all of those assigments there is some variables
+that have to be with some fixed values let v some variable if there is a path from v to !v so v must be zero for all different 
+assignments and if there is a path from !v to v so v must be one for all different assignments.
 ----------------------------------------------------------------------------------------------------------------------------------------
 
 
