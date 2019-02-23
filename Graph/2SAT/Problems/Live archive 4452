@@ -1,0 +1,232 @@
+/*
+Explanation: to satisfiy each minister you have to support more than half of his opinion which means that if he vote for
+1 bill: you have to support it,so it will force to support it.
+2 bills: you have to support them,so it will force to support both of them.
+3 bills: you have to support any 2 or 3 of them.
+4 bills: you have to support any 3 or 4 of them.
+so i will build the implication graph and see if sat, if sat any bill have pass to !bill so this bill must be not choosen(no) and 
+any !bill have pass to bill so this bill must be choosen(yes) else i won't know for sure that it have to be with a certain value i mean
+there can be different assignments to satisify and through those assignments it may be with yes and also may be with no so it is '?'.
+*/
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=209;
+int b,m,lwlink[N],dfsN[N],vis[N],instack[N],nodecomp[N],comp_root[N],part[N],mark[N],timer,bill[6];
+char vote[6];
+stack<int> stk;
+vector< vector<int> > v,comp;
+vector<int> topo;
+void I()
+{
+    clr(dfsN,0);
+    clr(lwlink,0);
+    clr(vis,0);
+    clr(part,0);
+    clr(mark,-1);
+    v.clear();
+    v.resize(N);
+    comp.clear();
+    timer=1;
+    topo.clear();
+}
+void dfs(int no)
+{
+    dfsN[no]=lwlink[no]=timer++;
+    instack[no]=1; stk.push(no);
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==0)
+        {
+            dfs(nw);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+        else if(instack[nw]==1)
+            lwlink[no]=min(lwlink[no],dfsN[nw]);
+    }
+    if(dfsN[no]==lwlink[no])
+    {
+        int x=-1;
+        comp.pb(vector<int> ());
+        while(x!=no)
+        {
+            x=stk.top(); stk.pop(); instack[x]=0;
+            comp.back().pb(x); nodecomp[x]=sz(comp)-1;
+        }
+    }
+    comp_root[ nodecomp[no]]=no;
+}
+bool issat()
+{
+    for(int i=2;i<=b*2;i+=2)
+        if(nodecomp[i]==nodecomp[i^1])
+        return 0;
+    return 1;
+}
+bool getpath(int no,int tar)
+{
+    if(no==tar)
+        return 1;
+     vis[no]=1;
+    for(int i=0;i<sz(comp[no]);i++)
+    {
+        int nw=comp[no][i];
+        for(int j=0;j<sz(v[nw]);j++)
+        {
+            int nwc= nodecomp[v[nw][j]];
+            if(vis[nwc])
+                continue;
+            bool ret=getpath(nwc,tar);
+            if(ret)
+                return 1;
+        }
+    }
+    return 0;
+}
+int getvalue(int id)
+{
+    int cc=nodecomp[id];
+    int notcc= nodecomp[id^1];
+    clr(vis,0);
+    bool p1= getpath(cc,notcc);
+    clr(vis,0);
+    bool p2= getpath(notcc,cc);
+    if(p1)
+        return 0;
+    if(p2)
+        return 1;
+    return 2;
+}
+
+void force(int x)
+{
+    v[x^1].pb(x);
+}
+void addor(int a,int b)
+{
+    v[a^1].pb(b);
+    v[b^1].pb(a);
+}
+int main()
+{
+    int cs=1;
+    while(cin>>b>>m)
+    {
+        if(b==0&&m==0)
+            break;
+        I();
+
+        for(int i=1;i<=m;i++)
+        {
+            int num;
+            cin>>num;
+            for(int j=0;j<num;j++)
+            {
+                cin>>bill[j]>>vote[j];
+                part[bill[j]]=1;
+            }
+
+            if(num==1)
+            {
+                if(vote[0]=='n')
+                force(bill[0]*2+1);
+                else
+                force(bill[0]*2);
+            }
+            else if(num==2)
+            {
+                if(vote[0]=='n')
+                force(bill[0]*2+1);
+                else
+                force(bill[0]*2);
+
+                if(vote[1]=='n')
+                force(bill[1]*2+1);
+                else
+                force(bill[1]*2);
+            }
+            else if(num==3)
+            {
+                int v1,v2,v3;
+                if(vote[0]=='n') v1=bill[0]*2+1; else v1=bill[0]*2;
+                if(vote[1]=='n') v2=bill[1]*2+1; else v2=bill[1]*2;
+                if(vote[2]=='n') v3=bill[2]*2+1; else v3=bill[2]*2;
+
+                addor(v1,v2); addor(v2,v3); addor(v1,v3);
+            }
+            else
+            {
+                int v1,v2,v3,v4;
+                if(vote[0]=='n') v1=bill[0]*2+1; else v1=bill[0]*2;
+                if(vote[1]=='n') v2=bill[1]*2+1; else v2=bill[1]*2;
+                if(vote[2]=='n') v3=bill[2]*2+1; else v3=bill[2]*2;
+                if(vote[3]=='n') v4=bill[3]*2+1; else v4=bill[3]*2;
+                addor(v1,v2); addor(v3,v4); addor(v1,v3); addor(v2,v4); addor(v1,v4); addor(v2,v3);
+            }
+        }
+
+         for(int i=2;i<=2*b+1;i++)
+            if(dfsN[i]==0)
+             dfs(i);
+         cout<<"Case "<<cs++<<": ";
+         if(issat()==0)
+         {
+             cout<<"impossible\n";
+             continue;
+         }
+
+
+
+         for(int i=1;i<=b;i++)
+         {
+             int ret=getvalue(i*2);
+             if(ret==1)
+                cout<<'y';
+             else if(ret==0)
+                cout<<'n';
+             else
+                cout<<'?';
+         }
+         cout<<endl;
+
+
+    }
+}
+
+
