@@ -1,0 +1,225 @@
+/*
+Explanation: first of all try to simplify the problem in to simplier form, first let the total number of white cells cnt[0] and total 
+number of black cells is cnt[1] if cnt[0]!=cnt[1]*2 then there is no solution, okay now i granteeed that there should be no extra cells
+so every black cell must be attached to two white cells one cell to up or down and one cell to left or right and if there is a black cell
+can't be attached to 2 cells then there is no solution, okay now i granteeed that there will be a solution iff no 2 black cells needed to
+attach the same white cell here i will solve with 2 sat as follows:
+Imagine that i have some cell the there is 4 directions i can go from it (up right down left) and i want to name those four edges
+so will let my current cell name is id, i will name the up cell = id * 2 and right id*2+1 and down will be named as the down cell id
+and going to up and the left as the left cell going to right, if i will choose the same white cell twice then the result of 2 sat will
+be not satisified else will be satisified because the equation of the white will prevent the cell to be choosen in more than one direction 
+to gether.
+*/
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=4*500*500+9;
+int dfsN[N],lwlink[N],instack[N],nodecomp[N],n,m,timer,comp,cnt[2];
+stack<int> stk;
+vector< vector<int> > v;
+char s[509][509];
+int dr[]={-1,0,1,0};
+int dc[]={0,1,0,-1};
+void I()
+{
+    clr(dfsN,0);
+    timer=1;
+    comp=0;
+    v.clear();
+    v.resize(N);
+    clr(cnt,0);
+    clr(instack,0);
+    clr(lwlink,0);
+}
+int Not(int x)
+{
+    if(x>=(n*m*2))
+        return x-(n*m*2);
+    return x+(n*m*2);
+}
+void addor(int a,int b)
+{
+    v[Not(a)].pb(b);
+    v[Not(b)].pb(a);
+}
+void force(int x)
+{
+    v[Not(x)].pb(x);
+}
+int name(int r,int c)
+{
+    return (r)*m+c;
+}
+bool V(int r,int c)
+{
+    return (r>=0&&r<n&&c>=0&&c<m);
+}
+
+bool build_graph()
+{
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        {
+
+            if(s[i][j]=='W')
+            {
+                cnt[0]++;
+                vector<int> e;
+                for(int k=0;k<4;k++)
+                {
+                    int nr= i+dr[k];
+                    int nc= j+dc[k];
+                    if(!V(nr,nc)||s[nr][nc]!='B')
+                        continue;
+
+                    if(k<2)
+                     e.pb(2*name(i,j)+k);
+                    else
+                     e.pb(2*name(nr,nc)+k-2);
+
+                }
+
+                for(int u=0;u<sz(e);u++)
+                {
+                    for(int w=u+1;w<sz(e);w++)
+                    {
+                        int f=e[u];  int s=e[w];
+                        addor(Not(f),Not(s));
+                    }
+                }
+            }
+            else if(s[i][j]=='B')
+            {
+                cnt[1]++;
+                vector<int> e[2];
+                for(int k=0;k<4;k++)
+                {
+                    int nr= i+dr[k];
+                    int nc= j+dc[k];
+                    if(!V(nr,nc)||s[nr][nc]!='W')
+                        continue;
+
+                    if(k<2)
+                     e[k&1].pb(2*name(i,j)+k);
+                    else
+                     e[k&1].pb(2*name(nr,nc)+k-2);
+
+                }
+
+                for(int u=0;u<2;u++)
+                {
+                    if(sz(e[u])==0)
+                        return 0;
+                    if(sz(e[u])==1)
+                    {
+                        force(e[u][0]);
+                    }
+                    if(sz(e[u])==2)
+                    {
+                        addor(e[u][0],e[u][1]);
+                        addor(Not(e[u][0]),Not(e[u][1]));
+                    }
+
+                }
+
+            }
+        }
+    }
+    return (cnt[0]==cnt[1]*2);
+}
+void dfs(int no)
+{
+    dfsN[no]=lwlink[no]=timer++;
+    instack[no]=1; stk.push(no);
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==0)
+        {
+            dfs(nw);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+        else if(instack[nw]==1)
+            lwlink[no]=min(lwlink[no],dfsN[nw]);
+    }
+    if(dfsN[no]==lwlink[no])
+    {
+        int x=-1;
+        comp++;
+        while(x!=no)
+        {
+            x=stk.top(); stk.pop(); nodecomp[x]=comp-1; instack[x]=0;
+        }
+    }
+}
+bool issat()
+{
+    int en=n*m*4;
+    for(int i=0;i<=en;i++)
+        if(dfsN[i]==0)
+         dfs(i);
+    for(int i=0;i<=en;i++)
+        if(nodecomp[i]==nodecomp[Not(i)])
+             return 0;
+    return 1;
+}
+int main()
+{
+    int T;
+    scanf("%d",&T);
+    while(T--)
+    {
+        I();
+        scanf("%d",&n);
+        scanf("%d",&m);
+
+        for(int i=0;i<n;i++)
+        {
+            scanf("%s",s[i]);
+        }
+        bool ret=build_graph();
+
+        if(ret&&issat())
+            printf("YES\n");
+        else
+            printf("NO\n");
+    }
+}
+
+
