@@ -116,6 +116,7 @@ goes to the same colour So the knight graph is a bipartite where the black cells
 Simpily,its like multiSourceMultiSink idea.
 ----------------------------------------------------------------------------------------------------------------------------------------
 5-MinPathCoverage in DAG ( means the min paths that not sharing any edges to cover all the graph nodes at least one time )
+Note: this is at bipartite graphs only because at general graphs it will NP-hard problem.
 its idea based on konig's theroem.
 Konig's theroem
 states that In a bipartite graph the minminum number of nodes covering all the edges(Known as MCBM (Max Cardinality Bipartite Matching)
