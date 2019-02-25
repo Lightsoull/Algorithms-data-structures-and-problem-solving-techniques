@@ -1,4 +1,5 @@
 /*
+Problem: MVC means what is the min number of vertexes that each edge will be covered by at least one node.
 MVC in :
 -general graph: is NP-hard problem.
 -bipartite graph: can be done by MCBM ( max cardinality bipartite matching ) by max flow.
