@@ -240,6 +240,7 @@ Notes
 is alot of other assignments that will let the variable values satisify too but through all of those assigments there is some variables
 that have to be with some fixed values let v some variable if there is a path from v to !v so v must be zero for all different 
 assignments and if there is a path from !v to v so v must be one for all different assignments.
+5- if i have 2 values a and b and i want to do this equation (a==1&&b==1)||(a==0&&b==0) but in CNF it will be (a||!b)&&(!a||b).
 ----------------------------------------------------------------------------------------------------------------------------------------
 
 
