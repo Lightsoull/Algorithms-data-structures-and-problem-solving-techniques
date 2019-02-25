@@ -1,0 +1,191 @@
+/*
+Explanation: first of all if a nnumber let it be x has no member in setB then it is forced to be in setA and if it has no memeber in setA
+then it is forced to be in setB if it has no member in both sets there is no answer and if it has member in both sets then let its 
+member in setA is xa and its member in setB is xb then x and xb and xa must be in the same set.
+-0  for A
+-1  for B
+Note if i have 2 values a and b and i want to do this equation (a==1&&b==1)||(a==0&&b==0) but in CNF it will be (a||!b)&&(!a||b).
+*/
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N = 200001;
+const ll MOD = 1e9 + 7;
+
+int n, a, b, p[N], cnt, c, idx[N], low[N], cmp[N], cmp_head[N], v[N],vis[N];
+bool in_stack[N];
+stack<int> stk;
+
+vector<vector<int> > g,comp;
+vector<int> topo;
+inline int Not(int x)
+{
+	return x >= n ? x - n : x + n;
+}
+
+inline void add(int a, int b)
+{
+	g[Not(a)].push_back(b);
+	g[Not(b)].push_back(a);
+}
+
+void dfs(int u)
+{
+	idx[u] = low[u] = ++cnt;
+	in_stack[u] = 1;
+	stk.push(u);
+
+	for (int i = 0; i < g[u].size(); i++)
+    {
+		if (idx[g[u][i]]==0)
+		{
+			dfs(g[u][i]);
+			low[u] = min(low[u], low[g[u][i]]);
+		}
+		else if (in_stack[g[u][i]]==1)
+			low[u] = min(low[u], idx[g[u][i]]);
+	}
+
+	if (idx[u] == low[u])
+    {
+        int v=-1;
+        comp.pb(vector<int>());
+		while (v!=u)
+		{
+            v = stk.top();
+			stk.pop();
+			in_stack[v] = 0;
+			cmp[v] = c;
+			comp.back().pb(v);
+		}
+		cmp_head[c++] = u;
+	}
+
+}
+void dfs2(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(comp[no]);i++)
+    {
+        int nw=comp[no][i];
+        for(int j=0;j<sz(g[nw]);j++)
+        {
+            int nwc= cmp[g[nw][j]];
+            if(vis[nwc])
+                continue;
+            dfs2(nwc);
+        }
+    }
+    topo.pb(no);
+}
+void force(int x)
+{
+    g[Not(x)].push_back(x);
+}
+int main()
+{
+
+	cin>>n>>a>>b;
+	g.resize(2 * n);
+
+	map<int, int> idx_of;
+	for (int i = 0; i < n; i++)
+    {
+		scanf("%d", p+i);
+		idx_of[p[i]] = i;
+	}
+
+	for (int i = 0; i < n; i++)
+    {
+		bool x = idx_of.find(a - p[i]) != idx_of.end(),y = idx_of.find(b - p[i]) != idx_of.end();
+
+		int x2 = idx_of[a - p[i]],y2 = idx_of[b - p[i]];
+
+		if (x && y)
+        {
+			add(Not(i), y2);
+			add(i, Not(y2));
+			add(i, Not(x2));
+			add(x2, Not(i));
+		}
+		else if (x)
+        {
+			force(Not(i));
+		}
+		else if (y)
+		{
+			force(i);
+		}
+		else {
+			puts("NO");
+			return 0;
+		}
+	}
+
+	for (int i = 0; i < 2 * n; i++)
+		if (!idx[i])
+			dfs(i);
+
+	for(int i=0; i<n; i++)
+		if (cmp[i] == cmp[Not(i)])
+        {
+			puts("NO");
+			return 0;
+		}
+    for(int i=0;i<c;i++)
+        if(vis[i]==0)
+            dfs2(i);
+	memset(v, -1, sizeof v);
+	for(int i=0; i<sz(topo); i++)
+	{
+	    int no=topo[i];
+	    if (v[no] == -1)
+        {
+			v[no] = 1;
+			v[cmp[Not(cmp_head[no])]] = 0;
+		}
+	}
+
+	puts("YES");
+	for (int i = 0; i < n; i++)
+		printf("%s%d", (i ? " " : ""), v[cmp[i]]);
+	puts("");
+
+	return 0;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
