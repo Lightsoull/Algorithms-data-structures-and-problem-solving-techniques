@@ -1,0 +1,83 @@
+/*
+MVC in :
+-general graph: is NP-hard problem.
+-bipartite graph: can be done by MCBM ( max cardinality bipartite matching ) by max flow.
+------------------------------------------------------------------------------------------------------------------------------------------
+-in a tree can be done by dp and that will be explained below.
+link: https://www.geeksforgeeks.org/vertex-cover-problem-set-2-dynamic-programming-solution-tree/
+Explanation: first observe that the answer won't be affected if we consider a certain node to be the root of the tree or another, so 
+consider any node to be the root and get the directed version of the tree according to the root you assigned to the tree, then observe
+that i have two options whether to take the root to be a mong the MVC set or not if i take it then its children will have the options
+(take/not take) but if i don't take it its children will only have one option (take) according to this fact i will run recursively
+and the state will be solve(node , flag) flag=1 if the node is taken, flag=0 if the node not taken.
+CODE
+----
+const int N=100009;
+int mem[N][2],vis[N];
+bool isleaf[N];
+vector< vector<int> > v(N),adj(N);
+int solve(int node,int flag)
+{
+    if(mem[node][flag]!=-1)
+        return mem[node][flag];
+    if(isleaf[node])
+        return flag;
+    int ans=0;
+    if(flag==0)
+    {
+        for(int i=0;i<sz(v[node]);i++)
+            ans+= solve(v[node][i],1);
+    }
+    else
+    {
+        ans=1;
+        for(int i=0;i<sz(v[node]);i++)
+            ans+= min(solve(v[node][i],1),solve(v[node][i],0));
+    }
+    return mem[node][flag]=ans;
+}
+void dfs(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(adj[no]);i++)
+    {
+        int nw=adj[no][i];
+        if(vis[nw])
+            continue;
+        v[no].pb(nw);
+        dfs(nw);
+    }
+}
+int main()
+{
+    int nodes;
+    cin>>nodes;
+
+    for(int i=0;i<nodes-1;i++)
+    {
+        int from,to;
+        cin>>from>>to;
+        adj[from].pb(to);
+        adj[to].pb(from);
+    }
+    dfs(1); // to build the directed version of the tree.
+    for(int i=1;i<=nodes;i++)
+    {
+        if(sz(v[i])==0)
+            isleaf[i]=1;
+    }
+    clr(mem,-1);
+   int ans=min(solve(1,1),solve(1,0));
+   cout<<ans<<endl;
+}
+/*
+8
+1 2
+1 3
+3 4
+2 5
+2 6
+6 7
+7 8
+*/
+----------------------------------------------------------------------------------------------------------------------------------------
