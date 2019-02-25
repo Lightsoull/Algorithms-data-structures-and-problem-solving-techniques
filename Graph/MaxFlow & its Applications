@@ -115,7 +115,7 @@ goes to the same colour So the knight graph is a bipartite where the black cells
 4- MaxBipartiteMatching ( means i want the max pair-wise relations between the 2 parts of the bipartite graph )
 Simpily,its like multiSourceMultiSink idea.
 ----------------------------------------------------------------------------------------------------------------------------------------
-5-MinPathCoverage in DAG ( means the min paths that not sharing any edges to cover all the graph nodes at least one time )
+5-MinPathCoverage in DAG ( means the min number of paths that not sharing any edges to cover all the graph nodes at least one time )
 Note: this is at bipartite graphs only because at general graphs it will NP-hard problem.
 its idea based on konig's theroem.
 Konig's theroem
