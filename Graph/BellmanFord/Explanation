@@ -1,0 +1,118 @@
+/*
+BellmanFord algorithsm solves the following problem: it is a SSSP (Single Source Shortest Path).
+I am having a graph with weights those weights may be +ve and -ve and i need to get the shortest path from one source to all the nodes,
+to deal with this problem i can't use dijkstra because its idea depends on that the weights of the graph is non-negative so i will 
+have only one option which is to use floyed but floyed works in n^3 and it gets all pairs shortest paths and i don't need that, so
+what i need is some algorithsm can work in better time than floyed and can deal with the negative weights which is bellman ford algorithsm.
+
+BellmanFord algorithsm explanation: it is implemented using dp, its idea is that the shortest path is a simple path which means it has 
+nodes-1 edges, at first i will get the shortest path from a certain source if the number of edges used in that path is only one edge and
+note that at first all the distances are inf except the dist to the source so all the nodes dircetly connected to the source which
+has a path of one edge i can assign a value to them and i will start to build up from here and get the shortest paths from the source
+that has 2 edges and since the shortest paths that has only one edge are already assigned so i can assign all the paths with two edges
+and do the same way till edge n-1.
+
+BellmanFord implementation explanation: i will use dp to do so note that i don't need except the dp array of the pervious edge so i can 
+reduce the memory space to (N*2) ( rolling table technique ) but here i am minmizing right so i won't care if i put a value from my 
+current dp array not the previous one if it is minminum.
+complexity(time): O( N*M ) N nodes,M edges.
+complexity(memory): O( N ).
+
+Cycles: if i have a positive cycle sure i won't go through it because it will increase the path, but what if i have a negative 
+cycle sure i will go through it to min the path and not one time so here the distance from source to any node in a negative 
+cycle or reachable from a negative cycle will be -inf, Now how could i detect that okay i said before that the max number of
+edges i need to use in a shortest path is n-1 so at n,n+1... i won't need to relax or update the dist array except for the
+nodes that is in a negative cycle sure they will need to be relaxed more and more to inf so from here i will know that there
+is negative cycle and i will move n more times to get all the nodes that are reachable from a negative cycle.
+
+Print the Path: to get the shortest path just store a previous array.
+Print the negative cycles:to print the negative cycles just take one node that is reachable from a negative cycle and get its
+shortest path vector you will see that there is a way from a node to itself here see whether this cycle is negative or not if negative 
+consider it.
+Print the positive cycles: multiply all the weights by -1 and get the negative cycles.
+
+Notes
+1- unlike dijkstra i can use it to get the longest path from a certain source to do so just multiply the weights by -1.
+2- Take care of self loops.
+CODE
+----
+typedef vector<int>       vi;
+const int OO = (int)1e8;	// Note, IF Small may be WRONG, Large may generate OVERFLOW
+
+struct edge 
+{
+	int from, to, w;
+	
+	edge(int from, int to, int w): from(from), to(to), w(w) {}
+};
+
+vi buildPath(vi prev, int src) 
+{
+	vi path;	// make sure to test case self edge. E.g. 2 --> 2
+	for (int i = src; i > -1 && sz(path) <= sz(prev); i = prev[i])	
+		path.push_back(i);
+	reverse( all(path) );
+	return path;
+}
+
+bool BellmanPrcoessing(vector<edge> & edgeList, int n, vi &dist, vi &prev, vi &pos) 
+{
+	if(sz(edgeList) == 0)	return false;
+
+	for (int it = 0, r = 0; it < n+1; ++it, r = 0) 
+  {
+		for (int j = 0; j < sz(edgeList) ; ++j) 
+    {
+			edge ne = edgeList[j];
+      // do this to avoid the overflow
+			if(dist[ne.from] >= OO || ne.w >= OO)	continue;
+      
+      // > not >= to detect the cycle
+			if( dist[ne.to] > dist[ne.from] + ne.w ) 
+      {
+				dist[ne.to] = dist[ne.from] + ne.w;
+				prev[ ne.to ] = ne.from, pos[ ne.to ] = j, r++;
+				if(it == n)		return true;
+			}
+		}
+		if(!r)	break;
+	}
+	return false;
+}
+
+pair<int, bool> BellmanFord(vector<edge> & edgeList, int n, int src, int dest)	// O(NE)
+{
+	vi dist(n, OO), prev(n, -1), reachCycle(n), path, pos(n);	// To use pos: edgeList[pos[path[i]]].w
+	dist[src] = 0;
+
+	bool cycle = BellmanPrcoessing(edgeList, n, dist, prev, pos);
+
+	if(cycle)
+  {
+		vi odist = dist;
+		BellmanPrcoessing(edgeList, n, dist, prev, pos);
+		for (int i = 0; i < n; ++i)	// find all nodes that AFFECTED by negative cycle
+			reachCycle[i] = (odist[i] != dist[i]);
+	}
+  else
+		path = buildPath(prev, dest);
+
+	return make_pair(dist[dest], cycle);
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
