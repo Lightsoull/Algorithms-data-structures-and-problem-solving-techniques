@@ -60,16 +60,16 @@ bool BellmanPrcoessing(vector<edge> & edgeList, int n, vi &dist, vi &prev, vi &p
 	if(sz(edgeList) == 0)	return false;
 
 	for (int it = 0, r = 0; it < n+1; ++it, r = 0) 
-  {
+        {
 		for (int j = 0; j < sz(edgeList) ; ++j) 
-    {
+                {
 			edge ne = edgeList[j];
-      // do this to avoid the overflow
+                        // do this to avoid the overflow
 			if(dist[ne.from] >= OO || ne.w >= OO)	continue;
       
-      // > not >= to detect the cycle
+                        // > not >= to detect the cycle
 			if( dist[ne.to] > dist[ne.from] + ne.w ) 
-      {
+                        {
 				dist[ne.to] = dist[ne.from] + ne.w;
 				prev[ ne.to ] = ne.from, pos[ ne.to ] = j, r++;
 				if(it == n)		return true;
@@ -79,7 +79,7 @@ bool BellmanPrcoessing(vector<edge> & edgeList, int n, vi &dist, vi &prev, vi &p
 	}
 	return false;
 }
-
+// edgeList is vector of the edges.
 pair<int, bool> BellmanFord(vector<edge> & edgeList, int n, int src, int dest)	// O(NE)
 {
 	vi dist(n, OO), prev(n, -1), reachCycle(n), path, pos(n);	// To use pos: edgeList[pos[path[i]]].w
@@ -88,14 +88,14 @@ pair<int, bool> BellmanFord(vector<edge> & edgeList, int n, int src, int dest)	/
 	bool cycle = BellmanPrcoessing(edgeList, n, dist, prev, pos);
 
 	if(cycle)
-  {
+        {
 		vi odist = dist;
 		BellmanPrcoessing(edgeList, n, dist, prev, pos);
 		for (int i = 0; i < n; ++i)	// find all nodes that AFFECTED by negative cycle
 			reachCycle[i] = (odist[i] != dist[i]);
 	}
-  else
-		path = buildPath(prev, dest);
+        else
+	 path = buildPath(prev, dest);
 
 	return make_pair(dist[dest], cycle);
 }
