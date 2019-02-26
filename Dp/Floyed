@@ -5,6 +5,9 @@ code for floyed
 2- put the diagonal to zero 
 3- put in the dist array the edges you get 
 4- if there are multiple edges just minmize
+5- floyed deals normally with negative weights, if the path doesn't pass through negative cycle then the answer will be in dist[i][j]
+and if it passes through a negative cycle then the answer will be -inf, you can test if the path from i to j pass by a negative 
+cycle by the anyEffectiveCycle function below.
 
 for(int k=1;k<=n;k++)
    for(int i=1;i<=n;i++)
