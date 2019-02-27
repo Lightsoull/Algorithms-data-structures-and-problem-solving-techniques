@@ -47,7 +47,7 @@ void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
 int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
 const ll OO=INT_MAX;
 const ll N=109;
-ll arr[N],vis[N],dist[N],n,in[N];
+ll arr[N],vis[N],dist[N],n,in[N],re[N];
 vector< vector<int> > v(N);
 void I()
 {
@@ -81,12 +81,15 @@ int solve(int s,int t)
     clr(in,0);
     q.push(s);
     in[s]=1;
-    int T=n+1;
-    while(!q.empty()&&T--)
+    clr(re,0);
+    while(!q.empty())
     {
         int no=q.front();
         q.pop();
-       // in[no]=0;
+        in[no]=0;
+        if(re[no]>=n+1)
+            continue;
+
         for(int i=0;i<sz(v[no]);i++)
         {
             int nw=v[no][i];
@@ -97,6 +100,8 @@ int solve(int s,int t)
             if((dist[no]+arr[nw])<0&&dist[nw]>dist[no]+arr[nw])
             {
                 dist[nw]=dist[no]+arr[nw];
+                re[nw]++;
+
                 if(in[nw]==0)
                 {
                    q.push(nw);
@@ -159,3 +164,5 @@ int main()
             cout<<"hopeless\n";
     }
 }
+
+
