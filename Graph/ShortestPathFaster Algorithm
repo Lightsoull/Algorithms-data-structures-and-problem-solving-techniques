@@ -1,0 +1,98 @@
+/*
+(SPFA) Shortest Path Faster Algorithm:it is a single source shortest path, it is idea comes from BellmanFord's idea where
+i won't need to move more than n-1 edges because the maximum length of the shortest path is n-1 because it will be a 
+simple path for sure.
+
+Complexity: for N nodes,M edges worest case (N*M) but in average (happens most of the time) O(M).
+*/
+CODE
+----
+const ll OO=INT_MAX;
+const ll N=10009;
+ll arr[N],vis[N],dist[N],nodes,edges,in[N];
+vector< vector< pair<int,int> > > v(N);
+bool dfs(int no,int des)
+{
+    if(no==des)
+        return 1;
+    vis[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i].first;
+        if(vis[nw])
+            continue;
+        bool ret=dfs(nw,des);
+        if(ret)
+            return 1;
+    }
+    return 0;
+}
+pair<int,int> solve(int s,int t)
+{
+    for(int i=1;i<=nodes;i++)
+        dist[i]=OO;
+    dist[s]=0;
+    queue<int> q;
+    clr(in,0);
+
+    q.push(s);
+    in[s]=1;
+
+    int T=nodes+1;   // take care not n but n+1
+    while(!q.empty()&&T--)
+    {
+        int no=q.front();
+        q.pop();
+
+        for(int i=0;i<sz(v[no]);i++)
+        {
+            int nw=v[no][i].first;
+            int we=v[no][i].second;
+            // to avoid the overflow
+            if(dist[no]>=OO)
+                continue;
+
+            if(dist[nw]>dist[no]+we)
+            {
+                dist[nw]=dist[no]+we;
+                if(in[nw]==0)
+                {
+                   q.push(nw);
+                   in[nw]=1;
+                }
+            }
+        }
+    }
+    bool isincycle=0;
+    for(int i=1;i<=nodes;i++)
+    {
+        for(int j=0;j<sz(v[i]);j++)
+        {
+            int nw=v[i][j].first;
+            int we=v[i][j].second;
+            if(dist[i]>=OO)
+                continue;
+            if(dist[nw]>dist[i]+we)
+            {
+                clr(vis,0);
+                isincycle|=dfs(nw,t);
+
+            }
+        }
+    }
+    return mp(dist[t],isincycle);
+}
+
+int main()
+{
+    int source,des;
+    cin>>nodes>>edges>>source>>des;
+    while(edges--)
+    {
+        int from,to,weight;
+        cin>>from>>to>>weight;
+        v[from].pb(mp(to,weight));
+    }
+    solve(source,des);
+}
+----------------------------------------------------------------------------------------------------------------------------------------
