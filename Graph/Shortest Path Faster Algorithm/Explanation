@@ -116,3 +116,147 @@ int main()
     return 0;
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
+Checking For Every Node if it is strictly in a negative cycle or not.
+const int N=1009;
+int n,m,vis[N],re[N],in[N],mark[N],dist[N],par[N],incycle[N],taken[N];
+vector< vector< pair<int,int> > > v;
+void I()
+{
+    clr(mark,0);
+    v.clear();
+    v.resize(N);
+    clr(re,0);
+    clr(in,0);
+    clr(par,-1);
+    clr(incycle,0);
+    clr(taken,0);
+}
+void bfs(int no)
+{
+    queue<int> q;
+    q.push(no);
+    vis[no]=1; mark[no]=1;
+    while(!q.empty())
+    {
+        int fr=q.front();
+        q.pop();
+
+        for(int i=0;i<sz(v[fr]);i++)
+        {
+            int nw=v[fr][i].first;
+            if(vis[nw])
+                continue;
+            mark[nw]=1;
+            vis[nw]=1;
+            q.push(nw);
+        }
+    }
+}
+void getcycle(int no)
+{
+    int fl=0;
+    for(int i=no;i!=-1;i=par[i])
+    {
+        if(i==no&&fl==1)
+            break;
+        fl=1;
+        incycle[i]=1;
+    }
+}
+void go(int no)
+{
+    int tvis[N];
+    clr(tvis,0);
+    for(int i=no;i!=-1;i=par[i])
+    {
+        if(tvis[i])
+        {
+            getcycle(i);
+            break;
+        }
+        tvis[i]=1;
+    }
+
+}
+void tI()
+{
+    for(int i=0;i<n;i++)
+        dist[i]=INT_MAX;
+}
+void solve(int s)
+{
+
+    queue<int> q;
+    q.push(s);
+    taken[s]=1;
+    in[s]=1;
+    dist[s]=0;
+    int L=n*2+2;
+    while(!q.empty())
+    {
+        int no=q.front();
+        q.pop();
+        taken[no]=1;
+        in[no]=0;
+
+        if(re[no]>=L)
+            continue;
+        for(int i=0;i<sz(v[no]);i++)
+        {
+            int nw=v[no][i].first;
+            int we=v[no][i].second;
+            if(dist[no]>=INT_MAX)
+                continue;
+            if(dist[nw]>dist[no]+we)
+            {
+                dist[nw]=dist[no]+we;
+                par[nw]=no;
+                re[nw]++;
+                if(re[nw]==L)
+                {
+                    clr(vis,0);
+                    bfs(nw);
+                }
+                else if(in[nw]==0)
+                {
+                    in[nw]=1;
+                    q.push(nw);
+                }
+            }
+        }
+    }
+
+
+    for(int i=0;i<n;i++)
+    {
+        if(mark[i]==1)
+        {
+            go(i);
+        }
+    }
+}
+int main()
+{
+
+    I();
+    cin>>n>>m;
+    for(int i=0;i<m;i++)
+    {
+        int fr,to,we;
+        cin>>fr>>to>>we;
+        v[fr].pb(mp(to,we));
+    }
+    tI();
+    for(int i=0;i<n;i++)
+      if(taken[i]==0)
+        solve(i);
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
