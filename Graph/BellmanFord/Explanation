@@ -97,7 +97,7 @@ pair<int, bool> BellmanFord(vector<edge> & edgeList, int n, int src, int dest)	/
         else
 	 path = buildPath(prev, dest);
 
-	return make_pair(dist[dest], cycle);
+	return make_pair(dist[dest], reachCycle[des]);
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
 
