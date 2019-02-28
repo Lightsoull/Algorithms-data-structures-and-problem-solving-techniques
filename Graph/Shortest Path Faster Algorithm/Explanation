@@ -6,6 +6,8 @@ level will reduce the value of a node at lower level except if there is a negati
 the max levels needed to checked is n-1.
 
 Complexity: for N nodes,M edges worest case (N*M) but in average (happens most of the time) O(M).
+Note
+1- This will be okay for dirceted and undirected graphs.
 */
 CODE
 ----
