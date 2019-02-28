@@ -1,0 +1,146 @@
+Explanation: observe that the weight between 2 nodes id (to-from)^3 which can be +ve and can be -ve that's way i will run
+SPFA or bellman ford toget the min distace from node 1.
+
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=209;
+const ll OO=1e14;
+int mark[N],in[N],re[N],arr[N],vis[N],n,m;
+ll dist[N];
+vector< vector<pair<int,ll> > > v;
+void I()
+{
+    v.clear();
+    v.resize(N);
+    clr(mark,0);
+    clr(in,0);
+    clr(re,0);
+    clr(vis,0);
+}
+void bfs(int no)
+{
+    mark[no]=1;
+    vis[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i].first;
+        if(vis[nw])
+            continue;
+        bfs(nw);
+    }
+}
+void solve(int s)
+{
+    for(int i=1;i<=n;i++)
+        dist[i]=OO;
+    queue<int> q;
+    q.push(s);
+    in[s]=1;
+    dist[s]=0;
+    int L=n+3;
+    while(!q.empty())
+    {
+        int no=q.front();
+        q.pop();
+        in[no]=0;
+        if(re[no]>=L)
+            continue;
+        for(int i=0;i<sz(v[no]);i++)
+        {
+            int nw=v[no][i].first;
+            ll we=v[no][i].second;
+            if(dist[no]>=OO)
+                continue;
+            if(dist[nw]>dist[no]+we)
+            {
+                dist[nw]=dist[no]+we;
+                re[nw]++;
+                if(re[nw]==L)
+                {
+                    clr(vis,0);
+                    bfs(nw);
+                }
+                else if(in[nw]==0)
+                {
+                    in[nw]=1;
+                    q.push(nw);
+                }
+            }
+        }
+    }
+}
+ll power3(ll x)
+{
+    return x*x*x;
+}
+int main()
+{
+    int cs=1;
+    while(cin>>n)
+    {
+        I();
+        for(int i=1;i<=n;i++)
+            cin>>arr[i];
+        cin>>m;
+        for(int i=0;i<m;i++)
+        {
+            int fr,to;
+            cin>>fr>>to;
+            ll d=power3((arr[to]-arr[fr]));
+            v[fr].pb(mp(to,d));
+        }
+
+        solve(1);
+        int q;
+        cin>>q;
+        cout<<"Set #"<<cs++<<endl;
+        while(q--)
+        {
+            int to;
+            cin>>to;
+            ll d=dist[to];
+            if(mark[to]||d<3||dist[to]>=OO)
+                cout<<"?"<<endl;
+            else
+                cout<<d<<endl;
+        }
+    }
+}
+
+
