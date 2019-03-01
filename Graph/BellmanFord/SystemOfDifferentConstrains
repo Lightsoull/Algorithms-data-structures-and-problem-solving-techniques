@@ -33,6 +33,7 @@ first edge puts a limit that it have to be at most x1+c1 so i will get the min p
 can be my value and the same for the rest of nodes, but how could i get the min path among all the nodes to a certain node here
 there is a trick put an extra node and connect it to all the nodes for weight equals to zero then the min path from that node
 to my node will be the answer i want.
+Note: this way of assignment will let the max of all varibales - min of all variables as min as possible.
 -------------------------------------------------------------------------------------------------------------------------
 Summary
 1- build the constraint graph.
