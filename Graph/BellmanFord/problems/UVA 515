@@ -1,3 +1,4 @@
+Explanation Link: https://www.algorithmist.com/index.php/UVa_515.
 #include <bits/stdc++.h>
 #define sz(v)   ((int)(v).size())
 #define  all(v)    ((v).begin()),((v).end())
