@@ -1,0 +1,92 @@
+Source: mostafa saad video.
+prerequisites
+1- a+b < c =  a+b <= c-1.  
+2- a+b > c =  a+b >= c+1.
+3- s<= a+b <= e =  a+b <= e and a+b >= s.
+4- a+b <= c =  a <= c-b   ( rearranging the enquality equation doesn't change the enquality sign )
+5- a-b >= s = b-a <= -s   ( multipling the enquality equation with -1 in both sides reverse the enquality sign,
+   from > to <
+   from < to >
+   from >= to <=
+   from <= to >=
+-------------------------------------------------------------------------------------------------------------------------------------------
+System Of Different constrains: means i am having some variables and i want to assign values to those variables in such a way that 
+some constrains must be occured for example if i have an array X of elements x1,x2,x3 and i want to assign the values of the array 
+in such a way that x1+x2 >= a and x2+x3 >= b and x1+x3 >=c.
+Task: is to know whether there is a way to assign values to the variables to satisifty the constrains and if so what is the values for
+the variables ( note there may be alot of valid solutions we just want one example of them ).
+Solution: first all the equations must have only two parameters(a,c) and in the form a+c >= d 
+(where a,d are variables and c is constant )so you have to rearrange all the equations
+to be in that form, second imagine that the equations as a graph and each equation is a weighted 
+edge for example a+c >= d is an edge from a to d with the weight c which means to reach d from a
+you have to add the value of weight which is c, okay this graph is called constraint graph after
+building it how could i know if there is a valid solution or not, okay first imagine i am having
+variables a,b,c,d and constants c1,c2,c3 where i am having edge(from,to,weight) edge(a,b,c1),edge(b,c,c2),edge(c,d,c3) if i put a=0
+then b <= c1 let b=c1 then c<= c1+c2 let c=c1+c2 then d<=c1+c2+c3 let d=c1+c2+c3 this is a valid possible solution, observe that
+the value of each variable can be the weight of the path to it starting from a so from here if the variables for a non-cyclic 
+behaviour then there can be a solution, Now if i have a cycle edge(a,b,c1),edge(b,c,c2),edge(c,d,c3),edge(d,a,c4) now every variable 
+participate in 2 equations, b-a <= c1, c-b <= c2, d-c <= c3, a-d <= c4 (note a+b >= c can be written as c-a <= b) if i sum up the 
+equations left hand side= b-a+c-b+d-c+a-d = 0 , right hand side c1+c2+c3+c4 if the total value of cycle weights is -ve then there 
+will be no answer else there will an answer, but how to assign the values okay if i have edge(x1,x2,c1),edge(x2,x3,c2) then
+from first edge x2 <= x1+c1, from second edge x2 >= x3-c2, okay the second edge will accept the value of x2 to be very high but the 
+first edge puts a limit that it have to be at most x1+c1 so i will get the min path from a node to x2 and that will be my limit and
+can be my value and the same for the rest of nodes, but how could i get the min path among all the nodes to a certain node here
+there is a trick put an extra node and connect it to all the nodes for weight equals to zero then the min path from that node
+to my node will be the answer i want.
+-------------------------------------------------------------------------------------------------------------------------
+Summary
+1- build the constraint graph.
+2- put the Extra node and connect it to all the nodes for weight zero.
+3- run bellmanford or SPFA and see if there is -ve cycle then there is no answer else there is a solution.
+4- to assign valid values to the variables every variable value is the shortest distance from the extra node to it.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
