@@ -8,6 +8,9 @@ the max levels needed to checked is n-1.
 Complexity: for N nodes,M edges worest case (N*M) but in average (happens most of the time) O(M).
 Note
 1- This will be okay for dirceted and undirected graphs.
+2- the graph can be not totally connected and to handel that you will mark the visited nodes and go for every non-visited node but
+the there is a better trick that could solve that which is to put an Extra node and put an edge from it to all the nodes with weight
+zero this way you will grantee that you visited each node and there is no effect because the weight will be zero.
 */
 CODE
 ----
