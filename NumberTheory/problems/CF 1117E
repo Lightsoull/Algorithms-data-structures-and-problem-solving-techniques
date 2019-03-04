@@ -1,0 +1,117 @@
+/*
+Explanation: the idea is that if i send a string with distinct chars in the positions i will get another string with different
+permutation of its positions and from here i could restore the orginal string from the string t, but this couldn't happen bec 
+i couldn't send distict chars bec the string may reach 10^4 and to know only 26 positions per query it will need 10^4/26 = 385 query
+which is impossible, okay i have at most 3 queries okay i will assign to each index a distinct triple and there is 26*26*26 distinct 
+triples which is greater than 10^4 so i can do that, the distinct triples means that they will differ in at least a char during one
+of the queries, the first query will take the first char of the triple for all the indexes and so on.so if there is 2 'a' char at two 
+different position so they can match to the same position at some point they will differ and the right one will only keep matching
+to that position so the right match will keep matching during the three queries.
+*/
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=10001;
+vector< vector<int> > arr(28);
+int mb[N];
+string v[3],ret;
+map< pair<int,int>,int > pos;
+char ans[N];
+void I()
+{
+    for(int i=0;i<26;i++)
+        arr[i].clear();
+}
+void query(string &s,string &ret)
+{
+    cout<<"? "<<s<<endl;
+    cin>>ret;
+}
+int main()
+{
+    string st;
+    cin>>st;
+    int n=sz(st),id=0;
+    for(int i=0;i<26&&sz(v[0])<n;i++)
+    {
+        for(int j=0;j<26&&sz(v[0])<n;j++)
+        {
+             for(int k=0;k<26&&sz(v[0])<n;k++)
+             {
+                 v[0]+= (i+'a'); v[1]+= (j+'a'); v[2]+=(k+'a');
+             }
+        }
+    }
+
+    cout.flush();
+    for(int i=0;i<3;i++)
+    {
+
+      query(v[i],ret);
+      I();
+      for(int j=0;j<n;j++)
+      {
+          arr[ret[j]-'a'].pb(j);
+      }
+      for(int j=0;j<n;j++)
+      {
+          int ch=v[i][j]-'a';
+          for(int k=0;k<sz(arr[ch]);k++)
+          {
+              int p=arr[ch][k];
+              pos[mp(j,p)]++;
+          }
+      }
+    }
+    for(auto it=pos.begin();it!=pos.end();it++)
+    {
+        int f=(*it).first.first; int s=(*it).first.second;
+        int to=(*it).second;
+        if(to==3)
+            mb[s]=f;
+    }
+
+   for(int i=0;i<n;i++)
+   {
+       ans[mb[i]]=st[i];
+   }
+   cout<<"! ";
+   for(int i=0;i<n;i++)
+    cout<<ans[i];
+   cout<<endl;
+}
