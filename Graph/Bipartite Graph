@@ -1,5 +1,68 @@
+Bipartite graph check
+Explanation: to check if the given graph is Bipartite or not move on its levels level by level and assign a colour for each level
+opposite to the colour assigned to the pervious level because it is obvious that there is an edge between them so they have to in
+opposite sides in the bipartite graph, then loop on all the edges if there is an edge from two same colour then the graph is not
+bipartite else the graph is bipartite.
+CODE
+----
+const int N=309;
+const int M=N*N;
+vector< vector<int> > v(N);
+bool colour[N];
+int vis[N],f[M],t[M];
+void bfs(int s)
+{
+    queue<int> q;
+    q.push(s);
+    vis[s]=1;
+    int col=1;
+    while(!q.empty())
+    {
+        int siz=sz(q);
+        col^=1;
+        while(siz--)
+        {
+           int no=q.front();
+           q.pop();
+           colour[no]=col;
+           for(int i=0;i<sz(v[no]);i++)
+           {
+               int nw=v[no][i];
+               if(vis[nw])
+                continue;
+               vis[nw]=1;
+               q.push(nw);
+           }
+        }
+    }
+}
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+    int id=0;
+    while(m--)
+    {
+        cin>>f[id]>>t[id];
+        v[f[id]].pb(t[id]);
+        v[t[id]].pb(f[id]);
+        id++;
+    }
+    bfs(1);
+    bool ok=1;
+    for(int i=0;i<id&&ok;i++)
+    {
+        if(colour[f[i]]==colour[t[i]])
+            ok=0;
+    }
+    if(ok)
+     cout<<"Biparite\n";
+    else
+     cout<<"Notbipartite\n";
+}
+----------------------------------------------------------------------------------------------------------------------------------------
 Prequists
-1- Augmenting path: path in the graph where eaach node have to be visited only one time.
+1- Augmenting path: path in the graph where each node have to be visited only one time.
 2- Residual graph: is the graph after the some updates happened to it.
 
 Max Cardinality Bipartite Matching (MCBM)
@@ -233,7 +296,10 @@ int main()
 
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Min Number of edges To Cover every node at least one time in bipartite graph. let that have simbol E
+-How to get that ?
+E= total nodes - MCBM.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
