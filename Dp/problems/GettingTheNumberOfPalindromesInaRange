@@ -1,0 +1,54 @@
+-Problem link: https://codeforces.com/contest/245/problem/H
+-Problem: you have q queries 1<=q<=10^6 given l,r and i want to count the number of palindrom subsets from l to r.
+-Solution: using Dp, the number of palindromes from i to j equal to the number of palindromes (i+1,j) + (i,j-1) - (i+1,j-1) + if (i,j) is
+palindrome, here we have another subproblem i want to know whether a subset of the orginal string is palindrome or not here we can 
+do another dp.
+
+CODE
+----
+const int N=5009;
+char st[N];
+int q,n;
+bool mem1[N][N],vis[N][N];
+int mem2[N][N];
+bool solve1(int i,int j)
+{
+    if(i==j)
+        return 1;
+    if(i+1==j)
+        return (st[i]==st[j]);
+    if(vis[i][j]==1)
+        return mem1[i][j];
+    vis[i][j]=1;
+   return mem1[i][j]= (st[i]==st[j]&&solve1(i+1,j-1));
+}
+int solve2(int i,int j)
+{
+    if(i==j)
+        return 1;
+    if(j<i)
+    return 0;
+    int  &ret=mem2[i][j];
+    if(ret!=-1)
+        return mem2[i][j];
+  return  mem2[i][j]= (solve2(i+1,j)+solve2(i,j-1)-solve2(i+1,j-1)+solve1(i,j));
+}
+int main()
+{
+
+    scanf("%s %d",st,&q);
+    n=strlen(st);
+
+    clr(mem2,-1);
+
+    int l,r;
+    while(q--)
+    {
+
+       scanf("%d %d",&l,&r);
+       l--;
+       r--;
+       printf("%d\n",solve2(l,r));
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
