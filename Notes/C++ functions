@@ -113,7 +113,10 @@ O(n).
 round( some double ) in c++ takes double and return double it returns the double approximated
 eg 5.56=6  and 4.3=4
 -----------------------------------------------------------------------------------------------------------------------------------------
-
+string ans;
+ans[i]= some_char 
+-this is wrong it can't be, if you need so use a char array.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
