@@ -1,0 +1,158 @@
+/*
+Explanation: i just binary search on the answer which as min max force and according to the assigned force by the binary search i will
+put the max possible edge length and then get the min path from 0 to n-1 if it is >= d then the force could be reduced else
+there will be no solution except increaseing the force.
+Note
+Take care the force on the edge i equals to the length of the edge i multiplied by the ki so if there is multiple edges choose 
+the largest k bec i am just choosing the worest case in order not to assign an edge length based on a smaller k which could be
+wrong.
+*/
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=109;
+int n,m,d,in[N],re[N],mi[N][N];
+double dist[N];
+vector< vector< pair<int,double> > > v;
+set< pair<int,int> > ed;
+void I()
+{
+    for(int i=0;i<n;i++)
+     for(int j=0;j<n;j++)
+        mi[i][j]=0;
+    ed.clear();
+}
+double solve(int s)
+{
+    for(int i=0;i<n;i++)
+        dist[i]=1e12;
+    clr(in,0);
+    clr(re,0);
+    queue<int> q;
+    q.push(s);
+    in[s]=1;
+    dist[s]=0;
+    int L=n+3;
+    while(!q.empty())
+    {
+        int no=q.front();
+        q.pop();
+        in[no]=0;
+        if(re[no]>=L)
+            continue;
+        for(int i=0;i<sz(v[no]);i++)
+        {
+            int nw=v[no][i].first;
+            double we=v[no][i].second;
+            if(dcmp(dist[no],1e12)>=0)
+                continue;
+            if(dcmp(dist[nw],dist[no]+we)>0)
+            {
+                dist[nw]=dist[no]+we;
+                re[nw]++;
+                if(re[nw]==L)
+                    ;
+                else if(in[nw]==0)
+                {
+                    in[nw]=1;
+                    q.push(nw);
+                }
+            }
+        }
+    }
+    return dist[n-1];
+}
+bool check(double mid)
+{
+    v.clear();
+    v.resize(N);
+    for(auto it=ed.begin();it!=ed.end();it++)
+    {
+        int f=(*it).first;
+        int t=(*it).second;
+        int k= mi[f][t];
+ 
+        double we= mid/k;
+        v[f].pb(mp(t,we));
+        v[t].pb(mp(f,we));
+    }
+    double ret=solve(0);
+ 
+    return dcmp(ret,d)>=0;
+}
+double BS(double l,double r)
+{
+    int T=100;
+    double ans=0;
+    while(T--)
+    {
+        double mid=(l+r)/2;
+        if(check(mid))
+        {
+            r=mid;
+            ans=mid;
+        }
+        else
+        {
+            l=mid;
+        }
+    }
+    return ans;
+}
+int main()
+{
+ 
+    while(cin>>n>>m>>d)
+    {
+        if(n==0&&m==0&&d==0)
+            break;
+        I();
+        for(int i=0;i<m;i++)
+        {
+            int f,t,k;
+            cin>>f>>t>>k;
+            mi[f][t]=max(k,mi[f][t]);
+            mi[t][f]=mi[f][t];
+            if(f>t)
+                swap(f,t);
+            ed.insert(mp(f,t));
+        }
+       cout<<fixed<<setprecision(2)<<BS(0,1e11)<<endl;
+    }
+}
+ 
