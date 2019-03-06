@@ -1,0 +1,344 @@
+Notes about the bipartite graphs
+-A Tree is always can be expressed as a Bipartite graph 
+-At the chess board the kight move in 2 steps in direction A then 1 step in direction B where A and B must be perpendicular 
+to each other, so it always attack the colour which is the opposite to it so all the edges from it goes to the other colour and never 
+goes to the same colour So the knight graph is a bipartite where the black cells are in a side and the white ones in the other side.
+---------------------------------------------------------------------------------------------------------------------------------------
+Bipartite graph check
+Explanation: to check if the given graph is Bipartite or not move on its levels level by level and assign a colour for each level
+opposite to the colour assigned to the pervious level because it is obvious that there is an edge between them so they have to in
+opposite sides in the bipartite graph, then loop on all the edges if there is an edge from two same colour then the graph is not
+bipartite else the graph is bipartite.
+CODE
+----
+const int N=309;
+const int M=N*N;
+vector< vector<int> > v(N);
+bool colour[N];
+int vis[N],f[M],t[M];
+void bfs(int s)
+{
+    queue<int> q;
+    q.push(s);
+    vis[s]=1;
+    int col=1;
+    while(!q.empty())
+    {
+        int siz=sz(q);
+        col^=1;
+        while(siz--)
+        {
+           int no=q.front();
+           q.pop();
+           colour[no]=col;
+           for(int i=0;i<sz(v[no]);i++)
+           {
+               int nw=v[no][i];
+               if(vis[nw])
+                continue;
+               vis[nw]=1;
+               q.push(nw);
+           }
+        }
+    }
+}
+int main()
+{
+    int n,m;
+    cin>>n>>m;
+    int id=0;
+    while(m--)
+    {
+        cin>>f[id]>>t[id];
+        v[f[id]].pb(t[id]);
+        v[t[id]].pb(f[id]);
+        id++;
+    }
+    bfs(1);
+    bool ok=1;
+    for(int i=0;i<id&&ok;i++)
+    {
+        if(colour[f[i]]==colour[t[i]])
+            ok=0;
+    }
+    if(ok)
+     cout<<"Biparite\n";
+    else
+     cout<<"Notbipartite\n";
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Prequists
+1- Augmenting path: path in the graph where each node have to be visited only one time.
+2- Residual graph: is the graph after the some updates happened to it.
+
+Max Cardinality Bipartite Matching (MCBM)
+-Source: mostafa saad video Max bipartite matching/mostafa saad video maxflow2/ CP3 (4.7.4)
+-Meaning: means the max matching of a bipartite graph.
+Note 
+the edges between the leftside and the rightside of the bipartite you have to put them to be
+directed going from the left side to the right side, because the max matching doesn't care whether
+the edge between the two nodes of the max matchings is from the left to right or opposite, but
+i put them in that way because the algorithm getting the MCBM process in that way.
+
+-How to get it ? there is two ways
+1- construct the biparttite graph then put an extra node to be a source and connect it to the left side of the graph with weights inf
+and put another extra node to the sink and connect the right side to the sink with weights equals to inf and the bipartite edges
+should be of weight equals to one, then run maxflow algorithm the value of the maxflow is the result.
+
+2- there is another faster way in O( N^2 ) where N is the number of nodes, i will move on the left side of the graph and try to match
+every node, matching a node means that to find an augmenting path and why finding an augmenting path would let the node be matched 
+because if i moved from a node A to node B if B already assigned to node C then by matching A to B, C have to find another one to go 
+to since it no longer could go to A so i will move from C to E but if E goes to some node to this node have to search for someone else
+to go to and so on, so i am moving in a path if it is ends at some node that could find someone else to go to then i can match the 
+intial node i want to match, but if it couldn't find someone else to go to then i couldn't match the intial node.
+CODE
+----
+/*
+Notes about code: the left side nodes from 1 to r and the right side nodes from 1 to c,visL to mark the visited nodes from the left 
+side and visR the same but for right side, L array to assign the Left node to each right node, R array to assign the Right node 
+to each left node.
+O(N^2)
+*/
+const int N=1002;
+int L[N],R[N],edges,r,c;
+bool visL[N],visR[N];
+vector< vector<int> > v(N);
+bool canmatch(int no)
+{
+    visL[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(visR[nw])
+            continue;
+        visR[nw]=1;
+        if(L[nw]<0||canmatch(L[nw]))
+        {
+            L[nw]=no; R[no]=nw;
+            return 1;
+        }
+    }
+    return 0;
+}
+void MCBM()
+{
+       int flow=0;
+       clr(L,-1); clr(R,-1);
+       for(int i=1;i<=r;i++)
+       {
+           clr(visL,0); clr(visR,0);
+           if(canmatch(i))
+             flow++;
+       }
+       printf("%d\n",flow);
+       vector< pair<int,int> > matchings;
+       for(int i=1;i<=r;i++)
+         if(R[i]!=-1)
+         matchings.pb(mp(i,R[i]));
+}
+int main()
+{
+    cin>>r>>c>>edges;
+    for(int i=0;i<edges;i++)
+    {
+        int rw,cl;
+        scanf("%d %d",&rw,&cl);
+        v[rw].pb(cl);
+    }
+    MCBM();
+}
+Notes
+1- it doesn't matter if the left side nodes names are from 1 to n and the right side is from 1 to m then there will be the same
+node name in the left and right side, it is okay ,but put the edges from the left side to the right side only, why this is right
+because when i match from left to right the right is will match to left by the L array so it is okay. bec i don't need any edges
+except from the left to the right.
+----------------------------------------------------------------------------------------------------------------------------------------
+Min Vertex Cover (MVC)
+-source: CP3 (4.7.4).
+-Meaning: In a bipartite graph is the min number of nodes that let every edge to be covered in at least one node.
+Note 
+the edges between the leftside and the rightside of the bipartite you have to put them to be
+directed going from the left side to the right side, because the max matching doesn't care whether
+the edge between the two nodes of the max matchings is from the left to right or opposite, but
+i put them in that way because the algorithm getting the MCBM process in that way.
+
+-How to get them ?
+MVC equals to MCBM
+-How to print them ?
+okay first since the MVC = MCBM then the MVC nodes must be only one of the two nodes in each matching, but could i know the exact nodes
+okay, imagine a bipartite graph the left side A,C,D and the right side B,E if there is an edge(A,B) edge(C,B) edge(D,E) then if i
+taked A and D as the MVC it will be wrong because B resonsible for A and C so edge(B,C) won't be covered which means if i tried to match
+A and it doesn't match means that the node that i want to match to which is B is resonsible for other node which is C and C has no
+other node to match to at that case i should choose B not A and not C.
+implementation: for printing the MVC i will define visL and visR and R and L arrays and i will try to match every node in the left to
+the right and then i will loop on the unmatched nodes from the left and go and try to match them the target from that is to mark the
+nodes that can't find another node to match to by one and the other nodes that already matched will be equal to zero at the visL
+and visR array.
+CODE
+----
+/*
+Notes about code: MVCleft means the nodes that among MVC at the left side of the bipartite and MVCright means the nodes that 
+among the MVC at the right side of the bipartite.
+*/
+const int N=2009;
+int L[N],R[N],visL[N],visR[N],edges,r,c;
+vector< vector<int> > v(N);
+vector<int> MVCleft,MVCright;
+bool canmatch(int no)
+{
+    visL[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(visR[nw])
+            continue;
+        visR[nw]=1;
+        if(L[nw]<0||canmatch(L[nw]))
+        {
+            L[nw]=no; R[no]=nw;
+            return 1;
+        }
+    }
+    return 0;
+}
+void MCBM()
+{
+       int flow=0;
+       clr(L,-1); clr(R,-1);
+       for(int i=1;i<=r;i++)
+       {
+           clr(visL,0); clr(visR,0);
+           if(canmatch(i))
+             flow++;
+       }
+       clr(visL,0); clr(visR,0);
+       for(int i=1;i<=r;i++)
+       {
+           if(R[i]==-1)
+            canmatch(i);
+       }
+       for(int i=1;i<=r;i++)
+        if(visL[i]==0)
+         MVCleft.pb(i);
+       for(int i=1;i<=c;i++)
+         if(visR[i]==1)
+          MVCright.pb(i);
+}
+int main()
+{
+    cin>>r>>c>>edges;
+    for(int i=0;i<edges;i++)
+    {
+        int rw,cl;
+        cin>>rw>>cl;
+        v[rw].pb(cl);
+    }
+    MCBM();
+    cout<<sz(MVCright)+sz(MVCleft)<<endl;
+    for(int i=0;i<sz(MVCleft);i++)
+        cout<<MVCleft[i]<<endl;
+    for(int i=0;i<sz(MVCright);i++)
+        cout<<MVCright[i]<<endl;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Maxiumum Indepentant set (MIS)
+-Source: CP3 (4.7.4)
+-Meaning: is the max number of nodes in the bipartite graph that no 2 nodes of them having an edge in between.
+Note 
+the edges between the leftside and the rightside of the bipartite you have to put them to be
+directed going from the left side to the right side, because the max matching doesn't care whether
+the edge between the two nodes of the max matchings is from the left to right or opposite, but
+i put them in that way because the algorithm getting the MCBM process in that way.
+
+-How to get it?
+MIS= Number of total nodes in the bipartite graph - MCBM.
+-How to print it?
+in the opposite way to print the MVC, if a node from the left side couldn't match which means visL equals to one then it is among the
+MIS nodes and if a node from the right side could match which means visR equals to zero then it is among the MIS nodes.
+CODE
+----
+const int N=2009;
+int L[N],R[N],visL[N],visR[N],edges,r,c;
+vector< vector<int> > v(N);
+vector<int> MISleft,MISright;
+bool canmatch(int no)
+{
+    visL[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(visR[nw])
+            continue;
+        visR[nw]=1;
+        if(L[nw]<0||canmatch(L[nw]))
+        {
+            L[nw]=no; R[no]=nw;
+            return 1;
+        }
+    }
+    return 0;
+}
+void MCBM()
+{
+       int flow=0;
+       clr(L,-1); clr(R,-1);
+       for(int i=1;i<=r;i++)
+       {
+           clr(visL,0); clr(visR,0);
+           if(canmatch(i))
+             flow++;
+       }
+       clr(visL,0); clr(visR,0);
+       for(int i=1;i<=r;i++)
+       {
+           if(R[i]==-1)
+            canmatch(i);
+       }
+       for(int i=1;i<=r;i++)
+        if(visL[i]==1)
+         MISleft.pb(i);
+       for(int i=1;i<=c;i++)
+         if(visR[i]==0)
+          MISright.pb(i);
+}
+
+int main()
+{
+    cin>>r>>c>>edges;
+    for(int i=0;i<edges;i++)
+    {
+        int rw,cl;
+        cin>>rw>>cl;
+        v[rw].pb(cl);
+    }
+    MCBM();
+    cout<<sz(MISright)+sz(MISleft)<<endl;
+    for(int i=0;i<sz(MISleft);i++)
+        cout<<MISleft[i]<<endl;
+    for(int i=0;i<sz(MISright);i++)
+        cout<<MISright[i]<<endl;
+
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Min Edge Cover: Min Number of edges To Cover every node at least one time in bipartite graph. 
+-How to get that ?
+Min Edge Cover= total nodes - MCBM.
+-How to print them ?
+the max matching edges are part of the min edge cover so i will mark both nodes of the max matching edge nodes as marked
+but there may be extra edges must to be added to cover all the nodes so i will loop on all the edges if the edge connects two 
+marked nodes so there is no need to add it else i will add it and mark the unmarked node.
+----------------------------------------------------------------------------------------------------------------------------------------
+Min Path Cover
+-Source: mostafa saad video Max bipartite matching/mostafa saad video maxflow2(important).
+-Note: The Following Solution iff the graph is DAG, if it is a general graph then it is NP-hard problem.
+-Meaning: min path cover means the min number of edge-disjoint paths in the graph to cover all the nodes at least one time.
+-How to get it in DAG?
+suppose i have n nodes from 1 to n, you will put all the n nodes one the left side and another copy of the n nodes also from 1 to n 
+in the rightside, then put the dirceted edges normally, by this way i can convert any DAG to bipartite graph then get the MCBM and
+the MPC= n - MCBM.
+- Proof for getting the MPC
+the max matching try to match every node which means it tries to make a parent to it and the number of paths is the number
+of nodes without parent to minmizing the number of paths you have to maxmize the number of nodes that have parent which
+means the matched nodes, so this is how it relates to max matching.
+----------------------------------------------------------------------------------------------------------------------------------------
+
