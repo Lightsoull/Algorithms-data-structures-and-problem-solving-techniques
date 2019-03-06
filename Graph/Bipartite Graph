@@ -1,3 +1,9 @@
+Notes about the bipartite graphs
+-A Tree is always can be expressed as a Bipartite graph 
+-At the chess board the kight move in 2 steps in direction A then 1 step in direction B where A and B must be perpendicular 
+to each other, so it always attack the colour which is the opposite to it so all the edges from it goes to the other colour and never 
+goes to the same colour So the knight graph is a bipartite where the black cells are in a side and the white ones in the other side.
+---------------------------------------------------------------------------------------------------------------------------------------
 Bipartite graph check
 Explanation: to check if the given graph is Bipartite or not move on its levels level by level and assign a colour for each level
 opposite to the colour assigned to the pervious level because it is obvious that there is an edge between them so they have to in
@@ -66,8 +72,14 @@ Prequists
 2- Residual graph: is the graph after the some updates happened to it.
 
 Max Cardinality Bipartite Matching (MCBM)
--Source: mostafa saad video Max bipartite matching/ CP3 (4.7.4)
+-Source: mostafa saad video Max bipartite matching/mostafa saad video maxflow2/ CP3 (4.7.4)
 -Meaning: means the max matching of a bipartite graph.
+Note 
+the edges between the leftside and the rightside of the bipartite you have to put them to be
+directed going from the left side to the right side, because the max matching doesn't care whether
+the edge between the two nodes of the max matchings is from the left to right or opposite, but
+i put them in that way because the algorithm getting the MCBM process in that way.
+
 -How to get it ? there is two ways
 1- construct the biparttite graph then put an extra node to be a source and connect it to the left side of the graph with weights inf
 and put another extra node to the sink and connect the right side to the sink with weights equals to inf and the bipartite edges
@@ -144,6 +156,12 @@ except from the left to the right.
 Min Vertex Cover (MVC)
 -source: CP3 (4.7.4).
 -Meaning: In a bipartite graph is the min number of nodes that let every edge to be covered in at least one node.
+Note 
+the edges between the leftside and the rightside of the bipartite you have to put them to be
+directed going from the left side to the right side, because the max matching doesn't care whether
+the edge between the two nodes of the max matchings is from the left to right or opposite, but
+i put them in that way because the algorithm getting the MCBM process in that way.
+
 -How to get them ?
 MVC equals to MCBM
 -How to print them ?
@@ -226,6 +244,12 @@ int main()
 Maxiumum Indepentant set (MIS)
 -Source: CP3 (4.7.4)
 -Meaning: is the max number of nodes in the bipartite graph that no 2 nodes of them having an edge in between.
+Note 
+the edges between the leftside and the rightside of the bipartite you have to put them to be
+directed going from the left side to the right side, because the max matching doesn't care whether
+the edge between the two nodes of the max matchings is from the left to right or opposite, but
+i put them in that way because the algorithm getting the MCBM process in that way.
+
 -How to get it?
 MIS= Number of total nodes in the bipartite graph - MCBM.
 -How to print it?
@@ -296,9 +320,26 @@ int main()
 
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
-Min Number of edges To Cover every node at least one time in bipartite graph. let that have simbol E
+Min Edge Cover: Min Number of edges To Cover every node at least one time in bipartite graph. 
 -How to get that ?
-E= total nodes - MCBM.
+Min Edge Cover= total nodes - MCBM.
+-How to print them ?
+the max matching edges are part of the min edge cover so i will mark both nodes of the max matching edge nodes as marked
+but there may be extra edges must to be added to cover all the nodes so i will loop on all the edges if the edge connects two 
+marked nodes so there is no need to add it else i will add it and mark the unmarked node.
+----------------------------------------------------------------------------------------------------------------------------------------
+Min Path Cover
+-Source: mostafa saad video Max bipartite matching/mostafa saad video maxflow2(important).
+-Note: The Following Solution iff the graph is DAG, if it is a general graph then it is NP-hard problem.
+-Meaning: min path cover means the min number of edge-disjoint paths in the graph to cover all the nodes at least one time.
+-How to get it in DAG?
+suppose i have n nodes from 1 to n, you will put all the n nodes one the left side and another copy of the n nodes also from 1 to n 
+in the rightside, then put the dirceted edges normally, by this way i can convert any DAG to bipartite graph then get the MCBM and
+the MPC= n - MCBM.
+- Proof for getting the MPC
+the max matching try to match every node which means it tries to make a parent to it and the number of paths is the number
+of nodes without parent to minmizing the number of paths you have to maxmize the number of nodes that have parent which
+means the matched nodes, so this is how it relates to max matching.
 ----------------------------------------------------------------------------------------------------------------------------------------
 
 
