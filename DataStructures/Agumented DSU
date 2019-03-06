@@ -1,0 +1,91 @@
+/*
+augmented dsu: means that i will make use of the dsu tree to calculate additional information i need in O(1) time like the dsu time.
+Example Problem: given q queries, of 2 types, first type connect Node1 to Node2 by edge of cost xorval second type get the XOR value of 
+the path from Node1 to Node2 if there are connected else ans is -1.
+
+Solution: there might be many connected components so i will connect every first type query nodes with dsu, if Node1 and Node2 belongs to
+different sets then there is no answer else the answer should be xor of val of xor of Node1 from root and val of xor of Node2 from root,
+the idea of augumenting the dsu is at getpar function i will not only assign the parent i will also assign the xor value from root till 
+this Node.
+
+CODE
+----
+pair<int,int> mb[10009];  // pair( parent of current node, xor val from root till current node )
+int getpar(int no)
+{
+    if(mb[no].first==no)
+        return no;
+    int ret= getpar(mb[no].first);
+    mb[no].second= mb[mb[no].first].second^mb[no].second;
+    mb[no].first=ret;
+    return ret;
+}
+void I(int no)
+{
+    if(mb[no]==mp(-1,-1))
+    mb[no]=mp(no,0);
+}
+void lnk(int a,int b,int x)
+{
+    int A=getpar(a);
+    int B=getpar(b);
+    if(A==B)
+        return;
+    x^=mb[a].second;
+    x^=mb[b].second;
+    mb[B]=mp(A,x);
+}
+int main()
+{
+    int q;
+    clr(mb,-1);
+    cin>>q;
+    int Node1,Node2,st,xorval;
+    while(q--)
+    {
+        cin>>st>>Node1>>Node2;
+
+        I(Node1);
+        I(Node2);
+        if(st==1)
+        {
+            cin>>xorval;
+            lnk(Node1,Node2,xorval);
+        }
+        else
+        {
+            int ans=-1;
+            if(getpar(Node1)==getpar(Node2))
+            {
+                ans= mb[Node1].second ^ mb[Node2].second;
+            }
+            cout<<ans<<endl;
+            if(ans!=-1)
+            last=ans;
+            else
+            last=1;
+        }
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+-Note
+-You can view the dsu as you have different sepearted blocks and you have some information about this blocks and when you linking
+2 blocks you merge those informations.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
