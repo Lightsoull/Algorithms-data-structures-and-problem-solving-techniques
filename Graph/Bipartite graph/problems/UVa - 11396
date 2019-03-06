@@ -1,0 +1,113 @@
+/*
+Explanation: the claw has three levels the first node for example can be coloured as zero the next level node can be coloured as one
+and the third level can be colored with zero, observe that the graph to be decomposied to claws every node in the third level of
+the claw must go to a node let be B that node B should go to two nodes C and D that no one of C and D is the same as the start of the
+claw means C and D have to have colour one not zero and B have to have colour zero, so by writting a lot of examples and tracing
+you will see that every node must go to the colour opposite to it, so if any node go to the same colour it would be no answer so
+that's obviously can be done by checking whether the given graph is bipartite or not :).
+*/
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=309;
+const int M=N*N;
+vector< vector<int> > v;
+bool colour[N];
+int vis[N],f[M],t[M];
+void bfs(int s)
+{
+    queue<int> q;
+    q.push(s);
+    vis[s]=1;
+    int col=1;
+    while(!q.empty())
+    {
+        int siz=sz(q);
+        col^=1;
+        while(siz--)
+        {
+           int no=q.front();
+           q.pop();
+           colour[no]=col;
+           for(int i=0;i<sz(v[no]);i++)
+           {
+               int nw=v[no][i];
+               if(vis[nw])
+                continue;
+               vis[nw]=1;
+               q.push(nw);
+           }
+        }
+    }
+}
+void I()
+{
+    v.clear();
+    v.resize(N);
+    clr(vis,0);
+}
+int main()
+{
+    int n;
+    while(cin>>n)
+    {
+        if(n==0)
+            break;
+        I();
+        int id=0;
+        while(cin>>f[id]>>t[id])
+        {
+            if(f[id]==0&&t[id]==0)
+              break;
+            v[f[id]].pb(t[id]);
+            v[t[id]].pb(f[id]);
+            id++;
+        }
+        bfs(1);
+        bool ok=1;
+        for(int i=0;i<id&&ok;i++)
+        {
+            if(colour[f[i]]==colour[t[i]])
+                ok=0;
+        }
+        if(ok)
+            cout<<"YES\n";
+        else
+            cout<<"NO\n";
+    }
+}
