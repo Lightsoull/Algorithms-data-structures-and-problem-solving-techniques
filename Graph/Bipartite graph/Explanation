@@ -340,5 +340,11 @@ the MPC= n - MCBM.
 the max matching try to match every node which means it tries to make a parent to it and the number of paths is the number
 of nodes without parent to minmizing the number of paths you have to maxmize the number of nodes that have parent which
 means the matched nodes, so this is how it relates to max matching.
+-If you want to print the paths 
+step 1: every node will have some Left matching and some right matching because there is a copy of the same node in both sides, 
+so you can start from a node that has only one matching (left or right) and not marked, mark it and go to what it matches if 
+it is on the left then go to the right of it then go to the right again and so on and keep marking all the nodes in the path untill
+you meet some node without right or marked before here it would be the end of a path. and go again to step 1 to get the remaing paths.
 ----------------------------------------------------------------------------------------------------------------------------------------
+
 
