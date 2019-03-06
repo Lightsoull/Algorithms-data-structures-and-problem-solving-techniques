@@ -1,0 +1,78 @@
+Solution: you have three factors or dimensions i will fix the first factor which is a values and move on them in increaseing order
+so the remaining factors are two factors i will use segment tree to deal with those two factors together i will express one of
+them as the index and the other as the value, the contestant won't be excellent iff there is a contest above him (have lower rank in both
+of the remaining factors) so i will query on index below b[i] here i removed one factor of the two factors and then get the min value 
+and compare it with c[i] here this is the last factor.
+
+Learnings
+1- as a thinking hit you can use the segment tree to express 2 factors and deal with them one for index and the other for value.
+2- learn to fix some factors and work on the others technique.
+
+CODE
+----
+const int N=100009;
+vector< pair<int,int> > v;
+int tree[5*N],a[N],b[N],c[N];
+void I()
+{
+    v.clear();
+    for(int i=0;i<5*N;i++)
+        tree[i]=INT_MAX;
+}
+void update(int s,int e,int p,int id,int val)
+{
+    if(s==e)
+    {
+        tree[p]=val;
+        return;
+    }
+    int m=(s+e)/2;
+    if(id<=m)
+        update(s,m,p*2,id,val);
+    else
+        update(m+1,e,p*2+1,id,val);
+
+    tree[p]=min(tree[p*2],tree[p*2+1]);
+}
+int query(int s,int e,int p,int a,int b)
+{
+    if(b<s||a>e||b<a)
+        return INT_MAX;
+    if(s>=a&&e<=b)
+        return tree[p];
+    int m=(s+e)/2;
+    return min(query(s,m,p*2,a,b),query(m+1,e,p*2+1,a,b));
+}
+int main()
+{
+    int T;
+    cin>>T;
+
+    while(T--)
+    {
+        I();
+        int n;
+        cin>>n;
+
+        for(int i=1;i<=n;i++)
+        {
+            cin>>a[i]>>b[i]>>c[i];
+            v.pb(mp(a[i],i));
+        }
+        sort(all(v));
+        int cnt=0;
+        for(int i=0;i<sz(v);i++)
+        {
+            int id=v[i].second;
+
+            int mx=query(0,N,1,1,b[id]-1);
+            if(mx<c[id])
+                ;
+            else
+             cnt++;
+
+            update(0,N,1,b[id],c[id]);
+        }
+        cout<<cnt<<endl;
+    }
+}
