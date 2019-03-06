@@ -1,0 +1,262 @@
+-Problem: you are given array and every time i will delete an element from it at a given position and i want the max sum of subarray
+that doesn't contain any deleted elements
+
+-Solution 1: using set/multiset i will put in set the start and end of each valid segment and i will put in multiset the sum of it and
+update that during the queries.
+CODE
+----
+const int N=100009;
+int n,arr[N];
+ll sum[N];
+multiset<ll> mx;
+set< pair<int,int> > st;
+int main()
+{
+     
+    cin>>n;
+    ll s=0;
+    for(int i=1;i<=n;i++)
+    {
+        cin>>arr[i];
+        s+=arr[i];
+        sum[i]=s;
+    }
+    mx.insert(s);
+    st.insert(mp(1,n));
+    int id;
+    for(int i=0;i<n;i++)
+    {
+        cin>>id;
+        auto it=(st.upper_bound(mp(id,INT_MAX)));
+        it--;
+        pair<int,int> p=(*it);
+         int s1=p.first;
+         int e1=p.second;
+         ll rg= sum[e1]-(s1?sum[s1-1]:0);
+        st.erase(it);
+        mx.erase(mx.find(rg));
+
+        if(p.first==p.second)
+        {
+            ;
+        }
+        else if(id==p.second)
+        {
+            s1=p.first;
+            e1=p.second-1;
+            ll rg= sum[e1]-(s1?sum[s1-1]:0);
+            st.insert(mp(s1,e1));
+            mx.insert(rg);
+        }
+        else if(id==p.first)
+        {
+            s1=p.first+1;
+            e1=p.second;
+            ll rg= sum[e1]-(s1?sum[s1-1]:0);
+            st.insert(mp(s1,e1));
+            mx.insert(rg);
+        }
+        else
+        {
+            s1=p.first;
+            e1=id-1;
+            ll rg= sum[e1]-(s1?sum[s1-1]:0);
+            st.insert(mp(s1,e1));
+            mx.insert(rg);
+
+            s1=id+1;
+            e1=p.second;
+            rg= sum[e1]-(s1!=0? sum[s1-1]:0);
+
+             st.insert(mp(s1,e1));
+             mx.insert(rg);
+        }
+        if(sz(mx)>0)
+        {
+
+        auto it2=mx.end();
+        it2--;
+         cout<<(*it2)<<endl;
+        }
+        else
+            cout<<"0 ";
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Solution 2: try to see the problem from the opposite view what if i begin from the end of the queries where everything is already
+splitted and try to combine everything here the dsu go.
+CODE
+----
+ll mx=0;
+ll rnk[100009],par[100009],pos[100009],tk[100009],arr[100009],ans[100009];
+void I(int n)
+{
+    for(int i=1;i<=n;i++)
+        par[i]=i,rnk[i]=arr[i];
+}
+int getpar(int n)
+{
+    if(par[n]==n)
+        return n;
+    return par[n]=getpar(par[n]);
+}
+void lnk(int a,int b)
+{
+    a=getpar(a);
+    b=getpar(b);
+    par[b]=a;
+    rnk[a]+=rnk[b];
+    rnk[b]=0;
+    mx=max(mx,rnk[a]);
+}
+int main()
+{
+    int n;
+    cin>>n;
+    for(int i=1;i<=n;i++)
+    {
+        cin>>arr[i];
+    }
+    I(n);
+    for(int i=0;i<n;i++)
+    {
+        cin>>pos[i];
+        tk[pos[i]]=1;
+    }
+    for(int i=1;i<=n-1;i++)
+    {
+        if(tk[i]==0&&tk[i+1]==0)
+            lnk(i,i+1);
+    }
+    for(int i=n-1;i>=0;i--)
+    {
+        ans[i+1]=mx;
+       int p=pos[i];
+        if(p-1>=1&&tk[p-1]==0)
+            lnk(p,p-1);
+        if(p+1<=n&&tk[p+1]==0)
+            lnk(p,p+1);
+         mx=max(mx,arr[p]);
+         tk[p]=0;
+    }
+   for(int i=1;i<=n;i++)
+    cout<<ans[i]<<endl;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Solution 3: Using segment tree When i delete an element i just update its value with -inf so when i update the max rangesum offcourse
+i will never take this element or any range contain it.
+CODE
+----
+const int N=100009;
+pair<pair<ll,ll>,pair<ll,ll> > tree[4*N];
+int arr[N];
+
+void build(int s,int e,int p)
+{
+
+    if(s==e)
+    {
+        tree[p].first.first=arr[s];
+        tree[p].first.second=arr[s];
+        tree[p].second.first=arr[s];
+        tree[p].second.second=arr[s];
+        return;
+    }
+
+    int m=(s+e)/2;
+    build(s,m,p*2);
+    build(m+1,e,p*2+1);
+    tree[p].first.first=tree[p].first.second=tree[p].second.first=tree[p].second.second=
+    tree[p*2].first.first+tree[p*2+1].first.first;
+
+}
+const ll inf=1e16;
+void update(int s,int e,int p,int id,ll val)
+{
+    if(s==e)
+    {
+        tree[p].first.first=val;
+        tree[p].first.second=val;
+        tree[p].second.first=tree[p].second.second=-1;
+        return;
+    }
+    int m=(s+e)/2;
+    if(id<=m)
+        update(s,m,p*2,id,val);
+    else
+        update(m+1,e,p*2+1,id,val);
+
+    tree[p].first.first=max(-inf,tree[p*2].first.first+tree[p*2+1].first.first);
+
+    tree[p].first.second=max(max(tree[p*2].first.second,tree[p*2+1].first.second),tree[p].first.first);
+    if(tree[p*2].second.second!=-1&&tree[p*2+1].second.first!=-1)
+    {
+        ll sum=tree[p*2].second.second+tree[p*2+1].second.first;
+        tree[p].first.second=max(tree[p].first.second,sum);
+
+    }
+    if(tree[p*2].first.first==tree[p*2].second.first&&tree[p*2+1].second.first!=-1)
+    tree[p].second.first=max(-inf,tree[p*2].first.first+tree[p*2+1].second.first);
+    else
+    tree[p].second.first=tree[p*2].second.first;
+
+    if(tree[p*2+1].first.first==tree[p*2+1].second.second&&tree[p*2].second.second!=-1)
+    tree[p].second.second=max(-inf,tree[p*2+1].first.first+tree[p*2].second.second);
+    else
+    tree[p].second.second=tree[p*2+1].second.second;
+
+}
+int main()
+{
+    int n;
+    cin>>n;
+
+    for(int i=0;i<n;i++)
+    {
+        cin>>arr[i];
+    }
+    build(0,n-1,1);
+    int pos;
+    for(int i=0;i<n;i++)
+    {
+        cin>>pos;
+        pos--;
+        update(0,n-1,1,pos,-1e16);
+        cout<<max(tree[1].first.second,0ll)<<endl;
+    }
+
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
