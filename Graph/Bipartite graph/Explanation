@@ -555,6 +555,11 @@ int main()
   
     return 0; 
 } 
+Note 
+-If you want to print the MVC or MIS, run the algorithm and after getting all the max matchings just loop on all the left side nodes
+and if it is not matched run can match function that stated before and sure you will have 2 vis arrays one for the left side and 
+the other one for the right side and mark during the can match function normaly as stated before.
+- And to print MPC same way as the ordinary one since i already have the matchings and the left and right arrays.
 ----------------------------------------------------------------------------------------------------------------------------------------
 
 
