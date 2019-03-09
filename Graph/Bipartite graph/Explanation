@@ -9,38 +9,33 @@ Explanation: to check if the given graph is Bipartite or not move on its levels 
 opposite to the colour assigned to the pervious level because it is obvious that there is an edge between them so they have to in
 opposite sides in the bipartite graph, then loop on all the edges if there is an edge from two same colour then the graph is not
 bipartite else the graph is bipartite.
+Note: the graph may be not connected so dfs handel that but bfs not.
 CODE
 ----
 const int N=309;
 const int M=N*N;
 vector< vector<int> > v(N);
 bool colour[N];
-int vis[N],f[M],t[M];
-void bfs(int s)
+int f[M],t[M],vis[N];
+void dfs(int no,int c)
 {
-    queue<int> q;
-    q.push(s);
-    vis[s]=1;
-    int col=1;
-    while(!q.empty())
+    vis[no]=1;
+    colour[no]=c;
+    for(int i=0;i<sz(v[no]);i++)
     {
-        int siz=sz(q);
-        col^=1;
-        while(siz--)
-        {
-           int no=q.front();
-           q.pop();
-           colour[no]=col;
-           for(int i=0;i<sz(v[no]);i++)
-           {
-               int nw=v[no][i];
-               if(vis[nw])
-                continue;
-               vis[nw]=1;
-               q.push(nw);
-           }
-        }
+        int nw=v[no][i];
+        if(vis[nw])
+            continue;
+        dfs(nw,c^1);
     }
+}
+void checkBipartite()
+{
+   for(int i=1;i<=n;i++)
+   {
+       if(vis[i]==0)
+        dfs1(i,0);
+   }
 }
 int main()
 {
@@ -54,7 +49,7 @@ int main()
         v[t[id]].pb(f[id]);
         id++;
     }
-    bfs(1);
+    checkBipartite();
     bool ok=1;
     for(int i=0;i<id&&ok;i++)
     {
@@ -356,6 +351,7 @@ there is a difference between maximum and maximal
 maximal: is the maximum possible thing i could get at a certain stage but it is not necessary the final maximum result.
 Maximum: is the final max result.
 
+Complexity: its worest case O( E*sqrt(N) ), but its practicly much faster than that so if its above TL a bit it can pass try it. 
 CODE
 ----
 // C++ implementation of Hopcroft Karp algorithm for 
