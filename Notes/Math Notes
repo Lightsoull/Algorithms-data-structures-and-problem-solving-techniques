@@ -183,6 +183,9 @@ If i am having array of numbers and want to get some subarray that the mean of i
 observe that if i have 2 numbers a and b and a=b then mean 2*a/2 = a so if b is less than a then the mean will be smaller so the max
 number of this array is the max mean.
 ----------------------------------------------------------------------------------------------------------------------------------------
+Associative Property
+A*(C*D) = (A*C)*D.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
