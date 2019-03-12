@@ -414,6 +414,11 @@ bool dfs(int no)
 ----------------------------------------------------------------------------------------------------------------------------------------
 there is a trick instead of clearing the vis array just assign a visID for each time, Note don't start the visID with zero.
 ----------------------------------------------------------------------------------------------------------------------------------------
+Sometimes in the problems he says that it is granteed that the answer won't exceed M , where M a certain integer.
+okay that doesn't mean that during calculating the answer the value won't exceed M so it may exceeds M, the overflow will cause the
+value of integer to return back to INT_MIN so if you are maxmizing it doesn't matter if an overflow happens but if you are minmizing
+you have to takecare to handel that if the answer exceeds M then put it to its limit which is M because this will affect the answer.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
