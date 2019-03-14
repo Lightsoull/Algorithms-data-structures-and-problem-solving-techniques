@@ -1,0 +1,161 @@
+Sources
+1- https://www.topcoder.com/community/competitive-programming/tutorials/minimum-cost-flow-part-one-key-concepts/#2 (part1 Assumption 3 ) 
+or you can read the three parts.
+2- https://en.wikipedia.org/wiki/Johnson%27s_algorithm.
+
+-Dijkstra with potientials
+The problem is if i want to get the shortest path in a graph G of V nodes and E edges from S to T, where S,T belongs to V .
+if all the weights are positive then it can be with dijkstra algorithm normaly but what if the weights are negative you can
+use bellmanford or SPFA but their worest case is V*E which can be TLE so here is another way to do so in a better complexity
+which is dijkstra complexity by Dijkstra with potientials. Note i won't need to use dijkstra with potientials alone bec i will
+need to use bellman first so it won't save complexity i only need to use it in another problem like MinCostMaxFlow for example.
+
+-Complexity: O( E * log(V) ).
+-Algorithm
+1- Create an extra node and connect it to all the vertexes with weight zero.
+2- Run Bellman ford algorithm/SPFA to get the shortest distance from the source to each node and put those the dist from source to ith
+node as phi[i].
+3- update the weights on edges from W(i,j) to W(i,j)+phi[i]-phi[j] and remove the extra node that you add it in the begining 
+(treat now with the orginal graph that you had it normaly but with the new weights).
+4- Run dijstra algorithm.
+5- the dist from S to T node by dijkstra = orginal shortest path distance from S to T + phi[S] - phi[T], so to get the exact distance
+just add -phi[S]+phi[T].
+-Notes
+1- Works on directed and undirected graphs
+2- works with double and integer costs.
+3- works with +ve and -ve weights.
+CODE
+----
+const int N=109,inf=INT_MAX;
+int n,m,in[N],re[N],dist[N],p[N],vis[N],phi[N];
+priority_queue< pair<int,int> ,vector< pair<int,int> >,greater<pair<int,int> > > pq;
+struct Edge
+{
+    int node,cost;
+    Edge(int a=0,int b=0)
+    {
+        node=a;  cost=b;
+    }
+};
+vector< Edge > ed;
+vector< vector<int> > g,g2;
+void I()
+{
+   g.clear();
+   g.resize(N);
+   ed.clear();
+}
+void addedge(int a,int b,int cost)
+{
+    int siz=sz(ed);
+    g[a].pb(siz);
+    g[b].pb(siz+1);
+    ed.pb(Edge(b,cost));
+    ed.pb(Edge(a,cost));
+}
+int SPFA(int S,int T)
+{
+    clr(p,-1);
+    clr(in,0);
+    clr(re,0);
+    for(int i=0;i<=n+1;i++)
+        dist[i]=inf;
+
+    queue<int> q;
+    q.push(S);
+    dist[S]=0;
+    in[S]=1;
+    int Lim=n+m+2;
+    while(!q.empty())
+    {
+        int no=q.front();
+        q.pop();
+        in[no]=0;
+        if(re[no]>=Lim)
+            continue;
+        for(int i=0;i<sz(g[no]);i++)
+        {
+            int id=g[no][i];
+            int nw=ed[id].node;
+            int we=ed[id].cost;
+
+            if(dist[no]>=inf)
+                continue;
+
+            if(dist[nw]>dist[no]+we)
+            {
+                dist[nw]=dist[no]+we;
+                re[nw]++;
+                if(re[nw]==Lim)
+                    ;
+                else if(in[nw]==0)
+                {
+                    in[nw]=1;
+                    q.push(nw);
+                }
+            }
+        }
+    }
+
+    return (dist[T]!=inf);
+}
+void dijkstra(int S,int T)
+{
+    for(int i=0;i<=n+1;i++)
+        dist[i]=inf;
+    clr(p,-1);
+    clr(vis,0);
+    pq.push(mp(0,S));
+    dist[S]=0;
+    while(!pq.empty())
+    {
+        int no=pq.top().second;
+        int we=pq.top().first;
+        pq.pop();
+        if(vis[no])
+            continue;
+        vis[no]=1;
+        for(int i=0;i<sz(g[no]);i++)
+        {
+            int id=g[no][i];
+            int nw=ed[id].node;
+            int co=ed[id].cost;
+            
+            if(dist[no]>=inf)
+                continue;
+            int we= co+phi[no]-phi[nw];
+            if(dist[nw]>dist[no]+we)
+            {
+                dist[nw]=dist[no]+we;
+                p[nw]=id;
+                pq.push(mp(dist[no]+we,nw));
+            }
+        }
+    }
+
+}
+int main()
+{
+        I();
+        cin>>n>>m;
+        int start=n+1;
+        for(int i=0;i<m;i++)
+        {
+            int fr,to,we;
+            cin>>fr>>to>>we;
+            addedge(fr,to,we);
+            addedge(to,fr,we);
+        }
+        g2=g;
+        for(int i=0;i<=n;i++)
+            addedge(start,i,0);
+        SPFA(start,n);
+       for(int i=0;i<=n;i++)
+          phi[i]=dist[i];
+        g=g2;
+        dijkstra(0,n);
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
