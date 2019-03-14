@@ -1,0 +1,368 @@
+-Sources
+1- mostafa saad video.
+2- https://www.topcoder.com/community/competitive-programming/tutorials/minimum-cost-flow-part-one-key-concepts/#2 (The three parts)
+3- https://en.wikipedia.org/wiki/Johnson%27s_algorithm (to understand better the dijkstra with potientials)
+-Explanation For The problem
+the problem is I have a graph G with V vertexes and E edges, each edge have there parameters
+1- c , the cost of passing one unit of flow through that edge.
+2- u , the capacity that the edge can pass ( max number of unit flows that the edge can pass ).
+3- f , the flow that passed through the edge so far.
+and First i want the maxflow from the source node S to the sink T, then Second through all the maxflow passes that could happen 
+i want the one with the min cost.
+-Explanation For the Idea
+idea based on Sucssive Shortest Path Algorithm, which continues to FordFulkerson's idea of getting the maxflow but with a small
+update instead of finding an sugmenting path find a path with the min cost from S to T.
+-Note
+1- intial costs may be -ve so you must do bellman/SPFA.
+2- Works on directed and undirected graphs.
+3- works with double and integer costs.
+4- works with +ve and -ve weights.
+5- All of that work only if there is negative cycles in the graph G.
+-Max Cost Max Flow
+just multiply all the initial costs with -1 and get the min cost max flow and multiply this value with -1 to get the max cost max flow.
+-Implementation Notes
+1- i store the edge in index i and its reverse in index i+1 , so there is one even and one odd so you could get the index of the
+reverse edge by xor i^1 = i+1 and vice versa.
+2- P for parent array.
+3- bottel neak is the value of the min capcity a edge can contain during the path from S to T .
+
+Complexity: O( V^2*E*B ) , where B is the maximum maxflow could happen.
+CODE with SPFA
+--------------
+const int N=109,inf=INT_MAX;
+int n,m,in[N],re[N],dist[N],p[N];
+struct Edge
+{
+    int node,flow,cost,cap;
+    Edge(int a=0,int b=0,int c=0,int d=0)
+    {
+        node=a; flow=b; cost=c; cap=d;
+    }
+};
+vector< Edge > ed;
+vector< vector<int> > g;
+void I()
+{
+   g.clear();
+   g.resize(N);
+   ed.clear();
+}
+void addedge(int a,int b,int cost,int cap)
+{
+    int siz=sz(ed);
+    g[a].pb(siz);
+    g[b].pb(siz+1);
+    ed.pb(Edge(b,0,cost,cap));
+    ed.pb(Edge(a,0,-cost,0));
+}
+int SPFA(int S,int T)
+{
+    clr(p,-1);
+    clr(in,0);
+    clr(re,0);
+    for(int i=1;i<=n;i++)
+        dist[i]=inf;
+
+    queue<int> q;
+    q.push(S);
+    dist[S]=0;
+    in[S]=1;
+    int Lim=n+m+2;
+    while(!q.empty())
+    {
+        int no=q.front();
+        q.pop();
+        in[no]=0;
+        if(re[no]>=Lim)
+            continue;
+        for(int i=0;i<sz(g[no]);i++)
+        {
+            int id=g[no][i];
+            int nw=ed[id].node;
+            int we=ed[id].cost;
+            int cp=ed[id].cap-ed[id].flow;
+            if(dist[no]>=inf||cp<=0)
+                continue;
+
+            if(dist[nw]>dist[no]+we)
+            {
+                dist[nw]=dist[no]+we;
+                p[nw]=id;
+                re[nw]++;
+                if(re[nw]==Lim)
+                    ;
+                else if(in[nw]==0)
+                {
+                    in[nw]=1;
+                    q.push(nw);
+                }
+            }
+        }
+    }
+
+    return (dist[T]!=inf);
+}
+pair<int,int> MCMF(int S,int T)
+{
+    int maxflow=0,mincost=0;
+    while(SPFA(S,T))
+    {
+
+        int bottelneak=inf;
+        for(int i=T;i!=S;i=ed[p[i]^1].node)
+        {
+            int fl=ed[p[i]].flow;
+            int cp=ed[p[i]].cap;
+            bottelneak=min(bottelneak,cp-fl);
+        }
+        for(int i=T;i!=S;i=ed[p[i]^1].node)
+        {
+            int fl=ed[p[i]].flow;
+            int cp=ed[p[i]].cap;
+            int co=ed[p[i]].cost;
+            mincost+= bottelneak*co;
+            ed[p[i]].flow+=bottelneak;
+            ed[p[i]^1].flow-=bottelneak;
+        }
+        maxflow+=bottelneak;
+    }
+    return mp(maxflow,mincost);
+}
+int main()
+{
+        I();
+        int S,T;
+        cin>>n>>m>>S>>T;
+        for(int i=0;i<m;i++)
+        {
+            int fr,to,we;
+            cin>>fr>>to>>we;
+            addedge(fr,to,we,1);
+            addedge(to,fr,we,1);
+        }
+
+        pair<int,int> p=MCMF(S,T);
+
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+-Min cost max flow may TLE with bellman and even with SPFA so there is a thing to do for better complexity which is using dijkstra
+with potientials (Explained in dijkstra file).
+-Note 
+at first you must use bellman you can't use dijkstra because the orginal weights might be -ve.
+-Complexity : O( E * log(E) * min(flow, V*flowcost ) ).
+CODE
+----
+const int N=109,inf=INT_MAX;
+int n,m,in[N],re[N],dist[N],p[N],vis[N],phi[N];
+priority_queue< pair<int,int> ,vector< pair<int,int> >,greater<pair<int,int> > > pq;
+struct Edge
+{
+    int node,flow,cost,cap;
+    Edge(int a=0,int b=0,int c=0,int d=0)
+    {
+        node=a; flow=b; cost=c; cap=d;
+    }
+};
+vector< Edge > ed;
+vector< vector<int> > g,g2;
+void I()
+{
+   g.clear();
+   g.resize(N);
+   ed.clear();
+}
+void addedge(int a,int b,int cost,int cap)
+{
+    int siz=sz(ed);
+    g[a].pb(siz);
+    g[b].pb(siz+1);
+    ed.pb(Edge(b,0,cost,cap));
+    ed.pb(Edge(a,0,-cost,0));
+}
+void SPFA(int S,int T)
+{
+    clr(p,-1);
+    clr(in,0);
+    clr(re,0);
+    for(int i=0;i<=n+1;i++)
+        dist[i]=inf;
+
+    queue<int> q;
+    q.push(S);
+    dist[S]=0;
+    in[S]=1;
+    int Lim=n+m+2;
+    while(!q.empty())
+    {
+        int no=q.front();
+        q.pop();
+        in[no]=0;
+        if(re[no]>=Lim)
+            continue;
+        for(int i=0;i<sz(g[no]);i++)
+        {
+            int id=g[no][i];
+            int nw=ed[id].node;
+            int we=ed[id].cost;
+            int cp=ed[id].cap-ed[id].flow;
+            if(dist[no]>=inf||cp<=0)
+                continue;
+
+            if(dist[nw]>dist[no]+we)
+            {
+                dist[nw]=dist[no]+we;
+                re[nw]++;
+                if(re[nw]==Lim)
+                    ;
+                else if(in[nw]==0)
+                {
+                    in[nw]=1;
+                    q.push(nw);
+                }
+            }
+        }
+    }
+}
+void dijkstra(int S,int T)
+{
+    for(int i=0;i<=n+1;i++)
+        dist[i]=inf;
+    clr(p,-1);
+    clr(vis,0);
+    pq.push(mp(0,S));
+    dist[S]=0;
+
+    while(!pq.empty())
+    {
+        int no=pq.top().second;
+        int we=pq.top().first;
+        pq.pop();
+        if(vis[no])
+            continue;
+        vis[no]=1;
+
+        for(int i=0;i<sz(g[no]);i++)
+        {
+            int id=g[no][i];
+            int nw=ed[id].node;
+            int co=ed[id].cost;
+            int cp=ed[id].cap;
+            int fl=ed[id].flow;
+            if((dist[no]>=inf)||(cp-fl<=0))
+                continue;
+            int we= co+phi[no]-phi[nw];
+            if(dist[nw]>dist[no]+we)
+            {
+                dist[nw]=dist[no]+we;
+                p[nw]=id;
+                pq.push(mp(dist[no]+we,nw));
+            }
+        }
+    }
+
+}
+pair<int,int> MCMF(int S,int T)
+{
+    int maxflow=0,mincost=0;
+
+    while(1)
+    {
+        dijkstra(S,T);
+        if(dist[T]==inf)
+            break;
+      // to know how it comes look to the 3rd source
+        for(int i=0;i<=n;i++)
+          phi[i]=min(dist[i]+phi[i],inf);
+
+        int bottelneak=inf;
+        for(int i=T;i!=S;i=ed[p[i]^1].node)
+        {
+            int fl=ed[p[i]].flow;
+            int cp=ed[p[i]].cap;
+            bottelneak=min(bottelneak,cp-fl);
+        }
+        for(int i=T;i!=S;i=ed[p[i]^1].node)
+        {
+            int fl=ed[p[i]].flow;
+            int cp=ed[p[i]].cap;
+            int co=ed[p[i]].cost;
+            mincost+= bottelneak*co;
+            ed[p[i]].flow+=bottelneak;
+            ed[p[i]^1].flow-=bottelneak;
+        }
+        maxflow+=bottelneak;
+    }
+    return mp(maxflow,mincost);
+}
+int main()
+{
+        I();
+        int S,T;
+        cin>>n>>m>>S>>T;
+        int id=0;
+        int start=0;
+        for(int i=0;i<m;i++)
+        {
+            int fr,to,we;
+            cin>>fr>>to>>we;
+            addedge(fr,to,we,1);
+            addedge(to,fr,we,1);
+        }
+        g2=g;
+        for(int i=1;i<=n;i++)
+            addedge(start,i,0,1);
+
+        SPFA(start,T);
+
+       for(int i=1;i<=n;i++)
+          phi[i]=dist[i];
+
+        g=g2;   // to restore the orginal graph
+        pair<int,int> p=MCMF(S,T);
+
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
