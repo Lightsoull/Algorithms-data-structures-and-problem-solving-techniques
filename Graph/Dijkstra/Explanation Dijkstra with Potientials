@@ -58,7 +58,7 @@ int SPFA(int S,int T)
     clr(p,-1);
     clr(in,0);
     clr(re,0);
-    for(int i=0;i<=n+1;i++)
+    for(int i=0;i<=n;i++)
         dist[i]=inf;
 
     queue<int> q;
@@ -101,7 +101,7 @@ int SPFA(int S,int T)
 }
 void dijkstra(int S,int T)
 {
-    for(int i=0;i<=n+1;i++)
+    for(int i=1;i<=n;i++)
         dist[i]=inf;
     clr(p,-1);
     clr(vis,0);
@@ -136,9 +136,11 @@ void dijkstra(int S,int T)
 }
 int main()
 {
+        // n nodes from 1 to n
+        // m edges
         I();
         cin>>n>>m;
-        int start=n+1;
+        int start=0;
         for(int i=0;i<m;i++)
         {
             int fr,to,we;
@@ -147,13 +149,13 @@ int main()
             addedge(to,fr,we);
         }
         g2=g;
-        for(int i=0;i<=n;i++)
+        for(int i=1;i<=n;i++)
             addedge(start,i,0);
         SPFA(start,n);
-       for(int i=0;i<=n;i++)
+       for(int i=1;i<=n;i++)
           phi[i]=dist[i];
         g=g2;
-        dijkstra(0,n);
+        dijkstra(1,n);
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
 
