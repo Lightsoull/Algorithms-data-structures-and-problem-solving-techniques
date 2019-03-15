@@ -1,0 +1,150 @@
+-Prerequests: go and review dijkstra with potientials file.
+-Johnson's algorithm for ( All Pairs Shortest Paths ).
+-Sources
+https://en.wikipedia.org/wiki/Johnson%27s_algorithm.
+-Explanation For the problem
+If i need to get all pairs shortest paths there is a way to do that using floyed algorithm and it works for +ve and -ve weights but
+in works in O(V^3), if you want to do that effiently you can use dijkstra for each node as a source but it works only for +ve weights
+in O( V*E*log(V) ) , E*log(V) for dijkstra and V because i do dijkstra for each node, okay but what if i want to get all pairs shortest 
+paths for -ve/+ve weights in better complexity than floyed the way is Johnson's algorithm.
+-Explanation for the Algorithm
+1- make an extra node connect it to all the nodes with weight zero to update the graph.
+2- i can run bellman or SPFA on the updated graph to get phi for each node. 
+3- then return to the orginal graph without the extra node and update the weights of the graph
+   from W(i,j) to W(i,j)+phi[i]-phi[j].
+4- Now run dijkstra from each node as a source and get all the shortest paths from that node.
+CODE
+----
+const int N=109,inf=INT_MAX;
+int n,m,in[N],re[N],dist1[N],p[N],vis[N],phi[N],dist2[N][N];
+priority_queue< pair<int,int> ,vector< pair<int,int> >,greater<pair<int,int> > > pq;
+struct Edge
+{
+    int node,cost;
+    Edge(int a=0,int b=0)
+    {
+        node=a;  cost=b;
+    }
+};
+vector< Edge > ed;
+vector< vector<int> > g,g2;
+void I()
+{
+   g.clear();
+   g.resize(N);
+   ed.clear();
+}
+void addedge(int a,int b,int cost)
+{
+    int siz=sz(ed);
+    g[a].pb(siz);
+    g[b].pb(siz+1);
+    ed.pb(Edge(b,cost));
+    ed.pb(Edge(a,cost));
+}
+int SPFA(int S,int T)
+{
+    clr(p,-1);
+    clr(in,0);
+    clr(re,0);
+    for(int i=0;i<=n;i++)
+        dist1[i]=inf;
+
+    queue<int> q;
+    q.push(S);
+    dist1[S]=0;
+    in[S]=1;
+    int Lim=n+m+2;
+    while(!q.empty())
+    {
+        int no=q.front();
+        q.pop();
+        in[no]=0;
+        if(re[no]>=Lim)
+            continue;
+        for(int i=0;i<sz(g[no]);i++)
+        {
+            int id=g[no][i];
+            int nw=ed[id].node;
+            int we=ed[id].cost;
+
+            if(dist1[no]>=inf)
+                continue;
+
+            if(dist1[nw]>dist1[no]+we)
+            {
+                dist1[nw]=dist1[no]+we;
+                re[nw]++;
+                if(re[nw]==Lim)
+                    ;
+                else if(in[nw]==0)
+                {
+                    in[nw]=1;
+                    q.push(nw);
+                }
+            }
+        }
+    }
+
+    return (dist1[T]!=inf);
+}
+void dijkstra(int S)
+{
+    for(int i=1;i<=n;i++)
+        dist2[S][i]=inf;
+    clr(p,-1);
+    clr(vis,0);
+    pq.push(mp(0,S));
+    dist2[S][S]=0;
+    while(!pq.empty())
+    {
+        int no=pq.top().second;
+        int we=pq.top().first;
+        pq.pop();
+        if(vis[no])
+            continue;
+        vis[no]=1;
+        for(int i=0;i<sz(g[no]);i++)
+        {
+            int id=g[no][i];
+            int nw=ed[id].node;
+            int co=ed[id].cost;
+
+            if(dist2[S][no]>=inf)
+                continue;
+            int we= co+phi[no]-phi[nw];
+            if(dist2[S][nw]>dist2[S][no]+we)
+            {
+                dist2[S][nw]=dist2[S][no]+we;
+                p[nw]=id;
+                pq.push(mp(dist2[S][no]+we,nw));
+            }
+        }
+    }
+
+}
+int main()
+{
+    // n nodes from 1 to n
+    // m edges
+        I();
+        cin>>n>>m;
+        int start=0;
+        for(int i=0;i<m;i++)
+        {
+            int fr,to,we;
+            cin>>fr>>to>>we;
+            addedge(fr,to,we);
+            addedge(to,fr,we);
+        }
+        g2=g;
+        for(int i=1;i<=n;i++)
+            addedge(start,i,0);
+        SPFA(start,n);
+       for(int i=1;i<=n;i++)
+          phi[i]=dist1[i];
+        g=g2;
+        for(int i=1;i<=n;i++)
+            dijkstra(i);
+}
+
