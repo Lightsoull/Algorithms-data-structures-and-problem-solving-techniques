@@ -13,6 +13,7 @@ paths for -ve/+ve weights in better complexity than floyed the way is Johnson's 
 3- then return to the orginal graph without the extra node and update the weights of the graph
    from W(i,j) to W(i,j)+phi[i]-phi[j].
 4- Now run dijkstra from each node as a source and get all the shortest paths from that node.
+- Complexity: O( V*E*log(V) ) , E*log(V) for dijkstra and V because i do dijkstra for each node
 CODE
 ----
 const int N=109,inf=INT_MAX;
