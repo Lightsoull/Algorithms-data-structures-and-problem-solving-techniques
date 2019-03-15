@@ -1,0 +1,225 @@
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=109,inf=INT_MAX;
+int n,m,in[N],re[N],dist[N],p[N],vis[N],phi[N];
+priority_queue< pair<int,int> ,vector< pair<int,int> >,greater<pair<int,int> > > pq;
+struct Edge
+{
+    int node,flow,cost,cap;
+    Edge(int a=0,int b=0,int c=0,int d=0)
+    {
+        node=a; flow=b; cost=c; cap=d;
+    }
+};
+vector< Edge > ed;
+vector< vector<int> > g,g2;
+void I()
+{
+   g.clear();
+   g.resize(N);
+   ed.clear();
+}
+void addedge(int a,int b,int cost,int cap)
+{
+    int siz=sz(ed);
+    g[a].pb(siz);
+    g[b].pb(siz+1);
+    ed.pb(Edge(b,0,cost,cap));
+    ed.pb(Edge(a,0,-cost,0));
+}
+int SPFA(int S,int T)
+{
+    clr(p,-1);
+    clr(in,0);
+    clr(re,0);
+    for(int i=0;i<=n+1;i++)
+        dist[i]=inf;
+ 
+    queue<int> q;
+    q.push(S);
+    dist[S]=0;
+    in[S]=1;
+    int Lim=n+m+2;
+    while(!q.empty())
+    {
+        int no=q.front();
+        q.pop();
+        in[no]=0;
+        if(re[no]>=Lim)
+            continue;
+        for(int i=0;i<sz(g[no]);i++)
+        {
+            int id=g[no][i];
+            int nw=ed[id].node;
+            int we=ed[id].cost;
+            int cp=ed[id].cap-ed[id].flow;
+           // cout<<no<<" "<<nw<<" "<<ed[id].cap<<endl;
+            if(dist[no]>=inf||cp<=0)
+                continue;
+ 
+            if(dist[nw]>dist[no]+we)
+            {
+                dist[nw]=dist[no]+we;
+                re[nw]++;
+                if(re[nw]==Lim)
+                    ;
+                else if(in[nw]==0)
+                {
+                    in[nw]=1;
+                    q.push(nw);
+                }
+            }
+        }
+    }
+ 
+    return (dist[T]!=inf);
+}
+void dijkstra(int S,int T)
+{
+    for(int i=0;i<=n+1;i++)
+        dist[i]=inf;
+    clr(p,-1);
+    clr(vis,0);
+    pq.push(mp(0,S));
+    dist[S]=0;
+ 
+    while(!pq.empty())
+    {
+        int no=pq.top().second;
+        int we=pq.top().first;
+        pq.pop();
+        if(vis[no])
+            continue;
+        vis[no]=1;
+ 
+        for(int i=0;i<sz(g[no]);i++)
+        {
+            int id=g[no][i];
+            int nw=ed[id].node;
+            int co=ed[id].cost;
+            int cp=ed[id].cap;
+            int fl=ed[id].flow;
+            if((dist[no]>=inf)||(cp-fl<=0))
+                continue;
+            int we= co+phi[no]-phi[nw];
+            if(dist[nw]>dist[no]+we)
+            {
+                dist[nw]=dist[no]+we;
+                p[nw]=id;
+                pq.push(mp(dist[no]+we,nw));
+            }
+        }
+    }
+ 
+}
+pair<int,int> MCMF(int S,int T)
+{
+    int maxflow=0,mincost=0;
+ 
+    while(1)
+    {
+        dijkstra(S,T);
+        if(dist[T]==inf)
+            break;
+ 
+        for(int i=0;i<=n;i++)
+          phi[i]=min(dist[i]+phi[i],inf);
+ 
+        int bottelneak=inf;
+        for(int i=T;i!=S;i=ed[p[i]^1].node)
+        {
+            int fl=ed[p[i]].flow;
+            int cp=ed[p[i]].cap;
+            bottelneak=min(bottelneak,cp-fl);
+        }
+        for(int i=T;i!=S;i=ed[p[i]^1].node)
+        {
+            int fl=ed[p[i]].flow;
+            int cp=ed[p[i]].cap;
+            int co=ed[p[i]].cost;
+            mincost+= bottelneak*co;
+            ed[p[i]].flow+=bottelneak;
+            ed[p[i]^1].flow-=bottelneak;
+        }
+        maxflow+=bottelneak;
+    }
+    return mp(maxflow,mincost);
+}
+int main()
+{
+    while(cin>>n)
+    {
+        if(n==0)
+            break;
+        I();
+        cin>>m;
+        int id=0;
+        int start=n+1;
+ 
+        addedge(0,1,0,2);
+        for(int i=0;i<m;i++)
+        {
+            int fr,to,we;
+            cin>>fr>>to>>we;
+            addedge(fr,to,we,1);
+            addedge(to,fr,we,1);
+        }
+        g2=g;
+        for(int i=0;i<=n;i++)
+            addedge(start,i,0,1);
+ 
+        bool ret=SPFA(start,n);
+        if(ret==0)
+        {
+            cout<<"Back to jail\n";
+            continue;
+        }
+ 
+       for(int i=0;i<=n;i++)
+          phi[i]=dist[i];
+ 
+        g=g2;
+        pair<int,int> p=MCMF(0,n);
+ 
+        if(p.first!=2)
+            cout<<"Back to jail\n";
+        else
+            cout<<p.second<<endl;
+    }
+}
