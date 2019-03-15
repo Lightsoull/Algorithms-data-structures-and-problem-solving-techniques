@@ -40,5 +40,25 @@ Lattice point : means point on an cartesian plane with integer co-ordinates.
 ----------------------------------------------------------------------------------------------------------------------------------------
 clique of nodes means like a node that there is an edge from it to all other ones.
 ----------------------------------------------------------------------------------------------------------------------------------------
+When the problem says in the output format : accurate to 2 fractional digits.
+means approximated to the nearest 2 digits, eg 5.5555 = 5.56 .
+ans= (round(ans*100.0))/100.0
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
