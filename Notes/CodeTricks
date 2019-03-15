@@ -419,7 +419,12 @@ okay that doesn't mean that during calculating the answer the value won't exceed
 value of integer to return back to INT_MIN so if you are maxmizing it doesn't matter if an overflow happens but if you are minmizing
 you have to takecare to handel that if the answer exceeds M then put it to its limit which is M because this will affect the answer.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+When the problem says in the output format : accurate to 2 fractional digits.
+means approximated to the nearest 2 digits, eg 5.5555 = 5.56 .
+ans= (round(ans*100.0))/100.0
+----------------------------------------------------------------------------------------------------------------------------------------
+When you are dealing with doubles instead of writing ans= ans*100 write ans= ans*100.0
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
