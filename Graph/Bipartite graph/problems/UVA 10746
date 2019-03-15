@@ -1,0 +1,226 @@
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=49;
+const double inf=1e11;
+struct Edge
+{
+    int node,flow,cap;
+    double cost;
+    Edge(int a,int b,int c,double d)
+    {
+        node=a; flow=b; cap=c; cost=d;
+    }
+};
+double dist[N],phi[N];
+vector< vector<int> > g,g2;
+vector< Edge > ed;
+priority_queue< pair<double,int> ,vector<pair<double,int>> , greater< pair<double,int> > > pq;
+int n,m,p[N],re[N];
+int vis[N],in[N];
+void I()
+{
+    g.clear();
+    g.resize(N);
+    ed.clear();
+}
+void addedge(int f,int t,double cost,int cap)
+{
+    int siz=sz(ed);
+    g[f].pb(siz);
+    g[t].pb(siz+1);
+
+    ed.pb(Edge(t,0,cap,cost));
+    ed.pb(Edge(f,0,0,-cost));
+}
+void dijkstra(int S)
+{
+    for(int i=0;i<=n+m+1;i++)
+        dist[i]=inf;
+    clr(vis,0);
+    clr(p,-1);
+    pq.push(mp(0,S));
+    dist[S]=0;
+    while(!pq.empty())
+    {
+        int no=pq.top().second;
+        pq.pop();
+
+        if(vis[no])
+            continue;
+        vis[no]=1;
+
+        for(int i=0;i<sz(g[no]);i++)
+        {
+            int id=g[no][i];
+            int nw=ed[id].node;
+            double cost= ed[id].cost;
+            int cap=ed[id].cap;
+            int flow=ed[id].flow;
+            if(dcmp(dist[no],inf)>=0||cap-flow<=0)
+                continue;
+            double ncost= cost+phi[no]-phi[nw];
+
+            if(dcmp(dist[nw],dist[no]+ncost)>=0)
+            {
+
+                dist[nw]=dist[no]+ncost;
+                p[nw]=id;
+                pq.push(mp(dist[no]+ncost,nw));
+            }
+        }
+    }
+}
+void SPFA(int S)
+{
+    for(int i=0;i<=n+m+2;i++)
+        dist[i]=inf;
+    clr(in,0);
+    clr(re,0);
+    queue<int> q;
+    q.push(S);
+    in[S]=1;
+    dist[S]=0;
+
+    int Lim=(m+n+9)*4;
+    while(!q.empty())
+    {
+        int no=q.front();
+        q.pop();
+        in[no]=0;
+        if(re[no]>=Lim)
+            continue;
+        for(int i=0;i<sz(g[no]);i++)
+        {
+            int id=g[no][i];
+            int nw=ed[id].node;
+            double cost= ed[id].cost;
+            int cap=ed[id].cap;
+            int flow=ed[id].flow;
+
+            if(dcmp(dist[no],inf)>=0||(cap-flow)<=0)
+                continue;
+            if(dcmp(dist[nw],dist[no]+cost)>0)
+            {
+                dist[nw]=dist[no]+cost;
+                re[nw]++;
+                if(re[nw]>=Lim)
+                    ;
+                else if(in[nw]==0)
+                {
+                    in[nw]=1;
+                    q.push(nw);
+                }
+
+            }
+        }
+    }
+}
+double MCMF(int S,int T)
+{
+    int maxflow=0;
+    double mincost=0;
+    while(1)
+    {
+        dijkstra(S);
+
+        if(dcmp(dist[T],inf)>=0)
+            break;
+
+        for(int i=0;i<=n+m+1;i++)
+            phi[i]=min(dist[i]+phi[i],inf);
+        int bottelneak;
+        for(int i=T;i!=S;i=ed[p[i]^1].node)
+        {
+            int cap= ed[p[i]].cap;
+            int flow= ed[p[i]].flow;
+            bottelneak=min(bottelneak,cap-flow);
+        }
+        for(int i=T;i!=S;i=ed[p[i]^1].node)
+        {
+            double cost= ed[p[i]].cost;
+            ed[p[i]].flow+=bottelneak;
+            ed[p[i]^1].flow-=bottelneak;
+            mincost+= cost*bottelneak;
+        }
+        maxflow+=bottelneak;
+    }
+
+    return mincost;
+}
+int main()
+{
+    while(cin>>n>>m)
+    {
+        if(n==0&&m==0)
+            break;
+        I();
+        int source=0,sink=n+m+1;
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=m;j++)
+            {
+                double time;
+                cin>>time;
+                addedge(n+j,i,time,1);
+            }
+        }
+        for(int i=1;i<=m;i++)
+            addedge(source,n+i,0,1);
+        for(int i=1;i<=n;i++)
+            addedge(i,sink,0,1);
+
+        int Extra=n+m+2;
+        g2=g;
+        for(int i=0;i<=n+m+1;i++)
+            addedge(Extra,i,0,1);
+
+        SPFA(Extra);
+
+        for(int i=0;i<=n+m+1;i++)
+            phi[i]=dist[i];
+        g=g2;
+
+        double res=MCMF(source,sink);
+        double flowCost= res/(n+0.0);
+        flowCost = (round(flowCost*100.0))/100.0;
+        cout<<fixed<<setprecision(2)<<flowCost<<endl;
+    }
+}
+
+
