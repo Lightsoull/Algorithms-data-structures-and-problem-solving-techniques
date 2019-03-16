@@ -2,7 +2,8 @@ Sources
 1-http://e-maxx.ru/algo/assignment_hungary
 2-https://www.topcoder.com/community/data-science/data-science-tutorials/assignment-problem-and-hungarian-algorithm/
 3-(code) https://github.com/ADJA/algos/blob/master/Graphs/HungarianMatching.cpp
-
+-Problem
+used to get the min cost of the max bipartite matching.
 -Implementation Notes
 1- it works on N*M matrix called cost martix (a) where N are people and M are jobs, where a[i][j] = the cost for the ith person 
 to do the jth job, N is the left side and M is the right side.
