@@ -49,7 +49,10 @@ int main()
     for (int i = 1; i <= n; i++)
         for (int j = 1; j <= m; j++)
             scanf("%d", &a[i][j]);
-
+    clr(par,0);
+    clr(link,0);
+    clr(u,0);
+    clr(v,0);
     for (int i = 1; i <= n; i++)
     {
         for (int j = 0; j < MAXN; j++)
