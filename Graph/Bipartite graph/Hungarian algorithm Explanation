@@ -12,6 +12,26 @@ to do the jth job, N is the left side and M is the right side.
 5- if you want to do it with max cost just multiply all the weights with -1.
 -Complexity: O( N*N*M ) , where N <= M.
 
+Examples
+1- Given a bipartite graph, it is required to find in it a matching maximal matching of the minimum weight 
+(that is, the matching size is maximized first, its cost is minimized).
+To solve, we simply construct the assignment problem, putting the number "infinity" in place of the missing edges. 
+After that, we solve the problem with the Hungarian algorithm, and remove from the answer
+the edges of infinite weight (they could come in response if the problem has no solution in the form of a perfect matching).
+2- Can be used to get the MPC (min path cover) also or any application on MCBM, but put costs with zero. 
+3-The problem of potentials . Dana matrix a[1..n][1..m]. Required to find two arrays u[1..n] and v[1..m] such that 
+for any i and j executed u[i] + v[j] <= a[i][j], but the sum of the elements of arrays u[] and v[] is maximum.
+Knowing the Hungarian algorithm, the solution of this problem is not difficult: the Hungarian algorithm just finds the 
+potential u[], v[] that satisfies the condition of the problem. On the other hand, without knowledge of the Hungarian algorithm, 
+this problem seems almost impossible to solve.
+
+CODE details
+1- par[right]=left, is the match of the right side to the left side.
+2- matrix a is the cost matrix.
+3- u[] is the labeling for the left side and v[] is the labeling for the right side , that u[i]+v[j] = a[i][j].
+4- link[right] stores the previous node in the right side that is matched before the current right side node.
+5- the second do-while loop just alternate the augmenting path.
+
 CODE
 ----
 const int MAXN = 105;
@@ -66,7 +86,7 @@ int main()
                 }
             j_cur = j_next;
         }while (par[j_cur]);
-
+       
         do
         {
             int j_prev = link[j_cur];
