@@ -322,3 +322,25 @@ int main()
 
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
+Applications
+- Used to solve the MCBM(Max Cardinality Bipartite Matching) with min cost.
+Implemenation
+1- add 2 extra nodes, one for source and other for sink.
+2- connect the source with the left side of bipartite with capcity one and cost zero.
+3- connect the right side to the sink with capcity one and cost zero.
+4- then get the min cost max flow normally.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
