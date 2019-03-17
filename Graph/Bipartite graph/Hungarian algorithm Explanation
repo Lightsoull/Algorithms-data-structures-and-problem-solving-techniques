@@ -19,12 +19,16 @@ Examples
 To solve, we simply construct the assignment problem, putting the number "infinity" in place of the missing edges. 
 After that, we solve the problem with the Hungarian algorithm, and remove from the answer
 the edges of infinite weight (they could come in response if the problem has no solution in the form of a perfect matching).
+
 2- Can be used to get the MPC (min path cover) also or any application on MCBM, but put costs with zero. 
+
 3-The problem of potentials . Dana matrix a[1..n][1..m]. Required to find two arrays u[1..n] and v[1..m] such that 
 for any i and j executed u[i] + v[j] <= a[i][j], but the sum of the elements of arrays u[] and v[] is maximum.
 Knowing the Hungarian algorithm, the solution of this problem is not difficult: the Hungarian algorithm just finds the 
 potential u[], v[] that satisfies the condition of the problem. On the other hand, without knowledge of the Hungarian algorithm, 
-this problem seems almost impossible to solve.
+this problem seems almost impossible to solve, so
+for u[i] + v[j] <= a[i][j] : just do max matching with min cost and the values in u,v or lx,ly will be the answer.
+for u[i] + v[j] >= a[i][j] : just do max matching with max cost and the values in u,v or lx,ly will be the answer.
 --------------------------------------------------------------------------------------------------------------------------------------
 CODE details
 1- par[right]=left, is the match of the right side to the left side.
