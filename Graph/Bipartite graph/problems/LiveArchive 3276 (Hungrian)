@@ -1,0 +1,229 @@
+/*
+Explanation: i will assume that i will gather them at ith row or jth column or at the right diagonal or left diagonal then i will 
+try to move all the n stones to any cell in the choosen row or column or diagonal and to do so i will get the min distance between 
+every stone and the jth cell in the ith row for example and i will set an edge from the ith stone in the left side to the jth cell
+in the right side with the shortest distance and make MCBM (weighted) by Hungrian algorithm and minmize.
+*/
+
+
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=20;
+const int inf=100000000;
+int n;
+int a[N][N],id,dist[N][N][N][N],vis[N][N],u[N],v[N],par[N],link[N],R[N],C[N],mival[N],mb[N][N];
+int dr[]={0,1,0,-1};
+int dc[]={1,0,-1,0};
+bool used[N];
+
+bool V(int r,int c)
+{
+    return (r>=1&&r<=n&&c>=1&&c<=n);
+}
+void bfs(int sr,int sc)
+{
+    for(int i=0;i<=n;i++)
+    {
+        for(int j=0;j<=n;j++)
+            dist[sr][sc][i][j]=inf,vis[i][j]=0;
+    }
+    queue<pair<int,int> > q;
+    q.push(mp(sr,sc));
+    dist[sr][sc][sr][sc]=0;
+    vis[sr][sc]=1;
+
+    while(!q.empty())
+    {
+        int r=q.front().first;
+        int c=q.front().second;
+        q.pop();
+        for(int i=0;i<4;i++)
+        {
+            int nr=r+dr[i]; int nc=c+dc[i];
+            if(!V(nr,nc)||vis[nr][nc])
+                continue;
+            vis[nr][nc]=1;
+            dist[sr][sc][nr][nc]=dist[sr][sc][r][c]+1;
+            q.push(mp(nr,nc));
+        }
+
+    }
+}
+int Hungrian()
+{
+    clr(par,0);
+    clr(link,0);
+    clr(u,0);
+    clr(v,0);
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=0;j<=n;j++)
+        {
+            used[j]=0;
+            mival[j]=inf;
+        }
+        int j_cur=0;
+        par[j_cur]=i;
+
+        do
+        {
+            used[j_cur]=1;
+            int delta=inf,j_next,i_cur=par[j_cur];
+            for(int j=0;j<=n;j++)
+            {
+                if(!used[j])
+                {
+                    int cur= a[i_cur][j]-u[i_cur]-v[j];
+
+                    if(mival[j]>cur)
+                    {
+                        mival[j]=cur;  link[j]=j_cur;
+                    }
+                    if(mival[j]<delta)
+                    {
+                        delta=mival[j]; j_next=j;
+                    }
+                }
+            }
+
+            for(int j=0;j<=n;j++)
+            {
+                if(used[j])
+                {
+                    u[par[j]]+=delta; v[j]-=delta;
+                }
+                else
+                {
+                    mival[j]-=delta;
+                }
+            }
+            j_cur=j_next;
+        }while(par[j_cur]);
+
+            do
+            {
+                int j_prev=link[j_cur];
+                par[j_cur]=par[j_prev];
+                j_cur=j_prev;
+            }while(j_cur>0);
+        }
+
+    return -v[0];
+}
+int solve()
+{
+    int mi=inf;
+    // ith row
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            int fr=mb[R[j]][C[j]];
+
+            for(int k=1;k<=n;k++)
+            {
+                a[fr][k]=dist[R[j]][C[j]][i][k];
+            }
+        }
+
+        mi=min(mi,Hungrian());
+
+    }
+    // ith column
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            int fr=mb[R[j]][C[j]];
+            for(int k=1;k<=n;k++)
+            {
+                a[fr][k]=dist[R[j]][C[j]][k][i];
+            }
+        }
+
+        mi=min(mi,Hungrian());
+    }
+    // left diagonal (1,1),(2,2)...
+    for(int i=0;i<n;i++)
+    {
+        int fr=mb[R[i]][C[i]];
+
+        for(int j=1;j<=n;j++)
+        {
+            a[fr][j]=dist[R[i]][C[i]][j][j];
+        }
+    }
+     mi=min(mi,Hungrian());
+
+    // right diagonal
+     for(int i=0;i<n;i++)
+    {
+        int fr=mb[R[i]][C[i]];
+
+        for(int j=n;j>=1;j--)
+        {
+            a[fr][j]=dist[R[i]][C[i]][n-j+1][j];
+        }
+    }
+     mi=min(mi,Hungrian());
+    return mi;
+}
+int main()
+{
+    int cs=1;
+    while(cin>>n)
+    {
+        if(n==0)
+            break;
+        id=1;
+        for(int i=0;i<n;i++)
+        {
+            cin>>R[i]>>C[i];
+            mb[R[i]][C[i]]=id++;
+        }
+
+        for(int i=0;i<n;i++)
+        {
+            bfs(R[i],C[i]);
+        }
+
+        cout<<"Board "<<cs++<<": "<<solve()<<" moves required."<<endl<<endl;
+
+    }
+}
