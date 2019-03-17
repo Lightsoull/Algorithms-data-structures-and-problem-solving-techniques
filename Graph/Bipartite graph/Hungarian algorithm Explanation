@@ -32,7 +32,7 @@ CODE details
 3- u[] is the labeling for the left side and v[] is the labeling for the right side , that u[i]+v[j] = a[i][j].
 4- link[right] stores the previous node in the right side that is matched before the current right side node.
 5- the second do-while loop just alternate the augmenting path.
-
+6- Take Care the n must be <= m.
 CODE For Max Matching with min cost
 -----------------------------------
 const int MAXN = 105;
