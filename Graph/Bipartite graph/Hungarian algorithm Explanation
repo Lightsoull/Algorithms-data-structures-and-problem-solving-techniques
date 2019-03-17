@@ -33,8 +33,8 @@ CODE details
 4- link[right] stores the previous node in the right side that is matched before the current right side node.
 5- the second do-while loop just alternate the augmenting path.
 
-CODE
-----
+CODE For Max Matching with min cost
+-----------------------------------
 const int MAXN = 105;
 const int INF = 1000 * 1000 * 1000;
 
@@ -106,3 +106,123 @@ int main()
          matchings.pb(mp(par[i],i));
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
+CODE For Max Matching with max cost
+-----------------------------------
+const int N=109;
+const int inf=100000000;
+int n,m;
+int a[N][N],id,u[N],v[N],par[N],link[N],mival[N];
+bool used[N];
+void I()
+{
+    for(int i=0;i<N;i++)
+    {
+        for(int j=0;j<N;j++)
+        {
+            a[i][j]=inf;
+        }
+    }
+}
+int Hungrian()
+{
+
+    clr(par,0);
+    clr(link,0);
+    clr(u,0);
+    clr(v,0);
+
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=0;j<=m;j++)
+        {
+            used[j]=0;
+            mival[j]=inf;
+        }
+        int j_cur=0;
+        par[j_cur]=i;
+
+        do
+        {
+            used[j_cur]=1;
+            int delta=inf,j_next,i_cur=par[j_cur];
+            for(int j=0;j<=m;j++)
+            {
+                if(!used[j])
+                {
+                    int cur= a[i_cur][j]-u[i_cur]-v[j];
+
+                    if(mival[j]>cur)
+                    {
+                        mival[j]=cur;  link[j]=j_cur;
+                    }
+                    if(mival[j]<delta)
+                    {
+                        delta=mival[j]; j_next=j;
+                    }
+                }
+            }
+
+            for(int j=0;j<=m;j++)
+            {
+                if(used[j])
+                {
+                    u[par[j]]+=delta; v[j]-=delta;
+                }
+                else
+                {
+                    mival[j]-=delta;
+                }
+            }
+            j_cur=j_next;
+        }while(par[j_cur]>0);
+
+
+            do
+            {
+                int j_prev=link[j_cur];
+                par[j_cur]=par[j_prev];
+                j_cur=j_prev;
+            }while(j_cur>0);
+     }
+
+    return -v[0];
+}
+int main()
+{
+    cin>>n>>m;
+    int fl=0;
+    if(n>m)
+    {
+        fl=1;
+        swap(n,m);
+    }
+    I();
+    while(1)
+    {
+        int f,t,c;
+        cin>>f>>t>>c;
+        if(f==0&&t==0&&c==0)
+            break;
+        if(fl==0)
+        a[f][t]=-c;
+        else
+        a[t][f]=-c;
+    }
+    cout<<-Hungrian()<<endl;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
