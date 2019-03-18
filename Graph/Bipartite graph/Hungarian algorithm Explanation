@@ -382,6 +382,208 @@ int main()
 	return 0;
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
+-The Faster Hungrian algorithm for max matching min cost.
+1- just put the weights multiplied with -1 and multiply the final answer with -1, but take care the edges that is not found put them
+with -inf noramly.
+CODE
+----
+const int MAX=109;
+const int inf=100000000;
+int r,n,lx[MAX],ly[MAX],max_match,slack[MAX],slackx[MAX],cost[MAX][MAX],pre[MAX],xy[MAX],yx[MAX],rx[MAX],ry[MAX]
+,hx[MAX],hy[MAX];
+bool T[MAX],S[MAX];
+void I(int n)
+{
+    for(int i=0;i<=n;i++)
+    {
+        for(int j=0;j<=n;j++)
+        {
+            cost[i][j]=-inf;
+        }
+    }
+}
+void intial_labels()
+{
+    clr(lx,0);
+    clr(ly,0);
+    for(int x=1;x<=n;x++)
+    {
+        for(int y=1;y<=n;y++)
+        {
+            lx[x]=max(lx[x],cost[x][y]);
+        }
+    }
+}
+void update_labels()
+{
+    int delta=INT_MAX;
+    for(int y=1;y<=n;y++)
+    {
+        if(T[y]==0)
+        delta=min(delta,slack[y]);
+    }
+    for(int x=1;x<=n;x++)
+    {
+        if(S[x]==1)
+            lx[x]-=delta;
+    }
+    for(int y=1;y<=n;y++)
+    {
+        if(T[y]==1)
+            ly[y]+=delta;
+    }
+    for(int y=1;y<=n;y++)
+    {
+        if(T[y]==0)
+            slack[y]-=delta;
+    }
+}
+void add_to_tree(int x,int prex)
+{
+    S[x]=1;
+    pre[x]=prex;
+
+    for(int y=1;y<=n;y++)
+    {
+        if(lx[x]+ly[y]-cost[x][y]<slack[y])
+        {
+            slack[y]=lx[x]+ly[y]-cost[x][y];
+            slackx[y]=x;
+        }
+    }
+}
+int q[MAX],tail,head;
+void augment()
+{
+    int x,y,root;
+    head=tail=0;
+    clr(S,0);
+    clr(T,0);
+    clr(pre,-1);
+
+    for(x=1;x<=n;x++)
+    {
+        if(xy[x]==-1)
+        {
+            q[tail++]=root=x;
+            pre[root]=-2;
+            S[root]=1;
+            break;
+        }
+    }
+
+    for(y=1;y<=n;y++)
+    {
+        slack[y]=lx[root]+ly[y]-cost[root][y];
+        slackx[y]=root;
+    }
+
+    while(1)
+    {
+        while(head<tail)
+        {
+            x=q[head++];
+            for(y=1;y<=n;y++)
+            {
+                if(cost[x][y]==lx[x]+ly[y]&&T[y]==0)
+                {
+                    if(yx[y]==-1)
+                        break;
+                    T[y]=1;
+                    q[tail++]=yx[y];
+                    add_to_tree(yx[y],x);
+                }
+            }
+            if(y<n+1)
+                break;
+        }
+        if(y<n+1)
+            break;
+        update_labels();
+        head=tail=0;
+
+        for(y=1;y<=n;y++)
+        {
+            if(T[y]==0&&slack[y]==0)
+            {
+                if(yx[y]==-1)
+                {
+                    x=slackx[y];
+                    break;
+                }
+                T[y]=1;
+
+                if(S[yx[y]]==0)
+                {
+                    q[tail++]=yx[y];
+                    add_to_tree(yx[y],slackx[y]);
+                }
+            }
+        }
+        if(y<n+1)
+            break;
+    }
+
+    if(y<n+1)
+    {
+        max_match++;
+        for(int cx=x,cy=y,ty;cx!=-2;cx=pre[cx],cy=ty)
+        {
+            ty=xy[cx];
+            yx[cy]=cx;
+            xy[cx]=cy;
+        }
+    }
+}
+int Hungrian()
+{
+    int ret=0;
+    max_match=0;
+    clr(xy,-1);
+    clr(yx,-1);
+
+    intial_labels();
+    for(int i=1;i<=n;i++)
+        augment();
+    for(int x=1;x<=n;x++)
+    {
+        if(xy[x]!=-1&&cost[x][xy[x]]!=-inf)
+        {
+            ret+= cost[x][xy[x]];
+        }
+    }
+    return ret;
+}
+int main()
+{
+    int r,h;
+    while(cin>>r>>h)
+    {
+        for(int i=1;i<=r;i++)
+        {
+            cin>>rx[i]>>ry[i];
+        }
+        for(int i=1;i<=h;i++)
+        {
+            cin>>hx[i]>>hy[i];
+        }
+
+        n=max(r,h);
+        I(n);
+        for(int i=1;i<=r;i++)
+        {
+            for(int j=1;j<=h;j++)
+            {
+                int dist= abs(hx[j]-rx[i])+abs(hy[j]-ry[i]);
+                cost[i][j]=-dist;
+            }
+        }
+
+        cout<<-Hungrian()<<endl;
+    }
+
+}
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
