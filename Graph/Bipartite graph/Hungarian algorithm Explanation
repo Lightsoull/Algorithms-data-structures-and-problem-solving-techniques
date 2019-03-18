@@ -264,7 +264,7 @@ void add_to_tree(int x, int prevx)
 	S[x] = true;
 	pre[x] = prevx;
 	for(int y = 0;y<V;++y)
-    {
+        {
 		if(lx[x]+ly[y]-cost[x][y]<slack[y])
 		{
 			slack[y] = lx[x]+ly[y]-cost[x][y];
@@ -283,7 +283,7 @@ void augment()
 	for(x = 0;x<V;++x)
 	{
 		if(xy[x]==-1)
-        {
+                {
 			q[tail++] = root = x;
 			pre[root] = -2;
 			S[root] = true;
@@ -291,20 +291,20 @@ void augment()
 		}
 	}
 	for(y = 0;y<V;++y)
-    {
+        {
 		slack[y] = lx[root]+ly[y]-cost[root][y];
 		slackx[y] = root;
 	}
 	while(true)
 	{
 		while(head<tail)
-        {
+                {
 			x = q[head++];
  
 			for(y = 0;y<V;++y)
 			{
 				if(cost[x][y]==lx[x]+ly[y] && !T[y])
-                {
+                                {
 					if(yx[y]==-1) break;
  
 					T[y] = true;
@@ -321,7 +321,7 @@ void augment()
 		for(y = 0;y<V;++y)
 		{
 			if(!T[y] && slack[y]==0)
-            {
+                        {
 				if(yx[y]==-1)
 				{
 					x = slackx[y];
@@ -331,7 +331,7 @@ void augment()
 				T[y] = true;
  
 				if(!S[yx[y]])
-                {
+                                {
 					q[tail++] = yx[y];
 					add_to_tree(yx[y],slackx[y]);
 				}
@@ -341,10 +341,10 @@ void augment()
 		if(y<V) break;
 	}
 	if(y<V)
-    {
+        {
 	  ++max_match;
 	  for(int cx = x,cy = y,ty;cx!=-2;cx = pre[cx],cy = ty)
-      {
+          {
 		ty = xy[cx];
 		yx[cy] = cx;
 		xy[cx] = cy;
@@ -371,7 +371,7 @@ int hungarian()
 int main()
 {
 	while(scanf("%d",&V)==1)
-    {
+        {
 		for(int i = 0;i<V;++i)
 			for(int j = 0;j<V;++j)
 				scanf("%d",&cost[i][j]);
