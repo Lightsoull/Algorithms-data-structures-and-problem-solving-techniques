@@ -1,0 +1,23 @@
+-Problem: you are given an array of length n and want the max indepentant conscutive ranges that has a sum S.
+Greedy Solution
+1- get all the ranges that have this sum in n^2.
+2- sort all the ranges by their right side increaseingly take the one with the smallest right side and its left side not in a previous 
+taken range.
+
+// seg is the ranges that has the sum S pair< left side, right side >.
+// note seg is sorted by its right side.
+// now is the ranges that i will take.
+// cur is the number of the ranges.
+CODE
+----
+int cur = 0;
+int r = -1;
+vector<pair<int,int>> now;
+for (auto seg: pp)
+    if (seg.first > r) 
+    {
+        cur++;
+        now.push_back(seg);
+        r = seg.second;
+    }
+-------------------------------------------------------------------------------------------------------------------------------------------
