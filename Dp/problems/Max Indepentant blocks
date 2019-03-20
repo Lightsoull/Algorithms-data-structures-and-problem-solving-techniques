@@ -1,0 +1,31 @@
+-Problem: you are given an array of length n and want the max indepentant conscutive ranges that has a sum S.
+-Solution :
+1- get all the ranges that equal to the sum S in n^2.
+2- you can get the max independant ranges by memorization
+whether to choose to take this range or not and if yes then lower_bound on a pair of range where its left greater than your current
+right by 1 and its left is -1 and that will be your next range to move to.
+
+CODE
+----
+int solve(int id)
+{
+      int &ret=mem[id];
+    if(ret!=-1)
+        return ret;
+
+    if(id==sz(v1))
+        return ret=0;
+
+    int fr=v1[id].first;
+    int to=v1[id].second;
+
+    int ans=0;
+
+    int next=lower_bound(all(v1),mp(to+1,-1))-v1.begin();
+
+    ans=max(ans,1+solve(next));
+    ans=max(ans,solve(id+1));
+
+    return ret=ans;
+}
+------------------------------------------------------------------------------------------------------------------------------------------
