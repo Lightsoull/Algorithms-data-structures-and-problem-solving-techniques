@@ -425,7 +425,9 @@ ans= (round(ans*100.0))/100.0
 ----------------------------------------------------------------------------------------------------------------------------------------
 When you are dealing with doubles instead of writing ans= ans*100 write ans= ans*100.0
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+-Take care if you have a matrix nxm and you want to take all the diagonals start from each row and move (r-1,c+1) where r for 
+rows and c for columns and start from column number two at last from to column number m.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
