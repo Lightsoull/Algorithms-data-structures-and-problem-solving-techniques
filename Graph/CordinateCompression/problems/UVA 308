@@ -1,3 +1,8 @@
+/*
+Implemenation Notes:
+1- when you compress the intervals use step of two not one, bec if you used a step of one the hole inside may be can't expressed
+for example if the rectangle is 1x1 so here if the step equals to one there will be no hole.
+*/
 #include<bits/stdc++.h>
 using namespace std;
 #define endl '\n'
