@@ -1,0 +1,144 @@
+/*
+Explanation: i will do coordinate compression bec the coordinates can be very large but here the coordinates are xy-plane so i will
+express it in a grid (by taking the start and not taking the end point) and then for each rectangle i will mark its cells in
+grid array by one and then do dfs from a cell in th main rectangle and all the visited cells are considered among the main island
+so i will need to calculate their area.
+*/
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=409;
+int vis[N][N],X,Y,grid[N][N];
+int dx[]={0,1,0,-1};
+int dy[]={1,0,-1,0};
+bool V(int x,int y)
+{
+    return (x>=0&&x<X&&y>=0&&y<Y);
+}
+void dfs(int x,int y)
+{
+   // cout<<x<<" "<<y<<endl;
+    vis[x][y]=1;
+    for(int i=0;i<4;i++)
+    {
+        int nx= x+dx[i],ny=y+dy[i];
+        if(!V(nx,ny)||vis[nx][ny])
+            continue;
+        if(grid[nx][ny]!=1)
+            continue;
+        dfs(nx,ny);
+    }
+}
+int main()
+{
+    int T;
+    cin>>T;
+    int in=0;
+    while(T--)
+    {
+        if(in)
+            cout<<endl;
+        in=1;
+        int n;
+        cin>>n;
+        set<ll> sx,sy;
+        int mainx,mainy;
+        ll x1[N],x2[N],y1[N],y2[N];
+        for(int i=0;i<n;i++)
+        {
+            cin>>x1[i]>>y1[i]>>x2[i]>>y2[i];
+            if(i==0)
+            {
+                mainx=x1[i]; mainy=y1[i];
+            }
+            sx.insert(x1[i]);
+            sx.insert(x2[i]);
+            sy.insert(y1[i]);
+            sy.insert(y2[i]);
+        }
+        X=0;
+        map<ll,int> mx,my;
+        ll ix[409],iy[409];
+        for(auto it=sx.begin();it!=sx.end();it++)
+        {
+            mx[(*it)]=X;
+            ix[X]=(*it);
+            X++;
+
+        }
+        Y=0;
+        for(auto it=sy.begin();it!=sy.end();it++)
+        {
+            my[(*it)]=Y;
+            iy[Y]=(*it);
+            Y++;
+        }
+        clr(grid,0);
+        for(int i=0;i<n;i++)
+        {
+            int strx= mx[x1[i]];
+            int enx= mx[x2[i]];
+            int stry= my[y1[i]];
+            int eny= my[y2[i]];
+            for(int j=strx;j<enx;j++)
+            {
+                for(int k=stry;k<eny;k++)
+                {
+                    grid[j][k]=1;
+                }
+            }
+        }
+        clr(vis,0);
+        dfs(mx[mainx],my[mainy]);
+        ll ans=0;
+        for(int i=0;i<X-1;i++)
+        {
+            for(int j=0;j<Y-1;j++)
+            {
+                if(vis[i][j]==0)
+                    continue;
+                ll area= (ix[i+1]-ix[i])*(iy[j+1]-iy[j]);
+                ans+= area;
+            }
+        }
+
+        cout<<ans<<endl;
+    }
+}
+
+
