@@ -1,0 +1,162 @@
+/*
+Explanation: first of all i will do co-ordinate compression but not as a cells in a grid but as a co-ordinates int XY-plane
+so that's why i will the start will be start-1 and the end will be end+1, and then i will colour all the connected components
+that don't pass through walls by a colour and then calculate the area of each colour here the area of each colour will be the 
+sum of area of each cell with that colour and the area of each cell will be 
+for ( i = 1; i < X; ++i )
+			for ( j = 1; j < Y; ++j )
+				card[col[i][j]] += (ix[i]-ix[i-1])*(iy[j]-iy[j-1])
+and then for each query binary search on the position of the cell that belongs to it and out put the area of its colour.
+*/
+#include <cassert>
+#include <iostream>
+#include <algorithm>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+#include <map>
+#include <set>
+#define MAXR 10000
+using namespace std;
+typedef long long ll;
+#define vc(x,y) (1<=(x)&&(x)<X&&1<=(y)&&(y)<Y)
+const int N=409;
+int compartments,queries,X,Y,col[N][N],scc,
+    dx[]={-1,0,1,0},
+	dy[]={0,1,0,-1};
+ll xx[9],yy[9],rr[9],ix[N],iy[N],
+	qx[N],qy[N],card[N];
+set<ll> sx,sy;
+map<ll,int> mx,my;
+
+
+
+void dfs( int x, int y )
+{
+	int i,j,nx,ny;
+	for ( col[x][y] = scc, i = 0; i < 4; ++i )
+    {
+		nx = x+dx[i], ny = y+dy[i];
+		if ( !vc(nx,ny) )
+			continue ;
+
+		for ( j = 0; j < compartments-1; ++j )
+        {
+			if ( nx == x && mx[xx[j]] < nx && nx <= mx[xx[j]+rr[j]] )
+			{
+				if ( (y<=my[yy[j]] && my[yy[j]]<ny)||(ny<=my[yy[j]] && my[yy[j]]<y) )
+				{
+					goto next;
+				}
+			}
+
+			if ( nx == x && mx[xx[j]] < nx && nx <= mx[xx[j]+rr[j]] )
+			{
+				if ( (y<=my[yy[j]+rr[j]] && my[yy[j]+rr[j]]<ny)||(ny<=my[yy[j]+rr[j]] && my[yy[j]+rr[j]]<y) )
+                {
+					goto next;
+				}
+			}
+
+			if ( ny == y && my[yy[j]] < ny && ny <= my[yy[j]+rr[j]] )
+			{
+				if ( (x<=mx[xx[j]] && mx[xx[j]]<nx)||(nx<=mx[xx[j]] && mx[xx[j]]<x) )
+				{
+					goto next;
+				}
+			}
+			if ( ny == y && my[yy[j]] < ny && ny <= my[yy[j]+rr[j]] )
+			{
+				if ( (x<=mx[xx[j]+rr[j]] && mx[xx[j]+rr[j]]<nx)||(nx<=mx[xx[j]+rr[j]] && mx[xx[j]+rr[j]]<x))
+				{
+					goto next;
+				}
+			}
+		}
+
+		if ( !col[nx][ny] )
+		   dfs(nx,ny);
+		next: continue ;
+	}
+}
+
+int main()
+{
+	int i,j,k,l,t,low,high,mid,ii,jj,cs = 0;
+
+	for (;1 == scanf("%d",&compartments) && compartments;)
+    {
+		for ( sx.clear(), sy.clear(), i = 0; i < compartments; ++i )
+		{
+			scanf("%lld %lld %lld",&xx[i],&yy[i],&rr[i]);
+			sx.insert(--xx[i]), sy.insert(--yy[i]);
+			sx.insert(xx[i]+rr[i]), sy.insert(yy[i]+rr[i]);
+		}
+		i = compartments;
+		xx[i] = 0, yy[i] = 0, rr[i] = MAXR, ++compartments;
+		sx.insert(xx[i]), sy.insert(yy[i]);
+		sx.insert(xx[i]+rr[i]), sy.insert(yy[i]+rr[i]);
+
+		for ( scanf("%d",&queries), k = 0; k < queries; ++k )
+        {
+			scanf("%d %d",&i,&j), qx[k] = i, qy[k] = j;
+			i = max(i,1), j = max(j,1);
+			i = min(i,MAXR), j = min(j,MAXR);
+			qx[k] = i, qy[k] = j;
+		}
+
+		mx.clear(), my.clear(), X = Y = 0;
+		for ( set<ll>::iterator it = sx.begin(); it != sx.end(); ++it )
+			ix[mx[*it] = X++] = *it;
+		for ( set<ll>::iterator it = sy.begin(); it != sy.end(); ++it )
+			iy[my[*it] = Y++] = *it;
+
+		for ( i = 0; i < X; ++i )
+			for ( j = 0; j < Y; ++j )
+				col[i][j] = 0;
+
+		for ( scc = 0, i = 0; i < X; ++i )
+			for ( j = 0; j < Y; ++j )
+				if ( !col[i][j] )
+                {
+					card[++scc] = 0, dfs(i,j);
+				}
+
+		for ( i = 1; i < X; ++i )
+			for ( j = 1; j < Y; ++j )
+				card[col[i][j]] += (ix[i]-ix[i-1])*(iy[j]-iy[j-1]);
+
+		printf("Case %d:\n",++cs);
+
+		for ( k = 0; k < queries; ++k )
+        {
+			i = qx[k], j = qy[k];
+			low = 0, high = X-1;
+
+			while ( low<=high )
+			{
+				mid = (low+high)/2;
+				if ( ix[mid] < i )
+					low = mid+1;
+				else
+                    high = mid-1,ii=mid;
+			}
+			low = 0, high = Y-1;
+
+			while ( low<= high )
+			{
+				mid = (low+high)/2;
+
+				if ( iy[mid] < j )
+					low = mid+1;
+				else
+                    high = mid-1,jj=mid;
+
+			}
+
+			printf("%lld\n",card[col[ii][jj]]);
+		}
+	}
+	return 0;
+}
