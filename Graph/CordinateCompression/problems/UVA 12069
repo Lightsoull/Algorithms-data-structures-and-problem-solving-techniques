@@ -1,0 +1,232 @@
+/*
+Explantion:
+first you can compress the plane and express it in 2d grid, but take care
+1- while compressing there might be two X-axis one with 10 and other with 20 when you compress the values the 10 will be 0 
+and the 20 will be 1 so in the grid it will be two adjacent cells which means there is no way between them which is not true
+(actually this result can be when you over compress you have to compress till there will be a at least a way between any two cells
+that have a way at the orginal co-ordinate), that's why when i am compressing every two nodes that is not adjacent to each other at the
+orginal coordinate i put their ids to differ by more than one and the ones that are adjacent can be adjacent in the compressed grid too
+that's the way you can compress by to make sure that there is no path can be blocked.
+
+2- from XY coordinate to grid cells: put an assumption and follow it for example here i assume that the grid is zero based and 
+coordinate (1,1) is the buttom left corner of the cell (1,1).
+
+3- bfs/dijkstra when there is directions for a node the direction must be included in the state.
+
+4- Take care of the inf coordinate you have to set some boundry of this inf grid. eg (0,0) to (10^8,10^8).
+*/
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+int countNumBit1(int mask) {int ret=0; while (mask)     {mask &= (mask-1);++ret;    }return ret;}
+const int N=4*59;
+typedef pair<int,pair<pair<int,int>,int>> piiii;
+int grid[N][N],MX,MY,dist[N][N][5];
+int vis[N][N][5];
+const int inf=INT_MAX;
+int dx[]={0,1,0,-1};
+int dy[]={1,0,-1,0};
+map<int,int> mx,my;
+int lx[59],ly[59],rx[59],ry[59];
+vector<int> X,Y;
+void I()
+{
+    X.clear();
+    Y.clear();
+}
+bool V(int x,int y)
+{
+    return (x>=0&&x<MX&&y>=0&&y<MY);
+}
+int bfs(int sx,int sy,int ex,int ey)
+{
+    for(int i=0;i<MX;i++)
+        for(int j=0;j<MY;j++)
+            for(int k=0;k<=4;k++)
+              dist[i][j][k]=inf;
+
+    priority_queue<piiii,vector<piiii >,greater<piiii> > pq;
+    clr(vis,0);
+    pq.push(mp(0,mp(mp(sx,sy),0)));
+    dist[sx][sy][0]=0;
+
+    while(!pq.empty())
+    {
+        int cx=pq.top().second.first.first;
+        int cy=pq.top().second.first.second;
+        int pre=pq.top().second.second;
+        pq.pop();
+        if(vis[cx][cy][pre])
+            continue;
+        vis[cx][cy][pre]=1;
+        if(cx==ex&&cy==ey)
+        {
+            return dist[cx][cy][pre];
+        }
+        for(int i=1;i<=4;i++)
+        {
+            int nx=cx+dx[i-1];
+            int ny=cy+dy[i-1];
+            if(!V(nx,ny))
+                continue;
+            if(grid[nx][ny]==1)
+                continue;
+            if(dist[cx][cy][pre]>=inf)
+                continue;
+            int add=1;
+            if(pre==0||pre==i)
+                add=0;
+            if(dist[nx][ny][i]>dist[cx][cy][pre]+add)
+            {
+                dist[nx][ny][i]=dist[cx][cy][pre]+add;
+                pq.push(mp(dist[cx][cy][pre]+add,mp(mp(nx,ny),i)));
+            }
+        }
+    }
+
+  return -1;
+}
+void build(int n)
+{
+
+       mx.clear();
+       my.clear();
+       X.pb(0);
+       X.pb(200000000);
+       Y.pb(0);
+       Y.pb(200000000);
+
+       for(int i=0;i<n;i++)
+       {
+           X.pb(lx[i]); X.pb(rx[i]);
+           Y.pb(ly[i]); Y.pb(ry[i]);
+       }
+
+       sort(all(X));
+       sort(all(Y));
+       X.resize(unique(X.begin(), X.end()) - X.begin());
+	   Y.resize(unique(Y.begin(), Y.end()) - Y.begin());
+
+       MX=0;
+       for(int i=0;i<sz(X);i++)
+       {
+           if(i==0)
+           {
+               mx[X[i]]=MX++;
+           }
+           else if(X[i]==X[i-1]+1)
+           {
+               mx[X[i]]=MX++;
+           }
+           else
+           {
+               mx[X[i]]=MX+1;
+               MX+=2;
+           }
+       }
+       MY=0;
+       for(int i=0;i<sz(Y);i++)
+       {
+           if(i==0)
+           {
+               my[Y[i]]=MY++;
+           }
+           else if(Y[i]==Y[i-1]+1)
+           {
+               my[Y[i]]=MY++;
+           }
+           else
+           {
+               my[Y[i]]=MY+1;
+               MY+=2;
+           }
+       }
+       clr(grid,0);
+       for(int i=0;i<n;i++)
+       {
+           for(int j=mx[lx[i]];j<mx[rx[i]];j++)
+            grid[j][my[ly[i]]]=grid[j][my[ry[i]]]=1;  
+
+           for(int j=my[ly[i]];j<my[ry[i]];j++)
+            grid[mx[lx[i]]][j]=grid[mx[rx[i]]][j]=1;  
+       }
+}
+int main()
+{
+    int T,cs=1;
+    cin>>T;
+    while(T--)
+    {
+       I();
+       int n;
+       cin>>n;
+       for(int i=0;i<n;i++)
+       {
+           cin>>lx[i]>>ly[i]>>rx[i]>>ry[i];
+
+       }
+
+       int q;
+       cin>>q;
+       cout<<"Labyrinth #"<<cs++<<endl;
+       while(q--)
+       {
+           int sx,sy,ex,ey;
+           cin>>sx>>sy>>ex>>ey;
+           X.clear(); Y.clear();
+
+           X.pb(sx); X.pb(ex);
+           Y.pb(sy); Y.pb(ey);
+
+           build(n);
+           int csx=mx[sx], csy=my[sy], cex=mx[ex], cey=my[ey];
+
+           int ret=bfs(csx,csy,cex,cey);
+           if(ret==-1)
+           {
+               cout<<"Impossible.\n";
+           }
+           else
+           {
+               cout<<ret<<endl;
+           }
+
+
+       }
+
+    }
+}
