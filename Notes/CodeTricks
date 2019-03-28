@@ -428,7 +428,10 @@ When you are dealing with doubles instead of writing ans= ans*100 write ans= ans
 -Take care if you have a matrix nxm and you want to take all the diagonals start from each row and move (r-1,c+1) where r for 
 rows and c for columns and start from column number two at last from to column number m.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+When you are uniqe a vector it is better to use resize than erase bec erase may cause RTE if unique iterator is vec.end().
+sort(all(vec));
+vec.resize(unique(all(vec))-vec.begin());
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
