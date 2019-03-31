@@ -1,0 +1,122 @@
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+
+int main()
+{
+    int n;
+    while(cin>>n)
+    {
+        if(n==0)
+            break;
+        int w,h;
+        cin>>w>>h;
+        map<int,int> mx,my;
+        int xl[109],xr[109],yl[109],yr[109],ix[209],iy[209];
+        mx[0]=0;
+        my[0]=0;
+        mx[w]=0;
+        my[h]=0;
+        for(int i=0;i<n;i++)
+        {
+            cin>>xl[i]>>yl[i]>>xr[i]>>yr[i];
+            mx[xl[i]]=0;
+            mx[xr[i]]=0;
+
+            my[yl[i]]=0;
+            my[yr[i]]=0;
+        }
+        int X=0;
+        for(auto it=mx.begin();it!=mx.end();it++)
+        {
+            (*it).second=X;
+            ix[X]=(*it).first;
+            X++;
+        }
+        int Y=0;
+        for(auto it=my.begin();it!=my.end();it++)
+        {
+            (*it).second=Y;
+            iy[Y]=(*it).first;
+            Y++;
+        }
+        int grid[209][209];
+        clr(grid,0);
+        for(int i=0;i<n;i++)
+        {
+            int sx= mx[xl[i]];
+            int ex= mx[xr[i]];
+            int sy= my[yl[i]];
+            int ey= my[yr[i]];
+
+            for(int i=sx+1;i<=ex;i++)
+            {
+                for(int j=sy+1;j<=ey;j++)
+                {
+                    grid[i][j]++;
+                }
+            }
+        }
+        ll area=0;
+        int mxi=0;
+        for(int i=1;i<X;i++)
+        {
+            for(int j=1;j<Y;j++)
+            {
+                if(grid[i][j]==0)
+                {
+                    area+= (ix[i]-ix[i-1])*(iy[j]-iy[j-1]);
+                }
+                mxi=max(mxi,grid[i][j]);
+            }
+        }
+        ll areamx=0;
+        for(int i=1;i<X;i++)
+        {
+            for(int j=1;j<Y;j++)
+            {
+                if(grid[i][j]==mxi)
+                {
+                    areamx+= (ix[i]-ix[i-1])*(iy[j]-iy[j-1]);
+                }
+            }
+        }
+        cout<<area<<" "<<mxi<<" "<<areamx<<endl;
+    }
+
+}
+
