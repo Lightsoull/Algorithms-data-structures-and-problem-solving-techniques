@@ -1,0 +1,192 @@
+/*
+Exolanation: take care here the step in the compression have to be 2 because if i have two coordinates adjacent i can pass between them 
+but when i express the coordinates on the grid i won't be able to pass between them.
+- I use 0/1 bfs.
+*/
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+const int dy[4] = { -1,1,0,0};
+const int dx[4] = { 0,0,1,-1};
+int grid[309][309];
+struct state { int y,x,d; };
+
+vector<string> cut (string s, string sep=",") {
+  vector<string> res;
+  for (int i=0; i<s.size(); i++) {
+    string sub = "";
+    while (i<s.size() && sep.find(s[i])==string::npos) sub+=s[i++];
+    if (sub != "") res.push_back (sub);
+  }
+  return res;
+}
+
+/* ############################ THE REAL CODE ############################ */
+
+class SafeJourney
+{
+  public:
+  int fewestRoadCrossings(int oldX, int oldY, vector <string> rh2, vector <string> rv2, string start, string en)
+  {
+    set<int> x,y;
+    mx[0]=0;
+    mx[oldX]=0;
+    my[0]=0;
+    my[oldY]=0;
+
+    vector<string> rh,rv;
+
+    for(int i=0;i<sz(rh2);i++)
+    {
+      vector<string> t = cut(rh2[i],",");
+      for(int j=0;j<sz(t);j++)
+        rh.pb(t[j]);
+    }
+    for(int i=0;i<sz(rv2);i++)
+    {
+      vector<string> t = cut(rv2[i],",");
+      for(int j=0;j<sz(t);j++)
+        rv.pb(t[j]);
+    }
+    map<int,int> mx,my;
+    for(int i=0;i<sz(rh);i++)
+    {
+      istringstream ss(rh[i]);
+      int yy,x1,x2;
+      ss >>yy>>x1>>x2;
+      my[yy]=0;
+      mx[x1]=0;
+      mx[x2]=0;
+    }
+    for(int i=0;i<sz(rv);i++)
+    {
+      istringstream ss(rv[i]);
+      int xx,y1,y2;
+      ss >>xx>>y1>>y2;
+      mx[xx]=0;
+      my[y1]=0;
+      my[y2]=0;
+    }
+
+    int sx,sy,ex,ey;
+    istringstream ss(start);
+    ss>>sx>>sy;
+    istringstream ss2(en);
+    ss2>>ex>>ey;
+
+    mx[sx]=0;
+    mx[ex]=0;
+    my[sy]=0;
+    my[ey]=0;
+    int X=0,Y=0;
+    for (auto it=mx.begin(); it!=mx.end(); it++) {
+      (*it).second = X;
+      X+=2;
+    }
+    for (auto it=my.begin(); it!=my.end(); it++) {
+      (*it).second = Y;
+      Y+=2;
+    }
+    X--;
+    Y--;
+
+    clr(grid,0);
+
+    for(int i=0;i<sz(rh);i++)
+    {
+      istringstream ss(rh[i]);
+      int yy,x1,x2;
+      ss >>yy>>x1>>x2;
+      yy=my[yy];
+      x1=mx[x1];
+      x2=mx[x2];
+      for(int ix=x1;ix<x2+1;ix++)
+        grid[yy][ix]=1;
+    }
+    for(int i=0;i<sz(rv);i++)
+    {
+      istringstream ss(rv[i]);
+      int xx,y1,y2;
+      ss >>xx>>y1>>y2;
+      xx=mx[xx];
+      y1=my[y1];
+      y2=my[y2];
+      for(int iy=y1;iy<y2+1;iy++)
+        grid[iy][xx]=1;
+    }
+
+    vector<vector<int> > d(Y,vector<int>(X,-1));
+
+    deque<state> q;
+    q.push_front((state){my[sy],mx[sx],0});
+
+    while (!q.empty())
+    {
+      state s=q.front(); q.pop_front();
+      int yy = s.y, xx=s.x;
+
+      if (d[yy][xx]!=-1) continue;
+      d[yy][xx]=s.d;
+
+      for(int i=0;i<4;i++)
+      {
+       int ny=yy+dy[i], nx=xx+dx[i];
+       if (ny<0 || ny>=Y || nx<0 || nx>=X) continue;
+
+       if (grid[ny][nx]==0 && d[ny][nx]==-1) q.push_front((state){ny,nx,s.d});
+       if (grid[ny][nx]==1 && d[ny][nx]==-1) q.push_back((state){ny,nx,s.d+1});
+      }
+    }
+
+    return d[my[ey]][mx[ex]];
+  }
+
+
+};
+
+int main()
+{
+    SafeJourney e;
+   cout<< e.fewestRoadCrossings(13
+,9
+,{ "7 0 5,6 0 5,4 4 8,4 9 13,3 4 13,2 4 8,3 1 3" }
+,{ "1 1 3,3 0 3,4 2 7,5 2 7,7 5 9,8 5 9,8 0 1,9 1 3", "10 1 3" }
+,"2 8"
+,"2 1"
+
+)<<endl;
+}
