@@ -1,0 +1,255 @@
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+const int N=209;
+int grid[N][N];
+struct rect
+{
+    int x1,x2,y1,y2,t;
+    rect(int a,int b,int c,int d,int e)
+    {
+        x1=a; x2= b; y1= c; y2= d; t=e;
+    }
+};
+ll calc(ll n)
+{
+    return (n*(n+1))/2;
+}
+ll getzero(ll r1,ll r2,ll c1,ll c2)
+{
+    if(c1>r2-1)
+    {
+        return (r2-r1)*(c2-c1);
+    }
+    if(c2-1<=r1)
+        return 0;
+
+    r1++; r2++; c1++; c2++;
+    r2--;
+    c2--;
+    ll fullrange,fr,to;
+    if(c1>r1&&c1<r2)
+    {
+        ll fr= r1; ll to=c1-1;
+        fullrange= to-fr+1;
+    }
+    else if(c1==r1)
+    {
+        fullrange=0;
+    }
+    else if(c1==r2)
+    {
+        fr=r1;
+        to=c1-1;
+        fullrange= to-fr+1;
+    }
+    else if(c1>r2)
+    {
+        fr=r1; to=r2; fullrange= to-fr+1;
+    }
+    else if(c1<r1)
+    {
+        fullrange=0;
+    }
+   ll str= r1;
+   ll en= min(c2-1,r2);
+   ll ans=0;
+   if(fullrange>0)
+   {
+    ll a= (en-str+1)-fullrange;
+    ll c= (c2-c1+1)-1;
+    ans= c*a-calc(a-1)+fullrange*(c2-c1+1);
+   }
+   else if(fullrange==0)
+   {
+       ll a=(en-str+1);
+       ll mx=max(c1,r1+1);
+       ll c= (c2-mx+1);
+       ans= c*a-calc(a-1);
+   }
+    return ans;
+}
+int main()
+{
+    int T,cs=1;
+    cin>>T;
+    while(T--)
+    {
+        int n,m;
+        cin>>n>>m;
+        cin.ignore();
+        int rt[N],ct[N],w[N],h[N],t[N];
+        for(int i=0;i<m;i++)
+        {
+            string s;
+            getline(cin,s);
+            for(int j=0;j<sz(s);j++)
+            {
+                if((s[j]=='(')||(s[j]==')')||(s[j]==',')||(s[j]=='-'))
+                    s[j]=' ';
+            }
+                stringstream ss(s);
+                vector<int> v;
+                int no;
+                while(ss>>no)
+                {
+                    v.pb(no);
+                }
+
+                if(sz(v)==4)
+                {
+                    rt[i]=v[0]-1; ct[i]=v[1]-1; w[i]=v[2]; h[i]=v[2];
+                    t[i]=v[3];
+                }
+                else if(sz(v)==5)
+                {
+                    rt[i]=v[0]-1; ct[i]=v[1]-1; w[i]=v[2]; h[i]=v[3];
+                    t[i]=v[4];
+                }
+          }
+
+         vector< rect > rec;
+         for(int i=0;i<m;i++)
+         {
+             int r1= rt[i];
+             int r2= rt[i]+h[i]-1;
+             int c1= ct[i];
+             int c2= ct[i]+w[i]-1;
+             int tim= t[i];
+             int mxr= n-1;
+             int mxc= n-1;
+             int mir=0;
+             int mic=0;
+             if(r2<=mxr&&c2<=mxc)
+             {
+                 rec.pb(rect(r1,r2,c1,c2,tim));
+             }
+             else if(r2<=mxr&&c2>mxc)
+             {
+                 int rem= w[i]-(mxc-c1+1);
+                 rec.pb(rect(r1,r2,c1,mxc,tim));
+                 rec.pb(rect(r1,r2,0,rem-1,tim));
+             }
+             else if(c2<=mxc&&r2>mxr)
+             {
+                 int rem= h[i]-(mxr-r1+1);
+                 rec.pb(rect(r1,mxr,c1,c2,tim));
+                 rec.pb(rect(0,rem-1,c1,c2,tim));
+             }
+             else if(c2>mxc&&r2>mxr)
+             {
+                 int rem1= w[i]-(mxc-c1+1);
+                 int rem2= h[i]-(mxr-r1+1);
+
+                 rec.pb(rect(r1,mxr,c1,mxc,tim));
+                 rec.pb(rect(r1,mxr,0,rem1-1,tim));
+                 rec.pb(rect(0,rem2-1,c1,mxc,tim));
+                 rec.pb(rect(0,rem2-1,0,rem1-1,tim));
+             }
+         }
+         map<int,int> mr,mc;
+         mr[0]=0;
+         mc[0]=0;
+         mr[n]=0;
+         mc[n]=0;
+         int ir[N],ic[N];
+         for(int i=0;i<sz(rec);i++)
+         {
+             rec[i].x2++;
+             rec[i].y2++;
+
+             int x1=rec[i].x1;
+             int x2=rec[i].x2;
+             int y1=rec[i].y1;
+             int y2=rec[i].y2;
+
+             mr[x1]=0;
+             mr[x2]=0;
+             mc[y1]=0;
+             mc[y2]=0;
+         }
+
+         int R=0;
+         for(auto it=mr.begin();it!=mr.end();it++)
+         {
+             (*it).second=R;
+             ir[R]=(*it).first;
+             R++;
+         }
+         int C=0;
+         for(auto it=mc.begin();it!=mc.end();it++)
+         {
+             (*it).second=C;
+             ic[C]=(*it).first;
+             C++;
+         }
+         clr(grid,0);
+         for(int i=0;i<sz(rec);i++)
+         {
+             int x1=mr[rec[i].x1];
+             int x2=mr[rec[i].x2];
+             int y1=mc[rec[i].y1];
+             int y2=mc[rec[i].y2];
+             int tim=rec[i].t;
+             if(tim%2==0)
+                continue;
+             for(int j=x1;j<x2;j++)
+             {
+                 for(int k=y1;k<y2;k++)
+                 {
+                     grid[j][k]^=1;
+                 }
+             }
+         }
+         ll ans=0;
+         for(int i=0;i<R-1;i++)
+         {
+             for(int j=0;j<C-1;j++)
+             {
+                ll tot= 1ll*(ir[i+1]-ir[i])*(ic[j+1]-ic[j]);
+                if(grid[i][j]==1)
+                    ans+= getzero(ir[i],ir[i+1],ic[j],ic[j+1]);
+                else
+                    ans+= tot-getzero(ir[i],ir[i+1],ic[j],ic[j+1]);
+             }
+         }
+
+         cout<<"Case "<<cs++<<": "<<ans<<endl;
+
+    }
+
+}
