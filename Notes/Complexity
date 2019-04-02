@@ -133,7 +133,8 @@ When you map an integer to vector of integer every time you will write mb[val][i
 logn bec you will search for val in map in logn , so its better to make a map from val to the index the vector stores at
 First make a vector< vector<int> > v(MAXsiz)  v[ index ].pb(element)  and map[val]=index.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+When you do binary search from start limit to end limit, don't put too large not needed limit because this may cause TLE.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
