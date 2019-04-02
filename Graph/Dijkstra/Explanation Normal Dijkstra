@@ -6,6 +6,8 @@ Notes
 2- dijkstra can't used for -ve weights by shifting the weights value to be +ve and count the number of edges used in the path
    because here the weight = weight_I_get_from_dijkstra - shift*Number_of_edges_used  so this equation not only depends on the
    weights but also depends the length of the path.
+3- if the result in the bfs will depend on the direction that lead to the current node so the direction must be in the state too
+not only the node and its weight so the vis array must include the node,weight,direction.
 
 struct node
 {
