@@ -1,0 +1,201 @@
+Sources: https://www.youtube.com/watch?v=nqJIXtfs7p4&list=PLPt2dINI2MIZeC3RhQ-edPLuwtS9NRZ80&index=4
+Co-ordinate Compression: is a techique that used in 1D,2D,3D..,nD planes, it compress a huge plane to a smaller one with keeping
+the same relations between the cells.
+Examples: see the problems on it in the sheet.
+----------------------------------------------------------------------------------------------------------------------------------------
+The Compression:
+-if i have  1D, 2D, 3D plane, i will compress each co-ordinate indepently the X alone , Y alone and Z alone, first you have to put all
+the Xs in a map (map will sort and unique the keys so all the Xs will be sorted and uniqued) and then iterate on the map and assign
+for each X an id the id may start from zero and increment each time with one step or more that's according to the problem and the
+same for the rest of the co-ordinates.
+-The step is the amount of the increament between the assigned id for the X co-ordinate and it is like it controls 
+the expansion of the plane, this amount may have to be two at some problems and it may have to be one or it may varies, examples
+1- if i have a 2D plane and i am cutting in horizontal and vertical moves in the grid and i want to count the number of holes 
+that could occur okay now if i set the step to be one then if i have a 1x1 square cut then there will be no area in between
+but in the XY plane it will be area so i will have to set the step to two to just expand the plane a little bit to allow the
+hole to appear.
+2- Given a 2d plane and there are some walls vertically only and you have to move from a given x1,y1 point to x2,y2 point, okay 
+when i express the xy-plane coorindates to grid cells, x and x+1 there is a path between them as a XY-plane coordinates but
+as a cells there won't be a path between them so here i have to set the step to two not one.
+- Don't forget to express the intial grid co-ordinates in the compressed grid for example from (0,0) to (n-1,n-1).
+- If the grid is inf then express that there is a inf co-ordinates for example from (-inf,-inf) to (inf,inf).
+- In the compressed grid each co-ordinate is expressed in the map.
+- When you put a co-ordinate as a grid cell make an assumption and follow it for example assume that the co-ordinate(i,j) 
+will be of the cell(i,j) and it will be the buttom-left corner ot the upper-right corner and according to that you will 
+assign the area if it is buttom-left then the area of the cell(i,j) is (i+1 - i)*(j+1 - j) and if if it is the upper-right
+then the area will be (i - (i-1))*(j- (j-1)).
+- When you colour a cell in the grid and Xs and Ys are in XY-plane co-ordinate put one side inclusive and the other exclusive
+eg from X1(inclusive) to X2(exclusive).
+
+CODE
+----
+int main()
+{
+    int n;
+    int xl[59],yl[59],zl[59],xr[59],yr[59],zr[59],ix[160],iy[160],iz[160];
+    map<int,int> mx,my,mz;
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        int x,y;
+        cin>>xl[i]>>yl[i]>>xr[i]>>yr[i]>>zl[i]>>zr[i];
+        mx[xl[i]]=0;
+        mx[xr[i]]=0;
+        my[yl[i]]=0;
+        my[yr[i]]=0;
+        mz[zl[i]]=0;
+        mz[zr[i]]=0;
+    }
+    int X=0;
+    for(auto it=mx.begin();it!=mx.end();it++)
+    {
+        (*it).second=X;
+        ix[X]=(*it).first;
+        X++;
+    }
+    int Y=0;
+    for(auto it=my.begin();it!=my.end();it++)
+    {
+        (*it).second=Y;
+        iy[Y]=(*it).first;
+        Y++;
+    }
+    int Z=0;
+    for(auto it=mz.begin();it!=mz.end();it++)
+    {
+        (*it).second=Z;
+        iz[Z]=(*it).first;
+        Z++;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Implemetation Notes:
+-Converting from grid cells to xy-plane: 
+1- let given (x1,y1) as top left corner of the grid cell and (x2,y2) as buttom right corner
+where x1<=x2 and y1<=y2, let the grid cell with (i,j) express the co-ordinate (i,j), the co-ordinate point will be at the top-left 
+point of the cell, and the buttom right corner (x2,y2) as a grid cell must be (x2+1,y2+1) as a xy-plane co-ordinate, so the
+grid cells (x1,y1) and (x2,y2) will be (x1,y1) and (x2+1,y2+1) as xy-plane co-ordinate.
+2- colouring the rectangle of xy-plane co-ordinates (x1,y1) and (x2+1,y2+1) will be in the grid cells from x1 to (x2+1)-1
+and from y1 to (y2+1)-1.
+3- Area of the grid cell (i,j) will be (ix[i+1]-ix[i])*(iy[j+1]-iy[j]).
+- Getting the area and the volume in 3D.
+The Area: imagine that i have a 3D cubiod the area is the number of cells in the cubiod from outside externaly it is like the 
+number of cells in the cover of the cubiod.
+The Volume: is the number of cells of the space the cubiod cover including the area.
+Rules
+Cube 
+area: 6*a^2 , a is side length.
+volume= s^3.
+Cubiod
+area: 2*(W*L+W*H+L*H) , where L is length, W is weidth, H is height.
+volume: L*W*H.
+CODE
+----
+int main()
+{
+        int n;
+        cin>>n;
+        int xl[59],yl[59],zl[59],xr[59],yr[59],zr[59],ix[160],iy[160],iz[160];
+        map<int,int> mx,my,mz;
+        mx[-505]=0;
+        my[-505]=0;
+        mz[-505]=0;
+        mx[505]=0;
+        my[505]=0;
+        mz[505]=0;
+        for(int i=0;i<n;i++)
+        {
+            int x,y,z;
+            cin>>xl[i]>>yl[i]>>zl[i]>>x>>y>>z;
+            xr[i]= xl[i]+x; yr[i]= yl[i]+y; zr[i]= zl[i]+z;
+            mx[xl[i]]=0;
+            mx[xr[i]]=0; 
+            my[yl[i]]=0;
+            my[yr[i]]=0;
+            mz[zl[i]]=0;
+            mz[zr[i]]=0;
+        }
+        X=0;
+        for(auto it=mx.begin();it!=mx.end();it++)
+        {
+            (*it).second=X;
+            ix[X]=(*it).first;
+            X++;
+        }
+        Y=0;
+        for(auto it=my.begin();it!=my.end();it++)
+        {
+            (*it).second=Y;
+            iy[Y]=(*it).first;
+            Y++;
+        }
+        Z=0;
+        for(auto it=mz.begin();it!=mz.end();it++)
+        {
+            (*it).second=Z;
+            iz[Z]=(*it).first;
+            Z++;
+        }
+        clr(grid,0);
+        for(int i=0;i<n;i++)
+        {
+            int sx= mx[xl[i]];
+            int ex= mx[xr[i]];
+            int sy= my[yl[i]];
+            int ey= my[yr[i]];
+            int sZ= mz[zl[i]];
+            int eZ= mz[zr[i]];
+            for(int j=sx;j<ex;j++)
+            {
+                for(int k=sy;k<ey;k++)
+                {
+                    for(int l=sZ;l<eZ;l++)
+                        grid[j][k][l]=1;
+                }
+            }
+        }
+        ll volume=0,area=0;
+        for(int i=0;i<X-1;i++)
+        {
+            for(int j=0;j<Y-1;j++)
+            {
+                for(int k=0;k<Z-1;k++)
+                {
+                    int x= ix[i+1]-ix[i];
+                    int y= iy[j+1]-iy[j];
+                    int z= iz[k+1]-iz[k];
+                    if(grid[i][j][k])
+                        volume+= x*y*z;
+                    if(grid[i][j][k]+grid[i+1][j][k]==1)
+                        area+= z*y;
+                    if(grid[i][j][k]+grid[i][j+1][k]==1)
+                        area+= z*x;
+                    if(grid[i][j][k]+grid[i][j][k+1]==1)
+                        area+= x*y;
+                }
+            }
+        }
+      cout<<area<<" "<<volume<<endl;
+}
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
