@@ -1,0 +1,3 @@
+Knowing if there is a path between 2 nodes : you have to use bfs from the source node to know if there is a path between
+the source node and the destination node or not.
+Note: using dfs will be wrong.
