@@ -1,0 +1,276 @@
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+#define scani(n)  scanf("%d",&n)
+//#define scans(st) scanf("%s",st)
+#define gc getchar_unlocked
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+const int N=100009;
+const int inf=1000000;
+int n,weight[N],depth[N],par[N],heavy[N],root[N],node_to_segid[N],segid_to_node[N];
+vector< vector<int> > v;
+struct node
+{
+    ll sum,presum,suffsum,mxsum;
+    node(ll a=0,ll b=0,ll c=0,ll d=0)
+    {
+        sum=a; presum=b; suffsum=c; mxsum=d;
+    }
+};
+int lazy[4*N];
+node tree[N*4];
+void I()
+{
+    v.clear();
+    v.resize(N);
+}
+int dfs_hld(int no)
+{
+    int siz=1,mx_siz=0;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(nw==par[no])
+            continue;
+        par[nw]=no;
+        depth[nw]=depth[no]+1;
+ 
+        int ret=dfs_hld(nw);
+        if(ret>mx_siz)
+        {
+            mx_siz=ret;
+            heavy[no]=nw;
+        }
+        siz+=ret;
+    }
+    return siz;
+}
+void Merge1(int p)
+{
+    tree[p].sum=tree[p*2].sum+tree[p*2+1].sum;
+    tree[p].mxsum=max(tree[p*2].mxsum,tree[p*2+1].mxsum);
+    tree[p].mxsum=max(tree[p].mxsum,tree[p*2].suffsum+tree[p*2+1].presum);
+    tree[p].presum=max(tree[p*2].presum,tree[p*2].sum+tree[p*2+1].presum);
+    tree[p].suffsum=max(tree[p*2+1].suffsum,tree[p*2+1].sum+tree[p*2].suffsum);
+}
+node Merge2(node a,node b)
+{
+    node res;
+    res=node();
+    res.sum=a.sum+b.sum;
+    res.mxsum=max(a.mxsum,b.mxsum);
+    res.mxsum=max(res.mxsum,a.suffsum+b.presum);
+    res.presum=max(a.presum,a.sum+b.presum);
+    res.suffsum=max(b.suffsum,b.sum+a.suffsum);
+    return res;
+}
+ 
+void build(int s=0,int e=n-1,int p=1)
+{
+    if(s==e)
+    {
+        int no=weight[segid_to_node[s]];
+        tree[p].sum=no;
+        tree[p].mxsum=max(0,no);
+        tree[p].presum=max(0,no);
+        tree[p].suffsum=max(0,no);
+        return;
+    }
+    int m=(s+e)/2;
+    build(s,m,p*2);
+    build(m+1,e,p*2+1);
+    Merge1(p);
+}
+void pushdown(int p,int s,int e,int m)
+{
+    if(lazy[p]==-inf)
+        return;
+ 
+        lazy[p*2]=lazy[p*2+1]=lazy[p];
+        ll val=lazy[p];
+        tree[p*2].sum= 1ll*(m-s+1)*val;
+        tree[p*2].mxsum=max(0ll,tree[p*2].sum);
+        tree[p*2].presum=max(0ll,tree[p*2].sum);
+        tree[p*2].suffsum=max(0ll,tree[p*2].sum);
+ 
+        tree[p*2+1].sum= 1ll*(e-(m+1)+1)*val;
+        tree[p*2+1].mxsum=max(0ll,tree[p*2+1].sum);
+        tree[p*2+1].presum=max(0ll,tree[p*2+1].sum);
+        tree[p*2+1].suffsum=max(0ll,tree[p*2+1].sum);
+ 
+        lazy[p]=-inf;
+}
+void update(int a,int b,int val,int s=0,int e=n-1,int p=1)
+{
+    if(b<s||a>e||b<a)
+        return;
+    if(s>=a&&e<=b)
+    {
+        tree[p].sum= 1ll*(e-s+1)*val;
+        tree[p].mxsum=max(0ll,tree[p].sum);
+        tree[p].presum=max(0ll,tree[p].sum);
+        tree[p].suffsum=max(0ll,tree[p].sum);
+        lazy[p]=val;
+        return ;
+    }
+    int m=(s+e)/2;
+    pushdown(p,s,e,m);
+ 
+    update(a,b,val,s,m,p*2);
+    update(a,b,val,m+1,e,p*2+1);
+    Merge1(p);
+}
+node query(int a,int b,int s=0,int e=n-1,int p=1)
+{
+    if(b<s||a>e||b<a)
+        return node();
+    if(s>=a&&e<=b)
+    {
+        return tree[p];
+    }
+    int m=(s+e)/2;
+    pushdown(p,s,e,m);
+    node res= Merge2(query(a,b,s,m,p*2),query(a,b,m+1,e,p*2+1));
+    return res;
+}
+ 
+node getval(int ou,int ov)
+{
+    vector<pair<int,int>> v2,v3;
+    int u=ou,v=ov;
+    for(;root[u]!=root[v];v=par[root[v]])
+    {
+        if(depth[root[u]]>depth[root[v]])
+            swap(u,v);
+    }
+    int myroot=root[u];
+    node L,R;
+    u=ou; v=ov;
+    for(;root[v]!=myroot;v=par[root[v]])
+    {
+       R=Merge2(query(node_to_segid[root[v]],node_to_segid[v]),R);
+    }
+    for(;root[u]!=myroot;u=par[root[u]])
+    {
+       L=Merge2(query(node_to_segid[root[u]],node_to_segid[u]),L);
+    }
+    if(depth[u]>depth[v])
+    {
+        L=Merge2(query(node_to_segid[v],node_to_segid[u]),L);
+    }
+    else
+    {
+         R=Merge2(query(node_to_segid[u],node_to_segid[v]),R);
+    }
+    swap(L.presum,L.suffsum);
+    return Merge2(L,R);
+}
+ 
+void valupdate(int u,int v,int c)
+{
+    for(;root[u]!=root[v];v=par[root[v]])
+    {
+        if(depth[root[u]]>depth[root[v]])
+            swap(u,v);
+        update(node_to_segid[root[v]],node_to_segid[v],c);
+    }
+    if(depth[u]>depth[v])
+    {
+        swap(u,v);
+    }
+    update(node_to_segid[u],node_to_segid[v],c);
+ 
+}
+void buildchain()
+{
+    clr(heavy,-1);
+    par[1]=-1;
+    depth[1]=0;
+ 
+    dfs_hld(1);
+    int pos=0;
+    for(int i=1;i<=n;i++)
+    {
+        if(par[i]==-1||heavy[par[i]]!=i)
+        {
+            for(int j=i;j!=-1;j=heavy[j])
+            {
+                root[j]=i;
+                node_to_segid[j]=pos;
+                segid_to_node[pos]=j;
+                pos++;
+            }
+ 
+        }
+    }
+    build();
+    for(int i=0;i<N*4;i++)
+        lazy[i]=-inf;
+}
+int main()
+{
+    I();
+    cin>>n;
+    for(int i=1;i<=n;i++)
+    {
+        cin>>weight[i];
+    }
+    for(int i=1;i<=n-1;i++)
+    {
+        int f,t;
+        cin>>f>>t;
+        v[f].pb(t);
+        v[t].pb(f);
+    }
+    buildchain();
+    int m;
+    cin>>m;
+    while(m--)
+    {
+        int st,a,b,c;
+        cin>>st;
+        if(st==1)
+        {
+            cin>>a>>b;
+            cout<<getval(a,b).mxsum<<endl;
+        }
+        else
+        {
+            cin>>a>>b>>c;
+            valupdate(a,b,c);
+        }
+    }
+}
