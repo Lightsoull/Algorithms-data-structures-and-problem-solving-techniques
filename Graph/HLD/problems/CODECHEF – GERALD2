@@ -1,0 +1,303 @@
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+#define scani(n)  scanf("%d",&n)
+//#define scans(st) scanf("%s",st)
+#define gc getchar_unlocked
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+
+// Mysol --------------------------------------------------------------------------------------------
+const int N=200000+9;
+const int M=524287+9;
+const int inf=1e9+41;
+int n,heavy[N],par[N],root[N],siz[N],L[N],R[N],seg1id[N],tim=0,q[N],seg2id[N],h[N],en[N],m;
+bool col[N];
+pair<int,int> tree1[M],tree2[M];
+vector< vector<int> > v;
+void I()
+{
+    v.clear();
+    v.resize(n+9);
+    tim=0;
+    int MAX=ceil(log2(n))+2;
+    for(int i=0;i<=MAX;i++)
+    {
+        tree1[i]=mp(-inf,-inf);
+        tree2[i]=mp(-inf,-inf);
+    }
+    for(int i=0;i<=n;i++)
+        col[i]=0;
+}
+int dfs_hld(int no)
+{
+    seg1id[no]=tim++;
+    int mx_siz=0;
+    siz[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        h[nw]=h[no]+1;
+        par[nw]=no;
+        int ret=dfs_hld(nw);
+        if(ret>mx_siz)
+        {
+            mx_siz=ret;
+            heavy[no]=nw;
+        }
+        siz[no]+=ret;
+    }
+    return siz[no];
+}
+void buildchain()
+{
+    for(int i=0;i<=n;i++)
+        heavy[i]=-1;
+    par[1]=-1;
+    h[1]=0;
+
+    dfs_hld(1);
+    int pos=0;
+    for(int i=1;i<=n;i++)
+    {
+        if(par[i]==-1||heavy[par[i]]!=i)
+        {
+            int en_node=0;
+            for(int j=i;j!=-1;j=heavy[j])
+            {
+                root[j]=i;
+                en_node=j;
+                seg2id[j]=pos++;
+            }
+            for(int j=i;j!=-1;j=heavy[j])
+            {
+               en[j]=en_node;
+            }
+        }
+    }
+    for(int i=1;i<=n;i++)
+    {
+        L[i]=seg1id[i];
+        R[i]=L[i]+siz[i]-1;
+    }
+}
+void update1(int id,pair<int,int> val,int s=0,int e=n-1,int p=1)
+{
+    if(s==e)
+    {
+        tree1[p]=val;
+        return ;
+    }
+    int m=(s+e)/2;
+    if(id<=m)
+    {
+        update1(id,val,s,m,p*2);
+    }
+    else
+    {
+        update1(id,val,m+1,e,p*2+1);
+    }
+    tree1[p]=max(tree1[p*2],tree1[p*2+1]);
+}
+pair<int,int> query1(int a,int b,int s=0,int e=n-1,int p=1)
+{
+    if(b<s||a>e||b<a)
+        return mp(-inf,-inf);
+
+    if(s>=a&&e<=b)
+    {
+        return tree1[p];
+    }
+    int m=(s+e)/2;
+    return max(query1(a,b,s,m,p*2),query1(a,b,m+1,e,p*2+1));
+}
+void update2(int id,pair<int,int> val,int s=0,int e=n-1,int p=1)
+{
+    if(s==e)
+    {
+        tree2[p]=val;
+        return ;
+    }
+    int m=(s+e)/2;
+    if(id<=m)
+    {
+        update2(id,val,s,m,p*2);
+    }
+    else
+    {
+        update2(id,val,m+1,e,p*2+1);
+    }
+    tree2[p]=max(tree2[p*2],tree2[p*2+1]);
+}
+pair<int,int> query2(int a,int b,int s=0,int e=n-1,int p=1)
+{
+
+    if(b<s||a>e||b<a)
+        return mp(-inf,-inf);
+    if(s>=a&&e<=b)
+    {
+        return tree2[p];
+    }
+    int m=(s+e)/2;
+    return max(query2(a,b,s,m,p*2),query2(a,b,m+1,e,p*2+1));
+}
+void solve1(int id)
+{
+    pair<int,int> mx;
+    if(heavy[id]==-1)
+     return;
+    mx=max(query1(L[id],L[heavy[id]]-1),query1(R[heavy[id]]+1,R[id]));
+    mx.first-= h[id];
+    mx.first+= (h[en[id]]-h[id]);
+
+    update2(seg2id[id],mx);
+
+}
+void toggle(int id)
+{
+     col[id]^=1;
+     pair<int,int> res;
+     res.second=id;
+     if(col[id])
+     {
+         res.first= h[id];
+     }
+     else
+     {
+         res.first= -inf;
+     }
+
+     update1(seg1id[id],res);
+
+     int cur=id;
+
+     while(cur!=-1)
+     {
+         solve1(cur);
+         cur=par[root[cur]];
+     }
+}
+pair<int,int> solve2(int id)
+{
+
+   pair<int,int> ret= query2(seg2id[root[id]],seg2id[id]-1);
+
+   ret.first -= (h[en[id]]-h[id]);
+   return ret;
+}
+pair<int,int> solve3(int cur,int ex)
+{
+    pair<int,int> ret= max(query1(L[cur],L[ex]-1),query1(R[ex]+1,R[cur]));
+    ret.first-= h[cur];
+    return ret;
+}
+pair<int,int> getans(int id)
+{
+    pair<int,int> ret=mp(0,id);
+    pair<int,int> p1=query1(L[id],R[id]),p2,mx;
+    p1.first-= h[id];
+    ret=max(ret,p1);
+
+    p1= solve2(id);
+
+    ret=max(ret,p1);
+    int cur= par[root[id]];
+    int ex= root[id];
+
+    while(cur!=-1)
+    {
+        int add= (h[id]-h[cur]);
+        p1=solve2(cur);
+        p2=solve3(cur,ex);
+        mx=max(p2,p1);
+        mx.first+=add;
+        ret=max(ret,mx);
+
+        ex= root[cur];
+        cur= par[ex];
+
+    }
+    return ret;
+}
+vector<int> mysol(vector<int> p,vector<int> q)
+{
+        vector<int> ans;
+        I();
+        for(int i=0;i<sz(p);i++)
+        {
+
+            v[p[i]].pb(i+2);
+        }
+
+        buildchain();
+        for(int i=1;i<=n;i++)
+        {
+            toggle(i);
+        }
+        for(int i=0;i<m;i++)
+        {
+            toggle(q[i]);
+            pair<int,int> res=getans(q[i]);
+            ans.pb(res.second);
+        }
+        return ans;
+}
+// End my sol ------------------------------------------------------------
+int main()
+{
+    int T;
+    cin>>T;
+    while(T--)
+    {
+
+    cin>>n>>m;
+    int no;
+    vector<int> p,q;
+    for(int i=0;i<n-1;i++)
+    {
+        cin>>no;
+        p.pb(no);
+    }
+    for(int i=0;i<m;i++)
+    {
+        cin>>no;
+        q.pb(no);
+    }
+    vector<int> ret=mysol(p,q);
+    for(int i=0;i<sz(ret);i++)
+        cout<<ret[i]<<endl;
+
+    }
+}
