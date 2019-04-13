@@ -1,0 +1,181 @@
+-Sources: 
+https://www.wikihow.com/Do-Long-Multiplication
+https://www.mathsisfun.com/long_division.html
+
+// take care here the divison result include all the zeros on the left.
+vector<int> longDivision(vector<int> divided,ll divisor,ll base)
+{
+
+    vector<int> ans;
+    ll temp=divided[0],id=1;
+
+    while(1)
+    {
+        ans.pb( ((temp/divisor)) );
+        if(id>=sz(divided))
+            break;
+        temp= (temp%divisor)*base+(divided[id++]);
+    }
+
+    return ans;
+}
+vector<int> Addition(vector<int> oa,vector<int> ob,int base)
+{
+    vector<int> a,b;
+    int mxsiz=max(sz(oa),sz(ob));
+    int misiz=min(sz(oa),sz(ob));
+    int diff= mxsiz-misiz;
+    int tdiff=diff;
+    while(sz(ob)<sz(oa)&&tdiff--)
+    {
+        b.pb(0);
+    }
+    tdiff=diff;
+    while(sz(oa)<sz(ob)&&tdiff--)
+    {
+        a.pb(0);
+    }
+    for(int i=0;i<sz(oa);i++)
+        a.pb(oa[i]);
+    for(int i=0;i<sz(ob);i++)
+        b.pb(ob[i]);
+
+    int n=sz(a);
+    for(int i=n-1;i>=0;i--)
+    {
+        a[i]+=b[i];
+
+        if(i)
+        {
+            a[i-1]+= (a[i])/base;
+            a[i]%=base;
+        }
+
+    }
+    return a;
+}
+vector<int> Multiplication(vector<int> a,vector<int> b,int base)
+{
+    vector< vector<int> > res(sz(a)+sz(b)+9);
+    int zero=0,id=0;
+    for(int i=sz(b)-1;i>=0;i--)
+    {
+        for(int k=0;k<zero;k++)
+        {
+            res[id].pb(0);
+        }
+        int carry=0;
+        for(int j=sz(a)-1;j>=0;j--)
+        {
+            int val= ((b[i]*a[j])+carry);
+            if(j)
+            {
+            carry= val/base;
+            res[id].pb(val%base);
+            }
+            else
+            {
+                if(val<base)
+                res[id].pb(val);
+                else
+                {
+                    res[id].pb(val%base);
+                    res[id].pb(val/base);
+                }
+            }
+        }
+        reverse(all(res[id]));
+        zero++;
+        id++;
+    }
+    vector<int> ret=res[0];
+    int idx=1;
+    while(idx<id)
+    {
+        ret=Addition(ret,res[idx],base);
+        idx++;
+    }
+    return ret;
+}
+bool issmaller(vector<int> a,vector<int> b)
+{
+    if(sz(a)<sz(b))
+        return 1;
+    if(sz(b)<sz(a))
+        return 0;
+    for(int i=0;i<sz(a);i++)
+        if(a[i]<b[i])
+         return 1;
+        else if(a[i]>b[i])
+            return 0;
+    return 0;
+}
+/* here the ans is a-b and i let a>=b so the answer is +ve if you want the 
+negative value just turn the result to -ve.
+*/
+vector<int> subtract(vector<int> a,vector<int> b,int base)
+{
+    vector<int> ans;
+    if(issmaller(a,b))
+        swap(a,b);
+    int id=sz(a)-1,carry=0;
+    for(int i=sz(b)-1;i>=0;i--)
+    {
+        int val= (a[id--]-b[i])-carry;
+
+        if(val<0)
+        {
+            val+=base;
+            carry=1;
+        }
+        else
+        {
+            carry=0;
+        }
+       ans.pb(val);
+    }
+
+    for(int i=id;i>=0;i--)
+    {
+        int val= a[id]-carry;
+
+        if(val<0)
+        {
+            val+=base;
+            carry=1;
+        }
+        else
+        {
+            carry=0;
+        }
+        ans.pb(val);
+    }
+    reverse(all(ans));
+    return ans;
+}
+
+vector<int> a,b;
+// note the digits in the two vectors are given with the right base system.
+int main()
+{
+    int n,m,base;
+    cin>>n>>m>>base;
+    int no;
+     for(int i=0;i<n;i++)
+     {
+         cin>>no;
+         a.pb(no);
+     }
+     for(int i=0;i<m;i++)
+     {
+         cin>>no;
+         b.pb(no);
+
+     }
+
+    vector<int> ret= subtract(a,b,base);
+    for(int i=0;i<sz(ret);i++)
+        cout<<ret[i];
+    cout<<endl;
+}
+
