@@ -117,8 +117,21 @@ string ans;
 ans[i]= some_char 
 -this is wrong it can't be, if you need so use a char array.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
+if you send parameters to a function and want some of them to be set by default the default parameters always be the last ones.
+----------------------------------------------------------------------------------------------------------------------------------------
+don't use c++ merge do it by your hand.
+----------------------------------------------------------------------------------------------------------------------------------------
+to assign vector to vector
+vector< int > v(v1.begin(),v1.end());
+----------------------------------------------------------------------------------------------------------------------------------------
+lower_bound: gets the first number equal or greater than a number.
+----------------------------------------------------------------------------------------------------------------------------------------
+to convert from double/int/longlong/float/unsigned long long or whatever type   to  string use to_string(num)
+string str= to_string(n1);
+But if the type is double or float it will return 3.000000 even if it is only 3.
+----------------------------------------------------------------------------------------------------------------------------------------
+when you scan double and you input .35 it will be taken as 0.35 normaly.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
