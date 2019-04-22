@@ -182,6 +182,11 @@ Try sometimes to generalize your thinking, like see the situation from a higher 
 Thinking when you think don't think 0/1 which means don't think if a certain thing may occur 1 time or 0 time because it may
 occur 2,3,4,N times.
 ----------------------------------------------------------------------------------------------------------------------------------------
+Greedy proof for yes/no questions:
+let your solution is a white circle, white means correct and black means wrong if your solution is exactly correct that means all 
+around the white circle must be black which means that every thing you don't consider it true is wrong and there is no black
+in your circle which means there is no wrong in your solution.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
