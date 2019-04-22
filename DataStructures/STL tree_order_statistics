@@ -1,0 +1,126 @@
+source: https://codeforces.com/blog/entry/11080?fbclid=IwAR28O_TmjhR5Ob00ALsxLX7-3u2LCyzwJd2HO7v_OMR0S7q0HUzvyOcog_0
+the problem: at set/map lower_bound/upper_bound you can't get the index of the solution number in logn time you
+will have to use distance(iterator1,iterator2) which works in at most o(n) time.
+Notes
+- order_of_key returns the number of elements strictly less than a certain number.
+- find_by_order returns an iterator on the kth smallest number starting from zero-based.
+- smallest if you use less but if you used greater it will be greatest.
+- if there is no answer it will return iterator equal to end(X).
+- if you want to use multiset/multimap just put extra int for an index which will keep each number remains bec each will have different
+index.
+
+CODE for set
+------------
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace std;
+using namespace __gnu_pbds;
+
+typedef tree<
+int, // here the data type stored in set/map_key it can be pair<int,int> or what ever
+null_type,  // that's the data type of the mapped value in case i use map if i use set so there won't a mapped value it will null_type.
+less<int>, // the comparator it can be less or greater < the data type of key >
+rb_tree_tag, // the type of the tree used we only use red_black_tree
+tree_order_statistics_node_update>
+ordered_set;
+
+ordered_set X;
+int main()
+{
+    X.insert(1);
+    X.insert(2);
+    X.insert(3);
+    X.insert(8);
+
+    cout<< X.order_of_key(-1)<<endl; // 0
+    cout<< X.order_of_key(100)<<endl; // 4
+    cout<< X.order_of_key(2)<<endl; // 1
+
+    cout<<*X.find_by_order(0)<<endl; // 1
+    cout<<*X.find_by_order(2)<<endl; // 3
+    cout<<(end(X)==X.find_by_order(10))<<endl; // 1
+ }
+ -------------------------------------------------------------------------
+ CODE for map
+ ------------
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace std;
+using namespace __gnu_pbds;
+
+typedef tree<
+int,
+int,
+less<int>,
+rb_tree_tag,
+tree_order_statistics_node_update>
+ordered_map;
+
+ordered_map X;
+int main()
+{
+    X[1]=5;
+    X[2]=6;
+    X[3]=7;
+
+    cout<< X.order_of_key(-5)<<endl; // 0
+    cout<< X.order_of_key(100)<<endl; // 3
+    cout<< X.order_of_key(2)<<endl; // 0
+    
+    cout<<(*X.find_by_order(0)).first<<" "<<(*X.find_by_order(0)).second<<endl; // 1 5
+
+}
+-------------------------------------------------------------------------------
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace std;
+using namespace __gnu_pbds;
+
+typedef tree<
+int,
+int,
+greater<int>,
+rb_tree_tag,
+tree_order_statistics_node_update>
+ordered_map;
+
+ordered_map X;
+int main()
+{
+    X[1]=5;
+    X[2]=6;
+    X[3]=7;
+  
+    cout<< X.order_of_key(-5)<<endl; // 3
+    cout<< X.order_of_key(100)<<endl; // 0
+    cout<< X.order_of_key(2)<<endl; // 1
+
+    cout<<(*X.find_by_order(0)).first<<" "<<(*X.find_by_order(0)).second<<endl; // 3 7
+
+}
+----------------------------------------------------------------------------------------------------------------------------------------    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
