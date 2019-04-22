@@ -135,6 +135,9 @@ First make a vector< vector<int> > v(MAXsiz)  v[ index ].pb(element)  and map[va
 ----------------------------------------------------------------------------------------------------------------------------------------
 When you do binary search from start limit to end limit, don't put too large not needed limit because this may cause TLE.
 ----------------------------------------------------------------------------------------------------------------------------------------
+when the problem said that you have 10^4 testcases and n can be up to 10^5, but total sum of n is 10^5 then you have to intialize things
+and work on the current n only not the max n to not make 10^5 each case which is TLE.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
