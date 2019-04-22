@@ -1,3 +1,7 @@
+Sources: mostafa saad videos.
+Explanation: the idea of the segment tree is that the ability to get the answer of a certain range from other disjoint ranges included
+in it.
+
 Segment tree + Lazy Propagation
 // Size of tree array  is 2^(t+1) - 1 , t=log(n)/log(2)
 //#define mid ((st + en) >> 1)
