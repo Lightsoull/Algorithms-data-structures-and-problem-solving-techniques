@@ -1,15 +1,74 @@
+Source : mostafa saad videos.
+----------------------------------------------------------------------------------------------------------------------------------------
 First way by RMQ
 - but you can get only the LCA and not the any kth ancestor.
 - The idea of the solution is that if i want the least common ancestor between two nodes let them be A and B 
 if you moved from A to B the min level node you will path by is the least common ancertor.
 -CODE
 make 3 arrays
-1- path array to store in it the dfs path ( note if you will return to a node you will store it a gain )
-2- level array to store in it the level of each node
-3- firstid array to store in it the first time you enter a node.
+1- E array: path array to store in it the dfs path ( note if you will return to a node you will store it a gain )
+2- L array: level array to store in it the level of each node
+3- H array: firstid array to store in it the first time you enter a node.
 
 we can get the RMQ by segment tree query in O(log n)
                       sparse table query in O(1)
+CODE
+----
+int id=0;
+void dfs(int node,int dep)
+{
+    E[id]=node;
+    H[node]=id;
+    L[id++]=dep;
+
+    vis[node]=1;
+    for(int i=0;i<sz(v[node]);i++)
+    {
+        int child=v[node][i];
+        if(vis[child]==1)
+            continue;
+
+        dfs(child,dep+1);
+
+        E[id]=node;
+        L[id++]=dep;
+    }
+}
+void build_RMQ()
+{
+    for(int i=0;i<id;i++)
+        sp[i][0]=i;
+
+    for(int i=1;(1<<i)<id;i++)
+    {
+        for(int j=0;(j+i-1)<id;j++)
+        {
+            if(E[sp[j][i-1]]<= E[sp[j+(1<<(i-1))][i-1]])
+                sp[j][i]=sp[j][i-1];
+            else
+                sp[j][i]=sp[j+(1<<(i-1))][i-1];
+        }
+    }
+}
+int RMQ(int a,int b)
+{
+    int rg= (b-a+1);
+    int mx= (int)log2(rg);
+
+    if(E[sp[a][mx]]<= E[sp[b-(1<<mx)+1][mx]])
+        return sp[a][mx];
+    else
+        return sp[b-(1<<mx)+1][mx];
+}
+int getlca(int a,int b)
+{
+    if(H[a]>H[b])
+    {
+        swap(a,b);
+    }
+    int id= RMQ(H[a],H[b]);
+    return E[id];
+}
 ----------------------------------------------------------------------------------------------------------------------------------------
 Second part by Dp
 - the idea is similar to sparse table idea, if i could get the ancestor number 2^(j-1) so i can get the ancestor number 2^j bec i can 
