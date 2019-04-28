@@ -1,0 +1,188 @@
+//#include "grader.h"
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    lcm(a,b)                ((a*b)/(__gcd(a,b)))
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+#define scani(n)  scanf("%d",&n)
+//#define scans(st) scanf("%s",st)
+#define gc getchar_unlocked
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+const int N=100009;
+int dp[N][23],lv[N],dist[N],siz[N],ans[N],par[N];
+bool iscen[N];
+vector< vector<int> > v(N);
+void dfs(int no,int p)
+{
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int ch=v[no][i];
+        if(ch==p)
+            continue;
+        dp[ch][0]=no;
+        lv[ch]=lv[no]+1;
+        dfs(ch,no);
+    }
+}
+void build_lca(int n)
+{
+    clr(dp,-1);
+    dfs(1,0);
+
+    for(int i=1;(1<<i)<n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            if(dp[j][i-1]!=-1)
+            dp[j][i]=dp[dp[j][i-1]][i-1];
+        }
+    }
+}
+int lca(int a,int b)
+{
+    if(lv[a]>lv[b])
+        swap(a,b);
+    for(int i=20;i>=0;i--)
+    {
+        if(lv[b]-(1<<i)>=lv[a])
+        {
+            b=dp[b][i];
+        }
+    }
+    if(a==b)
+        return a;
+    for(int i=20;i>=0;i--)
+    {
+        if(dp[a][i]!=-1&&dp[a][i]!=dp[b][i])
+        {
+            a=dp[a][i];
+            b=dp[b][i];
+        }
+    }
+    return dp[a][0];
+}
+void dfs_siz(int node,int p)
+{
+    siz[node]=1;
+    for(int i=0;i<sz(v[node]);i++)
+    {
+        int ch= v[node][i];
+        if(ch==p||iscen[ch])
+            continue;
+        dfs_siz(ch,node);
+        siz[node]+=siz[ch];
+    }
+}
+int get_cen(int node,int p,int num)
+{
+    for(int i=0;i<sz(v[node]);i++)
+    {
+        int ch=v[node][i];
+        if(ch==p||iscen[ch])
+          continue;
+
+        if(siz[ch]*2 > num)
+           return get_cen(ch,node,num);
+    }
+    return node;
+}
+void decomp_tree(int node,int p)
+{
+    dfs_siz(node,0);
+    int cen= get_cen(node,0,siz[node]);
+    iscen[cen]=1;
+    par[cen]=p;
+    for(int i=0;i<sz(v[cen]);i++)
+    {
+        if(iscen[v[cen][i]])
+            continue;
+        decomp_tree(v[cen][i],cen);
+    }
+}
+int getd(int a,int b)
+{
+    return lv[a]+lv[b]-2*lv[lca(a,b)];
+}
+void update(int node)
+{
+    int cur=node;
+    while(cur!=-1)
+    {
+        ans[cur]=min(ans[cur],getd(node,cur));
+        cur=par[cur];
+    }
+}
+
+int calc(int node)
+{
+    int cur=node,ret=INT_MAX;
+    while(cur!=-1)
+    {
+        ret=min(ret,ans[cur]+getd(node,cur));
+        cur=par[cur];
+    }
+   return ret;
+}
+void I(int n)
+{
+    for(int i=0;i<=n;i++)
+        ans[i]=1e9;
+}
+int main()
+{
+
+    int n,q;
+    cin>>n>>q;
+
+    for(int i=0;i<n-1;i++)
+    {
+        int f,t;
+        cin>>f>>t;
+        v[f].pb(t);
+        v[t].pb(f);
+    }
+    I(n);
+    build_lca(n);
+    decomp_tree(1,-1);
+    update(1);
+    while(q--)
+    {
+        int st,no;
+        cin>>st>>no;
+        if(st==1)
+            update(no);
+        else
+            cout<<calc(no)<<endl;
+    }
+}
