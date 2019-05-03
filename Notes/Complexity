@@ -138,8 +138,10 @@ When you do binary search from start limit to end limit, don't put too large not
 when the problem said that you have 10^4 testcases and n can be up to 10^5, but total sum of n is 10^5 then you have to intialize things
 and work on the current n only not the max n to not make 10^5 each case which is TLE.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
+When you do dfs and do the vis array only on the edges indexes not on the nodes so you may enter the same node more than once
+and traverse all its edges again and again this at the worest case can be O(E^2), consider example here there is a graph where there
+is n edges point to the same node and that node have n children so you will do n^2.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
