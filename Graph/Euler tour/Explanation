@@ -1,0 +1,188 @@
+/*
+- Euler tour have 2 things
+1- Euler path:  In a graph it is a path that start from a certain node and traversing all the edges in the graph and ends at another 
+   node different from what he starts from.
+2- Euler cycle: In a graph it is a path that start from a certain node and traversing all the edges each one exactly one time in the 
+   graph and ends at the same node he starts from.   
+- Take care the graph may be unconnected, having self loops and multiple edges.
+-Facts
+1- every graph have even number of nodes that have odd degrees (in&out degrees)
+2- sum of the degrees of each node (in&out degrees) = 2* NumofEdges
+----------------------------------------------------------------------------------------------------------------------------------------
+UnDircted Graph
+
+---> Checking if the graph have euler path, euler cycle or not 
+
+ The function returns one of the following values 
+   0 --> If graph is not Eulerian 
+   1 --> If graph has an Euler path (Semi-Eulerian) 
+   2 --> If graph has an Euler Circuit (Eulerian)  */
+// Method to check if all non-zero degree vertices are connected. 
+// It mainly does DFS traversal starting from 
+void DFSUtil(int v, bool visited[]) 
+{ 
+    // Mark the current node as visited and print it 
+    visited[v] = true; 
+    // Recur for all the vertices adjacent to this vertex
+    for (int i = 0; i < sz(adj[v]); ++i) 
+    {
+        int nw=adj[v][i];
+        if(visited[nw])
+            continue;
+        
+        DFSUtil(nw, visited); 
+    }
+} 
+bool isConnected() 
+{ 
+    // Mark all the vertices as not visited 
+    bool visited[V]; 
+    int i; 
+    for (i = 0; i < V; i++) 
+        visited[i] = false; 
+    // Find a vertex with non-zero degree 
+    for (i = 0; i < V; i++) 
+        if (adj[i].size() != 0) 
+            break; 
+    // If there are no edges in the graph, return true 
+    if (i == V) 
+        return true; 
+    // Start DFS traversal from a vertex with non-zero degree 
+    DFSUtil(i, visited); 
+    // Check if all non-zero degree vertices are visited 
+    for (i = 0; i < V; i++) 
+       if (visited[i] == false && adj[i].size() > 0) 
+            return false; 
+  
+    return true; 
+} 
+int isEulerian() 
+{ 
+    // Check if all non-zero degree vertices are connected 
+    if (isConnected() == false) 
+        return 0; 
+  
+    // Count vertices with odd degree 
+    int odd = 0; 
+    for (int i = 0; i < V; i++) 
+        if (adj[i].size() & 1) 
+            odd++; 
+  
+    // If count is more than 2, then graph is not Eulerian 
+    if (odd > 2) 
+        return 0; 
+  
+    // If odd count is 2, then semi-eulerian. 
+    // If odd count is 0, then eulerian 
+    // Note that odd count can never be 1 for undirected graph 
+    return (odd)? 1 : 2; 
+} 
+----------------------------------------------------------------------------------------------------------------------------------------
+Directed Graph
+
+---> Checking if the graph have euler path, euler cycle or not
+- Euler cycle: Every node must have ( in degrees = out degrees )
+- Euler path: Start node indegree = outdegree-1
+              End node indegree = outdegree+1
+              Other nodes indegree = outdegree
+ 
+ /* This function returns true if the directed graph has an eulerian 
+   cycle, otherwise returns false  */
+bool isEulerianCycle() 
+{ 
+    // Check if all non-zero degree vertices are connected 
+    if (isSC() == false) 
+        return false; 
+  
+    // Check if in degree and out degree of every vertex is same 
+    for (int i = 0; i < V; i++) 
+        if (adj[i].size() != in[i]) 
+            return false; 
+  
+    return true; 
+} 
+// Function that returns reverse (or transpose) of this graph 
+// This function is needed in isSC() 
+vector<vector<int> > getTranspose() 
+{ 
+    vector<vector<int> > g(V); 
+    int in[MAX];
+    clr(in,0);
+    for (int v = 0; v < V; v++) 
+    { 
+        // Recur for all the vertices adjacent to this vertex 
+        for(int i =0 ; i < sz(adj[v]); ++i) 
+        { 
+            int nw=adj[v][i];
+            g[nw].pb(v);
+            in[v]++; 
+        } 
+    } 
+    return g; 
+} 
+  
+// This function returns true if all non-zero degree vertices of  
+// graph are strongly connected 
+bool isSC() 
+{ 
+    // Mark all the vertices as not visited (For first DFS) 
+    bool visited[V]; 
+    for (int i = 0; i < V; i++) 
+        visited[i] = false; 
+  
+    // Find the first vertex with non-zero degree 
+    int n; 
+    for (n = 0; n < V; n++) 
+        if (adj[n].size() > 0) 
+          break; 
+  
+    // Do DFS traversal starting from first non zero degree vertex. 
+    DFSUtil(n, visited); 
+  
+     // If DFS traversal doesn't visit all vertices, then return false. 
+    for (int i = 0; i < V; i++) 
+        if (adj[i].size() > 0 && visited[i] == false) 
+              return false; 
+  
+    // Create a reversed graph 
+    vector<vector<int>> gr = getTranspose(); 
+  
+    // Mark all the vertices as not visited (For second DFS) 
+    for (int i = 0; i < V; i++) 
+        visited[i] = false; 
+  
+    // Do DFS for reversed graph starting from first vertex. 
+    // Staring Vertex must be same starting point of first DFS 
+    DFSUtil(n, visited); 
+  
+    // If all vertices are not visited in second DFS, then 
+    // return false 
+    for (int i = 0; i < V; i++) 
+        if (adj[i].size() > 0 && visited[i] == false) 
+             return false; 
+  
+    return true; 
+} 
+----------------------------------------------------------------------------------------------------------------------------------------
+Printing Euler cycle
+complexity: O(E)
+int v[MAX][MAX];
+vector<int> tour;
+int n,m;
+// Take care of self loops and multiple edges if yu will use adj list not array to store the graph
+void euler(int i)
+{
+    for(int j=0;j<MAX;j++)
+    {
+        if(v[i][j])
+        {
+            v[i][j]--; v[j][i]--;   // because the graph is undirected
+            euler(j);
+        }
+    }
+    
+    tour.pb(i);
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
