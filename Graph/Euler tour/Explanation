@@ -1,16 +1,31 @@
 /*
+Sources: 
+https://www.geeksforgeeks.org/eulerian-path-and-circuit/ ( check wether the graph is eulerian or not for undirected )
+https://www.geeksforgeeks.org/euler-circuit-directed-graph/ ( check wether the graph is eulerian or not for directed )
+https://www.geeksforgeeks.org/hierholzers-algorithm-directed-graph/ ( print the euler circuit )
+----------------------------------------------------------------------------------------------------------------------------------------
 - Euler tour have 2 things
 1- Euler path:  In a graph it is a path that start from a certain node and traversing all the edges in the graph and ends at another 
    node different from what he starts from.
 2- Euler cycle: In a graph it is a path that start from a certain node and traversing all the edges each one exactly one time in the 
    graph and ends at the same node he starts from.   
 - Take care the graph may be unconnected, having self loops and multiple edges.
--Facts
-1- every graph have even number of nodes that have odd degrees (in&out degrees)
-2- sum of the degrees of each node (in&out degrees) = 2* NumofEdges
 ----------------------------------------------------------------------------------------------------------------------------------------
 UnDircted Graph
+Eulerian Cycle
+An undirected graph has Eulerian cycle if following two conditions are true.
+a) All vertices with non-zero degree are connected. We don’t care about vertices with zero degree because they don’t belong to 
+Eulerian Cycle or Path (we only consider all edges).
+b) All vertices have even degree.
 
+Eulerian Path
+An undirected graph has Eulerian Path if following two conditions are true.
+a) Same as condition (a) for Eulerian Cycle
+b) If two vertices have odd degree and all other vertices have even degree. Note that only one vertex with odd degree is not 
+possible in an undirected graph (sum of all degrees is always even in an undirected graph)
+
+Note that a graph with no edges is considered Eulerian because there are no edges to traverse.
+-----------------------------------------------------------------------------------------------------------------------------------------
 ---> Checking if the graph have euler path, euler cycle or not 
 
  The function returns one of the following values 
@@ -164,24 +179,94 @@ bool isSC()
     return true; 
 } 
 ----------------------------------------------------------------------------------------------------------------------------------------
-Printing Euler cycle
-complexity: O(E)
-int v[MAX][MAX];
-vector<int> tour;
-int n,m;
-// Take care of self loops and multiple edges if yu will use adj list not array to store the graph
-void euler(int i)
-{
-    for(int j=0;j<MAX;j++)
-    {
-        if(v[i][j])
-        {
-            v[i][j]--; v[j][i]--;   // because the graph is undirected
-            euler(j);
-        }
-    }
-    
-    tour.pb(i);
+// A C++ program to print Eulerian circuit in given 
+// directed graph using Hierholzer algorithm 
+Complexity: O(E).
+
+#include <bits/stdc++.h> 
+using namespace std; 
+  
+void printCircuit(vector< vector<int> > adj) 
+{ 
+    // adj represents the adjacency list of 
+    // the directed graph 
+    // edge_count represents the number of edges 
+    // emerging from a vertex 
+    unordered_map<int,int> edge_count; 
+  
+    for (int i=0; i<adj.size(); i++) 
+    { 
+        //find the count of edges to keep track 
+        //of unused edges 
+        edge_count[i] = adj[i].size(); 
+    } 
+  
+    if (!adj.size()) 
+        return; //empty graph 
+  
+    // Maintain a stack to keep vertices 
+    stack<int> curr_path; 
+  
+    // vector to store final circuit 
+    vector<int> circuit; 
+  
+    // start from any vertex 
+    curr_path.push(0); 
+    int curr_v = 0; // Current vertex 
+  
+    while (!curr_path.empty()) 
+    { 
+        // If there's remaining edge 
+        if (edge_count[curr_v]) 
+        { 
+            // Push the vertex 
+            curr_path.push(curr_v); 
+  
+            // Find the next vertex using an edge 
+            int next_v = adj[curr_v].back(); 
+  
+            // and remove that edge 
+            edge_count[curr_v]--; 
+            adj[curr_v].pop_back(); 
+  
+            // Move to next vertex 
+            curr_v = next_v; 
+        } 
+  
+        // back-track to find remaining circuit 
+        else
+        { 
+            circuit.push_back(curr_v); 
+  
+            // Back-tracking 
+            curr_v = curr_path.top(); 
+            curr_path.pop(); 
+        } 
+    } 
+  
+    // we've got the circuit, now print it in reverse 
+    for (int i=circuit.size()-1; i>=0; i--) 
+    { 
+        cout << circuit[i]; 
+        if (i) 
+           cout<<" -> "; 
+    } 
+} 
+  
+// Driver program to check the above function 
+int main() 
+{ 
+    vector< vector<int> > adj1, adj2; 
+  
+    // Input Graph 1 
+    adj1.resize(3); 
+  
+    // Build the edges 
+    adj1[0].push_back(1); 
+    adj1[1].push_back(2); 
+    adj1[2].push_back(0); 
+    printCircuit(adj1); 
+    cout << endl; 
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
 
