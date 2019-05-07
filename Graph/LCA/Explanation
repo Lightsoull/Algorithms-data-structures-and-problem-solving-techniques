@@ -9,6 +9,7 @@ make 3 arrays
 1- E array: path array to store in it the dfs path ( note if you will return to a node you will store it a gain )
 2- L array: level array to store in it the level of each node
 3- H array: firstid array to store in it the first time you enter a node.
+4- the size of the E,L,H arrays is 4*(number_of_nodes).
 
 we can get the RMQ by segment tree query in O(log n)
                       sparse table query in O(1)
@@ -43,7 +44,7 @@ void build_RMQ()
     {
         for(int j=0;(j+i-1)<id;j++)
         {
-            if(E[sp[j][i-1]]<= E[sp[j+(1<<(i-1))][i-1]])
+            if(L[sp[j][i-1]]<= L[sp[j+(1<<(i-1))][i-1]])
                 sp[j][i]=sp[j][i-1];
             else
                 sp[j][i]=sp[j+(1<<(i-1))][i-1];
@@ -55,7 +56,7 @@ int RMQ(int a,int b)
     int rg= (b-a+1);
     int mx= (int)log2(rg);
 
-    if(E[sp[a][mx]]<= E[sp[b-(1<<mx)+1][mx]])
+    if(L[sp[a][mx]]<= L[sp[b-(1<<mx)+1][mx]])
         return sp[a][mx];
     else
         return sp[b-(1<<mx)+1][mx];
