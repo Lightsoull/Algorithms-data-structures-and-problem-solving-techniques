@@ -1,0 +1,238 @@
+//#include "grader.h"
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+const int N=100009;
+int n,q,siz[N],par[N];
+bool iscen[N];
+vector< vector<pair<int,ll> > > v(N);
+int id;
+ll dist[N];
+int E[3*N],H[3*N],L[3*N],sp[3*N][20];
+vector<vector<ll> > arr[N];
+map< pair<int,int> ,int> G,head;
+void dfs_lca(int no,int p,int dep,ll ds)
+{
+    dist[no]=ds;
+    E[id]=no;
+    L[id]=dep;
+    H[no]=id;
+    id++;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int ch=v[no][i].first;
+        ll we=v[no][i].second;
+        if(ch==p)
+            continue;
+        dfs_lca(ch,no,dep+1,ds+we);
+        E[id]=no;
+        L[id]=dep;
+        id++;
+    }
+}
+void build_RMQ()
+{
+    for(int i=0;i<id;i++)
+        sp[i][0]=i;
+
+    for(int i=1;(1<<i)<=id;i++)
+    {
+        for(int j=0;(j+(1<<i)-1)<id;j++)
+        {
+            if(L[sp[j][i-1]]<=L[sp[j+(1<<(i-1))][i-1]])
+            sp[j][i]=sp[j][i-1];
+            else
+            sp[j][i]=sp[j+(1<<(i-1))][i-1];
+        }
+    }
+}
+int RMQ(int a,int b)
+{
+    int mx=log2(b-a+1);
+    if(L[sp[a][mx]]<=L[sp[(b+1-(1<<mx))][mx]])
+        return sp[a][mx];
+    return sp[(b+1-(1<<mx))][mx];
+}
+int lca(int a,int b)
+{
+    if(H[a]>H[b])
+        swap(a,b);
+    return E[RMQ(H[a],H[b])];
+}
+ll getd(ll a,ll b)
+{
+    return dist[a]+dist[b]-2ll*(dist[lca(a,b)]);
+}
+
+void build_lca()
+{
+    id=0;
+    dfs_lca(1,0,0,0);
+    build_RMQ();
+}
+//-------------------------------------------lca
+
+void dfs_siz(int node,int p)
+{
+    siz[node]=1;
+    for(int i=0;i<sz(v[node]);i++)
+    {
+        int ch=v[node][i].first;
+        if(ch==p||iscen[ch])
+            continue;
+        dfs_siz(ch,node);
+        siz[node]+=siz[ch];
+    }
+}
+int get_cen(int node,int p,int num)
+{
+    for(int i=0;i<sz(v[node]);i++)
+    {
+        int ch=v[node][i].first;
+        if(ch==p||iscen[ch])
+            continue;
+        if(siz[ch]*2 > num)
+          return get_cen(ch,node,num);
+    }
+    return node;
+}
+vector<ll> vv;
+int indx;
+void dfs(int node,int p,ll d,int cen)
+{
+
+    vv.pb(d);
+    G[mp(node,cen)]=indx;
+    for(int i=0;i<sz(v[node]);i++)
+    {
+        int ch=v[node][i].first;
+        ll we=v[node][i].second;
+        if(ch==p||iscen[ch])
+            continue;
+        dfs(ch,node,d+we,cen);
+    }
+}
+void decomp_tree(int node,int p)
+{
+    dfs_siz(node,0);
+    ll cen=get_cen(node,0,siz[node]);
+    par[cen]=p;
+    indx=0;
+    G[mp(cen,cen)]=-1;
+    for(int i=0;i<sz(v[cen]);i++)
+    {
+        int ch=v[cen][i].first;
+        if(iscen[ch])
+            continue;
+        vv.clear();
+        dfs(ch,cen,0,cen);
+        head[mp(cen,indx)]=ch;
+        arr[cen].pb(vv);
+        indx++;
+    }
+
+    iscen[cen]=1;
+    for(int i=0;i<sz(v[cen]);i++)
+    {
+        int ch=v[cen][i].first;
+        if(iscen[ch])
+            continue;
+        decomp_tree(ch,cen);
+    }
+}
+//------------------------------------------------------------- decomp_tree
+ll solve(int org,int no,ll l)
+{
+    ll d=getd(org,no);
+    ll ans=0;
+    if(d>l)
+        return 0;
+    l-=d;
+    int blk2=-1;
+    ans++;
+    if(G.find(mp(org,no))!=G.end())
+         blk2=G[mp(org,no)];
+         
+    for(int i=0;i<sz(arr[no]);i++)
+    {
+        if(i==blk2)
+            continue;
+       int hd=head[mp(no,i)];
+
+       ll need= l-getd(no,hd);
+       ans+= upper_bound(all(arr[no][i]),need)-arr[no][i].begin();
+    }
+
+    return ans;
+}
+ll query(int no,ll l)
+{
+    int org=no;
+    ll ans=0;
+    while(no!=-1)
+    {
+        ll res=solve(org,no,l);
+        ans+=res;
+        no=par[no];
+    }
+
+    return ans;
+}
+int main()
+{
+    FS();
+    cin>>n>>q;
+    for(int i=1;i<=n-1;i++)
+    {
+        ll f,t,w;
+        cin>>f>>t>>w;
+        v[f].pb(mp(t,w));
+        v[t].pb(mp(f,w));
+    }
+    build_lca();
+    decomp_tree(1,-1);
+    for(int i=1;i<=n;i++)
+        for(int j=0;j<sz(arr[i]);j++)
+        sort(all(arr[i][j]));
+    while(q--)
+    {
+        int no;
+        ll l;
+        cin>>no>>l;
+        cout<<query(no,l)<<endl;
+
+    }
+}
