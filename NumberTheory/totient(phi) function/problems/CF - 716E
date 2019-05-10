@@ -1,0 +1,212 @@
+//#include "grader.h"
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+const int N=100009;
+ll iscen[N];
+ll siz[N];
+ll po[N],inv[N];
+map<ll,ll> cnt;
+vector< vector< pair<ll,ll> > > v(N);
+ll n,m;
+ll phi(ll n)
+{
+    ll ans=1;
+    for(ll i=2;i*i<=n;i++)
+    {
+        if(n%i!=0)
+            continue;
+
+        ll num=1;
+        while(n%i==0)
+        {
+            n/=i;
+            num*=i;
+        }
+        ans*= (num/i)*(i-1);
+    }
+    if(n>1)
+        ans*= (n-1);
+    return ans;
+}
+ll power(ll b,ll p)
+{
+    if(p==0)
+        return (1ll%m);
+    if(p%2!=0)
+        return ((b%m)*power((b%m*(b%m))%m,p/2))%m;
+
+    return power((b%m*(b%m))%m,p/2)%m;
+}
+void dfs_siz(ll node,ll p)
+{
+    siz[node]=1;
+    for(int i=0;i<sz(v[node]);i++)
+    {
+        ll ch=v[node][i].first;
+        if(ch==p||iscen[ch])
+            continue;
+        dfs_siz(ch,node);
+        siz[node]+=siz[ch];
+    }
+}
+ll get_cen(ll node,ll p,ll num)
+{
+    for(int i=0;i<sz(v[node]);i++)
+    {
+        ll ch=v[node][i].first;
+        if(ch==p||iscen[ch])
+            continue;
+        if(siz[ch]*2 > num)
+            return get_cen(ch,node,num);
+    }
+    return node;
+}
+void dfs(ll node,ll p,ll dep,ll sum,bool cancel)
+{
+     ll val= (((sum*-1)%m+m)%m * inv[dep])%m;
+    if(cancel==0)
+    {
+      cnt[val]++;
+    }
+    else
+    {
+       cnt[val]--;
+    }
+
+    for(int i=0;i<sz(v[node]);i++)
+    {
+        ll ch=v[node][i].first;
+        ll we=v[node][i].second;
+        if(ch==p||iscen[ch])
+            continue;
+        dfs(ch,node,dep+1,((sum*(10%m))%m+we)%m,cancel);
+    }
+}
+ll cnt_val(ll n)
+{
+    return cnt[n];
+}
+ll ans=0;
+void solve(ll node,ll p,ll dep,ll suff)
+{
+
+    ll ret=cnt_val(suff);
+    ans+=ret;
+
+    for(int i=0;i<sz(v[node]);i++)
+    {
+       ll ch=v[node][i].first;
+       ll we=v[node][i].second;
+       if(ch==p||iscen[ch])
+            continue;
+
+       solve(ch,node,dep+1,((po[dep]*(we%m))%m+suff)%m);
+    }
+}
+void decomp_tree(ll node)
+{
+    dfs_siz(node,-1);
+    ll cen=get_cen(node,-1,siz[node]);
+    dfs(cen,-1,0,0,0);
+
+    for(int i=0;i<sz(v[cen]);i++)
+    {
+        ll ch=v[cen][i].first;
+        ll we=v[cen][i].second;
+        if(iscen[ch])
+            continue;
+        dfs(ch,cen,1,we%m,1);
+
+        solve(ch,cen,1,we%m);
+
+        dfs(ch,cen,1,we%m,0);
+    }
+    ans+= cnt[0]-1;
+    dfs(cen,-1,0,0,1);
+    iscen[cen]=1;
+    for(int i=0;i<sz(v[cen]);i++)
+    {
+        ll ch=v[cen][i].first;
+        if(iscen[ch])
+            continue;
+        decomp_tree(ch);
+    }
+
+}
+int main()
+{
+    cin>>n>>m;
+    po[0]=(1%m);
+    for(int i=1;i<=n;i++)
+        po[i]=((po[i-1])*(10%m))%m;
+    for(int i=1;i<=n-1;i++)
+    {
+        ll f,t,w;
+        cin>>f>>t>>w;
+        v[f].pb(mp(t,w));
+        v[t].pb(mp(f,w));
+    }
+
+
+    ll _phi=phi(m);
+
+    _phi--;
+    ll res= power(10,_phi);
+    inv[0]=1;
+    for(int i=1;i<=n;i++)
+    {
+        inv[i]= (inv[i-1]*res)%m;
+    }
+
+    decomp_tree(0);
+    cout<<ans<<endl;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
