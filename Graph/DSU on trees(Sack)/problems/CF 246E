@@ -1,0 +1,190 @@
+//#include "grader.h"
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+const int N=400009;
+int n,siz[N];
+set<string> st[N];
+bool big[N];
+vector< vector<int> > v(N),q(N);
+map<pair<int,int> ,int > mb,ans;
+string name[N];
+int vv[N],kk[N],lev[N];
+void dfs_siz(int no,int p)
+{
+    siz[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(nw==p)
+            continue;
+        dfs_siz(nw,no);
+        siz[no]+=siz[nw];
+    }
+}
+void add(int no,int p,int org,bool cancel)
+{
+    if(cancel==0)
+    {
+
+    st[lev[no]].insert(name[no]);
+
+    }
+    else
+    {
+        auto it=st[lev[no]].find(name[no]);
+        if(it!=st[lev[no]].end())
+            st[lev[no]].erase(it);
+    }
+
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(nw==p||big[nw])
+            continue;
+
+        add(nw,no,org,cancel);
+    }
+}
+void get_ans(int no)
+{
+    for(int i=0;i<sz(q[no]);i++)
+    {
+        int nw=q[no][i];
+        ans[mp(no,nw)]=sz(st[nw]);
+    }
+}
+void dfs(int no,int p,bool keep)
+{
+    int big_child=-1,mx=-1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(nw==p)
+            continue;
+        if(siz[nw]>mx)
+        {
+            mx=siz[nw];
+            big_child=nw;
+        }
+    }
+
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(nw==p||nw==big_child)
+            continue;
+        dfs(nw,no,0);
+    }
+
+    if(big_child!=-1)
+    {
+        dfs(big_child,no,1);
+        big[big_child]=1;
+    }
+
+    add(no,p,no,0);
+    get_ans(no);
+    if(big_child!=-1)
+        big[big_child]=0;
+
+    if(keep==0)
+    {
+        add(no,p,no,1);
+    }
+}
+void solve()
+{
+    dfs_siz(0,-1);
+
+    dfs(0,-1,0);
+}
+void dfs1(int no,int p,int lv)
+{
+    lev[no]=lv;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(nw==p)
+            continue;
+        dfs1(nw,no,lv+1);
+    }
+}
+int main()
+{
+
+    cin>>n;
+
+    for(int i=1;i<=n;i++)
+    {
+        int p;
+        cin>>name[i]>>p;
+        v[p].pb(i);
+    }
+
+    dfs1(0,-1,0);
+    int m;
+    cin>>m;
+
+    for(int i=1;i<=m;i++)
+    {
+        cin>>vv[i]>>kk[i];
+        kk[i]=lev[vv[i]]+kk[i];
+        q[vv[i]].pb(kk[i]);
+    }
+
+    solve();
+    for(int i=1;i<=m;i++)
+      cout<<ans[mp(vv[i],kk[i])]<<" ";
+    cout<<endl;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
