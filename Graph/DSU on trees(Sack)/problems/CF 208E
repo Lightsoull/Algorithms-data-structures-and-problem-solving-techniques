@@ -1,0 +1,199 @@
+//#include "grader.h"
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+const int N=100009;
+int n,m,siz[N];
+bool big[N];
+int p[N][20],lv[N];
+int mb[N];
+int ans[N];
+vector< vector<int> > v(N);
+vector< vector<pair<int,int> > > v1(N);
+void dfs(int no)
+{
+    siz[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        p[nw][0]=no;
+        lv[nw]=lv[no]+1;
+        dfs(nw);
+        siz[no]+=siz[nw];
+    }
+}
+void build_lca()
+{
+    p[0][0]=-1;
+    lv[0]=0;
+    dfs(0);
+    for(int i=1;(1<<i)<=n;i++)
+    {
+        for(int j=0;j<=n;j++)
+        {
+            if(p[j][i-1]!=-1)
+            p[j][i]=p[p[j][i-1]][i-1];
+            else
+            p[j][i]=-1;
+        }
+    }
+}
+int getkth(int no,int k)
+{
+    if(k>=lv[no])
+        return -1;
+    int mx=log2(lv[no]);
+
+    for(int i=mx;i>=0;i--)
+    {
+        if((1<<i)<=k)
+        {
+            no=p[no][i];
+            k-=(1<<i);
+        }
+    }
+
+    return no;
+}
+void add(int no,int x)
+{
+    mb[lv[no]]+=x;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(big[nw])
+            continue;
+        add(nw,x);
+    }
+}
+void getsol(int no)
+{
+    for(int i=0;i<sz(v1[no]);i++)
+    {
+        int nw=v1[no][i].first;
+        int id=v1[no][i].second;
+        int lev=lv[nw];
+        ans[id]=mb[lev]-1;
+    }
+}
+void dfs2(int no,bool keep)
+{
+    int mx=-1,big_child=-1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(siz[nw]>mx)
+        {
+            mx=siz[nw];
+            big_child=nw;
+        }
+    }
+
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(nw==big_child)
+            continue;
+        dfs2(nw,0);
+    }
+
+    if(big_child!=-1)
+    {
+        dfs2(big_child,1);
+        big[big_child]=1;
+    }
+
+    add(no,1);
+    getsol(no);
+    if(big_child!=-1)
+    {
+        big[big_child]=0;
+    }
+
+    if(keep==0)
+    {
+        add(no,-1);
+    }
+}
+void solve()
+{
+    dfs2(0,0);
+}
+int main()
+{
+    cin>>n;
+
+    for(int i=1;i<=n;i++)
+    {
+        int p;
+        cin>>p;
+        v[p].pb(i);
+    }
+    int m;
+    cin>>m;
+    build_lca();
+    for(int i=1;i<=m;i++)
+    {
+        int no,k;
+        cin>>no>>k;
+        int node= getkth(no,k);
+        if(node==-1||node==0)
+        {
+           ans[i]=0;
+           continue;
+        }
+
+        v1[node].pb(mp(no,i));
+    }
+    solve();
+    for(int i=1;i<=m;i++)
+    {
+        cout<<ans[i]<<" ";
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
