@@ -1,0 +1,16 @@
+/*
+I think it may be solved using hashing with dsu.
+Dsu is used to get at each node the hash of each 
+prefix of the strings written in this node's subtree. 
+To count the pair of positions which defines the given 
+string and the first node it passes through while going 
+down is u, the string can be decomposed into 2 parts.
+A proper suffix which is a prefix of some string in u's subtree,
+and a proper prefix which is a suffix of the string stored directly
+above u. By iterating over all proper suffixes above u and calculating
+the hash of this suffix, we can infer the hash that matches this suffix.
+So we count the number of hashes in u's subtree and add it to the answer.
+Since merging the prefixes would be difficult. We store the hash of a
+position relative to the root and not for every u. To get the hash relative u,
+we can subtract the hash of the string above u to the root (depending on how you calc the hash).
+*/
