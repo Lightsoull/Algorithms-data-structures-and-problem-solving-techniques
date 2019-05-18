@@ -1,0 +1,218 @@
+//#include "grader.h"
+#include <bits/stdc++.h>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+int dcmp(long double a,long double b){   return fabsl(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);}
+const int N=200009;
+int n,m;
+bool instack[N];
+int dfsN[N],lwlink[N],timer=1,comp_root[N],vis[N],mark[N],val[N],comp[N];
+vector<int> ans;
+vector< vector<int> > v(N),com,arr(N);
+stack<int> stk;
+vector<int> topo;
+bool ok=1;
+int Not(int a)
+{
+    if(a<=m)
+        return a+m;
+    return a-m;
+}
+void addOR(int a,int b)
+{
+    v[Not(a)].pb(b);
+    v[Not(b)].pb(a);
+}
+void check(int id1,int id2)
+{
+    bool dif=0;
+    int en=min(sz(arr[id1]),sz(arr[id2]));
+    for(int i=0;i<en;i++)
+    {
+        int ch1= arr[id1][i];
+        int ch2= arr[id2][i];
+
+        if(ch1==ch2)
+            continue;
+        if(ch1<ch2)
+        {
+            dif=1;
+            addOR(Not(ch1),ch2);
+            break;
+        }
+        else
+        {
+            dif=1;
+            addOR(Not(ch1),Not(ch1));
+            addOR(ch2,ch2);
+            break;
+        }
+    }
+
+    if(dif==0)
+    {
+
+        ok= (ok && (sz(arr[id1])<=sz(arr[id2])));
+    }
+}
+void dfs(int no)
+{
+    dfsN[no]=lwlink[no]=timer++;
+    stk.push(no);
+    instack[no]=1;
+    for(int i=0;i<sz(v[no]);i++)
+    {
+        int nw=v[no][i];
+        if(dfsN[nw]==0)
+        {
+            dfs(nw);
+            lwlink[no]=min(lwlink[no],lwlink[nw]);
+        }
+        else if(instack[nw])
+        {
+            lwlink[no]=min(lwlink[no],dfsN[nw]);
+        }
+    }
+
+    if(dfsN[no]==lwlink[no])
+    {
+        int x=-1;
+        com.pb(vector<int>());
+        while(x!=no)
+        {
+            x=stk.top();
+            stk.pop();
+            com.back().pb(x);
+            comp[x]=sz(com)-1;
+            instack[x]=0;
+        }
+    }
+    comp_root[comp[no]]=no;
+
+}
+bool issat()
+{
+    for(int i=1;i<=m+m;i++)
+    {
+        if(dfsN[i]==0)
+        {
+            dfs(i);
+        }
+    }
+
+    for(int i=1;i<=m;i++)
+    {
+        if(comp[i]==comp[Not(i)])
+            return 0;
+    }
+    return 1;
+
+}
+void dfs2(int no)
+{
+    vis[no]=1;
+    for(int i=0;i<sz(com[no]);i++)
+    {
+        int nw=com[no][i];
+        for(int j=0;j<sz(v[nw]);j++)
+        {
+            int nww= comp[v[nw][j]];
+            if(vis[nww])
+                continue;
+            dfs(nww);
+        }
+    }
+    topo.pb(no);
+}
+void Assign()
+{
+    for(int i=0;i<sz(com);i++)
+    {
+        if(vis[i]==0)
+            dfs2(i);
+    }
+    clr(mark,-1);
+    for(int i=0;i<sz(topo);i++)
+    {
+        int no=topo[i];
+        if(mark[no]==-1)
+        {
+            mark[no]=1;
+            mark[comp[Not(comp_root[no])]]=0;
+        }
+    }
+    for(int i=1;i<=m+m;i++)
+    {
+        val[i]=mark[comp[i]];
+    }
+}
+int main()
+{
+    cin>>n>>m;
+
+    for(int i=0;i<n;i++)
+    {
+        int num;
+        cin>>num;
+        for(int j=0;j<num;j++)
+        {
+            int no;
+            cin>>no;
+            arr[i].pb(no);
+        }
+    }
+    for(int i=0;i<n-1;i++)
+    {
+        check(i,i+1);
+    }
+    ok= (ok && issat());
+    if(ok==0)
+    {
+        cout<<"No\n";
+        return 0;
+    }
+
+    Assign();
+    for(int i=m+1;i<=m+m;i++)
+    {
+        if(val[i]==1)
+          ans.pb(i);
+    }
+    cout<<"Yes\n"<<sz(ans)<<endl;
+    for(int i=0;i<sz(ans);i++)
+        cout<<ans[i]-m<<" ";
+
+
+}
