@@ -1,6 +1,6 @@
 -If you have an integer n and you want to get its smallest divisor and biggest divisor.
-smallest divisor: is the smallest number in the sorted prime factors of the number.
-biggest divisor: is the number/smallest_divisor.
+smallest divisor but not 1: is the smallest number in the sorted prime factors of the number.
+biggest divisor but not n: is the number/smallest_divisor.
 
 -To get the smallest divior of a number can be in sqrt(n) by getting the prime factors of a number.
 -To get the smallest divisor of every number in a range of numbers [L,R]:
