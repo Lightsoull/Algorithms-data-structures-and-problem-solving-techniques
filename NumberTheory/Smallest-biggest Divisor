@@ -1,0 +1,40 @@
+-If you have an integer n and you want to get its smallest divisor and biggest divisor.
+smallest divisor: is the smallest number in the sorted prime factors of the number.
+biggest divisor: is the number/smallest_divisor.
+
+-To get the smallest divior of a number can be in sqrt(n) by getting the prime factors of a number.
+-To get the smallest divisor of every number in a range of numbers [L,R]:
+you can run seive remeber that every element that not prime will be marked by a prime so just minimize on the prime that
+marks a certain number and this will be the answer, but somestimes there will be a prime factor of some number let it be n 
+that occur one time at the prime factors of n and it exceeds its sqrt so seive won't get it, okay right but i just want the
+smallest prime so if a list of prime factors contain that prime it will be the largest one so i won't need it except if it is 
+the only prime so it equals to n so i can handel that by intializing first the small_div[num]=num.
+
+CODE
+----
+const int N=5000001;
+int l,r;
+int small_div[N];
+bool flag[N];
+void seive(int n)
+{
+    flag[0]=flag[1]=1;
+    for(ll i=2;i*i<=n;i++)
+    {
+        if(flag[i])
+          continue;
+        for(ll j=i*2;j<=n;j+=i)
+        {
+            flag[j]=1;
+            small_div[j]=min(small_div[j]*1ll,i);
+        }
+    }
+
+
+}
+int main()
+{
+    for(int i=1;i<=r;i++)
+        small_div[i]=i;
+    seive(r);
+}
