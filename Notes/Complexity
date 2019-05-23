@@ -142,9 +142,9 @@ When you do dfs and do the vis array only on the edges indexes not on the nodes 
 and traverse all its edges again and again this at the worest case can be O(E^2), consider example here there is a graph where there
 is n edges point to the same node and that node have n children so you will do n^2.
 ----------------------------------------------------------------------------------------------------------------------------------------
-When you do dfs from each node in a  graph only for two levels and then stop, the complexity of that is nlogn as noraml dfs
-plus some contant factor because sure there will be overlap but that overlap will be at most to one level so from here that 
-contant factor comes.
+When you do dfs from each node in a  graph only for N( N may be 2 or 3 or whatever) levels and then stop, the complexity of that is
+max(E^2,V^2), because let N is 2 imagine that i have  a root that goes to all remaining nodes then you will see that it is not in
+linear time.
 ----------------------------------------------------------------------------------------------------------------------------------------
 
 
