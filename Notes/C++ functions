@@ -132,7 +132,9 @@ But if the type is double or float it will return 3.000000 even if it is only 3.
 ----------------------------------------------------------------------------------------------------------------------------------------
 when you scan double and you input .35 it will be taken as 0.35 normaly.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+set that sorts decreasely, set< int ,greater<int> > st;
+if you want it for pairs just put instead of int pair<int,int> or whatever.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
