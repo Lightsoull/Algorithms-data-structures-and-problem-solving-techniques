@@ -146,8 +146,10 @@ When you do dfs from each node in a  graph only for N( N may be 2 or 3 or whatev
 max(E^2,V^2), because let N is 2 imagine that i have  a root that goes to all remaining nodes then you will see that it is not in
 linear time.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
+decreasing writing of IF statments decreases the complexity.
+----------------------------------------------------------------------------------------------------------------------------------------
+the estimated complexity for the number od divisors for n is cubic root of n.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
