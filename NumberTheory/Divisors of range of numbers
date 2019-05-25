@@ -1,0 +1,77 @@
+- IF you have a range of numbers from 1 to 10^6 and you want to get the divisors for each number of them or the list of prime factors
+for each number of them this can be in 10^6 * sqrt(10^6) which is TLE so there is another way to do that:
+first get the smallest divisor for each number which can be done by seive in O(n), then if i have the smallest divisor of a every
+number between 1 and 10^6 then for each number lets get its prime factors by dividing it at first by its smallest prime factor then 
+divide the remaining part by its smallest prime factor and so on this in n*log(n) this way i will get all the prime factors for each
+number and the remaining part is to get the divisors for each number okay as you know the number of divisors them selfs is so small
+but they way to get them is the thing that costs, so the complexity of assigning all the divisors for all the N numbers is d*N , 
+where d is the max number of diviors in the list and N is the length of the list, and this could be done recursively.
+
+CODE
+----
+const int N=10000009;
+const int M=1000009;
+int small_div[N];
+ll a[M];
+bool flag[N];
+vector<int> mb[N];
+vector<pair<int,int>> dv,v;
+void seive(int n)
+{
+    for(int i=1;i<n;i++)
+        small_div[i]=i;
+    flag[0]=flag[1]=1;
+    for(ll i=2;i*i<n;i++)
+    {
+        if(flag[i])
+            continue;
+        for(int j=i*2;j<n;j+=i)
+        {
+            flag[j]=1;
+            small_div[j]=min(small_div[j]*1ll,i);
+        }
+    }
+}
+// mb[idx] contain the divisors of the idx th number in the a[] array.
+void add(int id,ll num,int idx)
+{
+    if(id==sz(dv))
+    {
+        mb[idx].pb(num);
+        return ;
+    }
+
+    for(int i=0,c=1;i<=dv[id].second;i++,c*=dv[id].first)
+    {
+        add(id+1,num*c,idx);
+    }
+}
+int main()
+{
+    int n;
+    cin>>n;
+
+    for(int i=0;i<n;i++)
+        cin>>a[i],v.pb(mp(a[i],i));
+
+    seive(N);
+    clr(mb,-1);
+    for(int i=0;i<n;i++)
+    {
+        int no=v[i].first;
+        int id=v[i].second;
+        dv.clear();
+        while(no>1)
+        {
+            if(sz(dv)>0&&dv.back().first==small_div[no])
+            {
+                dv.back().second++;
+            }
+            else
+              dv.pb(mp(small_div[no],1));
+
+            no/=small_div[no];
+        }
+        add(0,1,id);
+    }
+}
