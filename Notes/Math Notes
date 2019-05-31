@@ -193,7 +193,11 @@ Most signficant is the most left and the less signficant is the most right.
 - Sum of first N even numbers is N*(N+1).
 - Sum of first N odd numbers is N^2.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you want the sum of elements between L and R of an array, instead of getting F(L,R) which is the sum of elements of array
+from L to R you can just reduce the problem and get the F(X) which is the sum from begining till X position of elements in
+array if you have this function you can compute the sum from L to R by F[R]-F[L-1].
+the same for multiplication functions.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
