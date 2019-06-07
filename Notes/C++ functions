@@ -135,6 +135,9 @@ when you scan double and you input .35 it will be taken as 0.35 normaly.
 set that sorts decreasely, set< int ,greater<int> > st;
 if you want it for pairs just put instead of int pair<int,int> or whatever.
 ----------------------------------------------------------------------------------------------------------------------------------------
+erase in vector Complexity:
+the number of elements erased + the number of elements after the last erased element.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
