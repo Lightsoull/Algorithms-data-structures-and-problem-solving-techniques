@@ -174,6 +174,9 @@ if you want to decreament an iterator then dealing with it, yu have to put brack
 ----------------------------------------------------------------------------------------------------------------------------------------
 Takecare of the binary search boundries.
 ----------------------------------------------------------------------------------------------------------------------------------------
+When you are given a list of edges and you have to select a some edges from it to be in and other to be out and output the in
+edges, Take care of order of from and to of input edges.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
