@@ -232,5 +232,27 @@ int main()
     get_euler_path();
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
+Some Wrong Thinking
+1- if you did a dfs and vis on edges to get euler (path/cycle) this will be with complexity N^2, bec consider the following
+example: graph edges 1-2, 1-3, 1-4, 2-1, 3-1, 4-1. here it is N^2 bec if i don't enter an edge bec it is visisted i will still
+iterating on it checking whether it is visited or not, and that will be avoided in the Hierholzer algorithsm by poping from vector.
+2- To print euler cycle/path you can't put edges it is just nodes.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
