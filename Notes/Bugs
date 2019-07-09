@@ -177,7 +177,8 @@ Takecare of the binary search boundries.
 When you are given a list of edges and you have to select a some edges from it to be in and other to be out and output the in
 edges, Take care of order of from and to of input edges.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+when you do a cmp function to sort don't write return a<=b write return a<b.  
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
