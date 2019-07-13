@@ -1,0 +1,156 @@
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp>
+#define sz(v)   ((int)(v).size())
+#define  all(v)    ((v).begin()),((v).end())
+#define  allr(v)    ((v).rbegin()),((v).rend())
+#define   pb         push_back
+#define   mp         make_pair
+#define   mt         make_tuple
+//#define   Y            imag()
+//#define   X            real()
+#define    clr(v,d)      memset( v, d ,sizeof(v))
+#define   angle(n)      atan2((n.imag()),(n.real()))
+#define   vec(a,b)       ((b)-(a))
+//#define   length(a)      hypot( (a.imag()),(a.real()) )
+#define   normalize(a)      (a)/(length(a))
+//#define    dp(a,b)          (((conj(a))*(b)).real())
+//#define    cp(a,b)          (((conj(a))*(b)).imag())
+#define    lengthsqrt(a)       dp(a,a)
+#define    rotate0( a,ang)    ((a)*exp( point(0,ang) ))
+#define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)
+#define    reflection0(m,v)         (conj((v)/(m))*(m))
+#define     reflectionA(m,v,p0)     (conj( (vec(p0,v))/(vec(p0,m)) ) * (vec(p0,m)) ) + p0
+//#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
+#define     PT                    complex<double>
+#define outfile freopen("out.out", "w", stdout);
+#define infile  freopen("in.in", "r", stdin);
+#define PI acos(-1)
+typedef  long long     ll ;
+typedef  unsigned long long ull;
+const double eps= (1e-9);
+using namespace std;
+using namespace __gnu_pbds;
+int dcmp(double a,double b){   return fabs(a-b)<=eps ? 0: (a>b)? 1:-1  ;}
+int getBit(int num, int idx) {return ((num >> idx) & 1) == 1;}
+int setBit1(int num, int idx) {return num | (1<<idx);}
+ll setBit0(ll num, int idx) {return num & ~(1ll<<idx);}
+ll flipBit(int num, int idx) {return num ^ (1<<idx);}
+void FS(){ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);}
+ll mod=1000000007;
+ll mod2=1000000007-1;
+typedef vector<ll> row;
+typedef vector<row> matrix;
+ll power(ll b,ll p)
+{
+    if(p==0)
+        return 1;
+    if(p&1)
+    {
+        return (b%mod*(power(((b%mod)*(b%mod))%mod,p/2)%mod))%mod;
+    }
+    else
+    {
+        return power(((b%mod)*(b%mod))%mod,p/2)%mod;
+    }
+}
+matrix zero_matrix(ll n,ll m)
+{
+    return matrix(n,row(m,0));
+}
+matrix identity_matrix(ll n)
+{
+    matrix v=zero_matrix(n,n);
+    for(int i=0;i<n;i++)
+    {
+        v[i][i]=1;
+    }
+    return v;
+}
+matrix multipliy_matrix(matrix a,matrix b)
+{
+    matrix c=zero_matrix(sz(a),sz(b[0]));
+    for(int i=0;i<sz(a);i++)
+    {
+        for(int k=0;k<sz(a[0]);k++)
+        {
+            for(int j=0;j<(sz(b[0]));j++)
+            {
+                c[i][j]=(c[i][j]+ ((a[i][k]%mod2)*(b[k][j]%mod2))%mod2)%mod2;
+            }
+
+        }
+    }
+    return c;
+}
+matrix power_matrix(matrix b,ll p)
+{
+    if(p==0)
+        return identity_matrix(sz(b));
+    if(p&1)
+    {
+        return multipliy_matrix(b,power_matrix(multipliy_matrix(b,b),p/2));
+    }
+    else
+    {
+        return power_matrix(multipliy_matrix(b,b),p/2);
+    }
+}
+int main()
+{
+    ll n,c,f1,f2,f3;
+
+    cin>>n>>f1>>f2>>f3>>c;
+
+    matrix v1=zero_matrix(3,3);
+    v1[0][0]=1;
+
+    matrix v2=zero_matrix(3,3);
+    v2[0][1]=1;
+
+    matrix v3=zero_matrix(3,3);
+    v3[0][2]=1;
+
+    matrix v4=zero_matrix(3,3);
+    v4[0][1]=2;
+
+    matrix tr2=zero_matrix(3,3);
+    tr2[1][2]=1;
+    tr2[2][2]=1;
+    tr2[1][1]=1;
+
+    matrix tr=zero_matrix(3,3);
+
+    tr[0][2]=tr[1][0]=tr[1][2]=tr[2][1]=tr[2][2]=1;
+
+    matrix trn1=power_matrix(tr,n-3);
+
+
+    matrix tr3=zero_matrix(5,5);
+    tr3[0][0]=tr3[0][1]=tr3[0][4]=tr3[1][1]=tr3[1][4]=tr3[2][4]=tr3[3][2]=tr3[3][4]=tr3[4][3]=tr3[4][4]=1;
+
+    matrix v5=zero_matrix(5,5);
+    v5[0][0]=2;
+
+
+    //cout<<multipliy_matrix(v4,power_matrix(tr2,n-3))[0][2]<<endl;
+    ll n1= power(f1,multipliy_matrix(v1,trn1)[0][2]);
+    ll n2= power(f2,multipliy_matrix(v2,trn1)[0][2]);
+    ll n3= power(f3,multipliy_matrix(v3,trn1)[0][2]);
+    ll C1= power(c,(((n%mod2*2)%mod2-6)%mod2+mod2)%mod2);
+    ll C2=1,C3=1,C4=1;
+    if(n-4>=1)
+       C2=power(c,multipliy_matrix(v5,power_matrix(tr3,n-4))[0][4]);
+    if(n-5>=1)
+       C3=power(c,multipliy_matrix(v5,power_matrix(tr3,n-5))[0][4]);
+    if(n-6>=1)
+       C4=power(c,multipliy_matrix(v5,power_matrix(tr3,n-6))[0][4]);
+
+
+    ll ans= (((((((n1*n2)%mod*n3)%mod*C1)%mod*C2)%mod*C3)%mod)*C4)%mod;
+    cout<<ans<<endl;
+}
+
+
+
+
