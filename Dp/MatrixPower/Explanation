@@ -1,0 +1,175 @@
+Sources:
+1- mostafa sadd 2 videos.
+--------------------------------------------------------------------------------------------------------------------------------------
+Idea: when you have some recurrance equation f[n]= f[n-1]+f[n-2] so you can express that sum by the product of 2 matrixes.
+-------------------------------------------------------------------------------------------------------------------------------------
+CODE
+----
+typedef vector<ll> row;
+typedef vector<row> matrix;
+ll power(ll b,ll p)
+{
+    if(p==0)
+        return 1;
+    if(p&1)
+    {
+        return (b%mod*(power(((b%mod)*(b%mod))%mod,p/2)%mod))%mod;
+    }
+    else
+    {
+        return power(((b%mod)*(b%mod))%mod,p/2)%mod;
+    }
+}
+/*
+a martix NxM have only zero values
+it is just like a zero number when
+it multiplied by another matrix the result will
+be zero and when it is added to another matrix the
+result is zero.
+*/
+matrix zero_matrix(int n,int m)
+{
+    return matrix(n,row(m,0));
+}
+/*
+identity matrix: is a matrix NxN where only the diagonal is one
+and the rest of the matrix is zero.
+it acts like number one when it multiplied by another matrix the result
+is the other matrix.
+*/
+matrix identity_matrix(int n)
+{
+    matrix v=zero_matrix(n,n);
+    for(int i=0;i<n;i++)
+    {
+        v[i][i]=1;
+    }
+    return v;
+}
+/*
+matrix trace is just the sum of the diagonal values.
+*/
+int matrix_trace(matrix a)
+{
+    int ans=0;
+    for(int i=0;i<sz(a);i++)
+        ans+=a[i][i];
+    return ans;
+}
+/*
+rotation of a matrix clockwise
+*/
+matrix rotate_matrix(matrix a)
+{
+    matrix b=zero_matrix(sz(a),sz(a[0]));
+    for(int i=0;i<sz(a);i++)
+    {
+        for(int j=0;j<sz(a[i]);j++)
+        {
+            b[j][sz(a)-1-i]=a[i][j];
+        }
+    }
+    return b;
+}
+/*
+reflect a matrix
+*/
+matrix reflect_matrix(matrix a)
+{
+    matrix b=zero_matrix(sz(a),sz(a[0]));
+    for(int i=0;i<sz(a);i++)
+    {
+        for(int j=0;j<sz(a[i]);j++)
+        {
+            b[i][sz(a[0])-1-j]=a[i][j];
+        }
+    }
+    return b;
+}
+/*
+matrix Addition
+Rule
+- same rows and columns of the two matrixes.
+it is the sum of the corresponding cells.
+*/
+matrix Add_matrix(matrix a,matrix b)
+{
+    matrix c=zero_matrix(sz(a),sz(a[0]));
+    for(int i=0;i<sz(a);i++)
+    {
+        for(int j=0;j<sz(a[i]);j++)
+        {
+            c[i][j]=b[i][j]+a[i][j];
+        }
+    }
+    return c;
+}
+/*
+matrix plus 1 is the matrix plus the identitty matrix.
+*/
+matrix plus_one_matrix(matrix a)
+{
+    matrix b=identity_matrix(sz(a));
+
+    return Add_matrix(a,b);
+}
+/*
+matrix multiplication
+rules
+1- if the two matrixes A and B have
+r1xc1 and r2xc2, c1=r2.
+the result matrix will have r1xc2.
+*/
+matrix multipliy_matrix(matrix a,matrix b)
+{
+    matrix c=zero_matrix(sz(a),sz(b[0]));
+    for(int i=0;i<sz(a);i++)
+    {
+        for(int k=0;k<sz(a[0]);k++)
+        {
+            for(int j=0;j<(sz(b[0]));j++)
+            {
+                c[i][j]=(c[i][j]+ (a[i][k]*b[k][j])%mod2)%mod2;
+            }
+
+        }
+    }
+    return c;
+}
+/*
+the same as the normal power of numbers
+*/
+matrix power_matrix(matrix b,int p)
+{
+    if(p==0)
+        return identity_matrix(sz(b));
+    if(p&1)
+    {
+        return multipliy_matrix(b,power_matrix(multipliy_matrix(b,b),p/2));
+    }
+    else
+    {
+        return power_matrix(multipliy_matrix(b,b),p/2);
+    }
+}
+// What about calculating: (a^1+a^2+a^3+a^4+a^5+a^n) ???
+
+// Let's try even power
+// (a^1+a^2+a^3+a^4+a^5+a^6)       = (a^1+a^2+a^3)+(a^1*a^3+a^2*a^3+a^3*a^3)
+// (a^1+a^2+a^3)+a^3*(a^1+a^2+a^3) = (a^1+a^2+a^3)*(1+a^3)
+// (a^1+a^2+a^3)+a^3*(a^1+a^2+a^3) = (a^1+a^2+a^3)*(1+ a^1+a^2+a^3 - (a^1+a^2))
+//
+
+// what about odd n
+// (a^1+a^2+a^3+a^4+a^5+a^6+a^7)   = a + a*(a^1+a^2+a^3+a^4+a^5+a^6)
+//                                 = a(1+(a^1+a^2+a^3+a^4+a^5+a^6))
+
+
+matrix sumPows(matrix a, int k) { // Return a^1+a^1+a^2+.....a^k    in O(k)
+    if (k == 0)
+        return zero_matrix(sz(a),sz(a[0]));
+    if(k%2!=0)
+        return multipliy_matrix(a,plus_one_matrix( sumPows(a,k-1) ));
+    else
+        return multipliy_matrix(sumPows(a,k/2),plus_one_matrix(power_matrix(a,k/2)));
+}
