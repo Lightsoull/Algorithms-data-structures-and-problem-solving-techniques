@@ -198,7 +198,8 @@ from L to R you can just reduce the problem and get the F(X) which is the sum fr
 array if you have this function you can compute the sum from L to R by F[R]-F[L-1].
 the same for multiplication functions.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Let x double number , 0<= x <=1 taking x^(inf) = 0, just like taking probability for inf number of turns will also equal to zero.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
