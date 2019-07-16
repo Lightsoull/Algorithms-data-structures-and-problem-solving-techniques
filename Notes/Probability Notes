@@ -1,0 +1,8 @@
+-Let x double number , 0<= x <=1 taking x^(inf) = 0, just like taking probability for inf number of turns will also equal to zero.
+------------------------------------------------------------------------------------------------------------------------------------------
+- Binomial distribution :
+if you have 2 possible out comes A and B and need the probability of getting N Bs , X turns,
+let probeility of getting B P2 and getting A p1,
+P(X)= (P1^(X-N) * p2^(N) ) * (X-1 choose N-1)
+E(X)= N/p2 .
+------------------------------------------------------------------------------------------------------------------------------------------
