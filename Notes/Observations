@@ -10,4 +10,48 @@ possible X and smallest possible Y. We can pick these 2 vertices to be 2 of the 
 
 3- If you have queries and is a query contradicts with a pervious ones it will be neglected so you can't proceed the queries offline.
 
+4- At chess board NxN each white cell is connected to four adjacent white cells and vice versa like a bipartite graph, the way to get
+a connected part of chess board of B black cells and White cells is:
+lets say B>W if no just swap, take a row consists of white then black then white and so on.. this will take all the white cells needed
+and subtract from black cells W-1 then the remaining black cells one way to do it just to take the black cells adjacent to each white
+cell if after that there will still black cells then there is no way to be done.
+CODE for NxN chess board starting at cell (1,1) which is a white cell
+---------------------------------------------------------------------
+int main()
+{
+    int q;
+    cin>>q;
+    while(q--)
+    {
+        int b,w;
+        cin>>b>>w;
+        int fl=0;
+        if(w>b)
+            swap(b,w),fl=1;
+        if(!(w*2+2>=b-w+1))
+        {
+            cout<<"NO\n";
+            continue;
+        }
+        b-=(w-1);
+        cout<<"YES\n";
+        for(int i=2+fl;i<=w*2+fl;i++)
+            cout<<2<<" "<<i<<endl;
+        for(int i=2+fl;i<=w*2+fl&&b;i+=2)
+        {
+            cout<<1<<" "<<i<<endl;
+            b--;
+        }
+        for(int i=2+fl;i<=w*2+fl&&b;i+=2)
+        {
+            cout<<3<<" "<<i<<endl;
+            b--;
+        }
+        if(b)
+            cout<<2<<" "<<1+fl<<endl,b--;
+        if(b)
+            cout<<2<<" "<<2*w+1+fl<<endl;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
 
