@@ -179,7 +179,9 @@ edges, Take care of order of from and to of input edges.
 ----------------------------------------------------------------------------------------------------------------------------------------
 when you do a cmp function to sort don't write return a<=b write return a<b.  
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+When you want something with a certain value equal k and your approach is greedy to max the value to be able to reach k takecare as it 
+may exceeds k.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
