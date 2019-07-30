@@ -65,6 +65,19 @@ void pattern_search(string main, string pat) {
 }
 complexity : O(n)
 ----------------------------------------------------------------------------------------------------------------------------------------
+Notes
+- if you are hashing a string of alphabet chars then there is 26 char so you have to use mod and try to use some big prime one to avoid 
+collosion.
+- if you are hashing a string of digits then we have only 10 digits (0-9) so we can not use mod but store the hash code in long long
+and since there is no mod there is no collosion for sure and use base 11 .
+- Take care the string 000 has the same value as 00 as 0 all of them have a hash code zero so to deal with that shift the digits
+value by one so 0 become 1 and 1 become 2 and so on and let the base be 11, the same for alphabet strings don't let 'a' be zero 
+let it be one.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 
 
