@@ -156,7 +156,9 @@ for(int i=0;i<n;i++)
 this is (n*(n+1))/2 not n*n.
 and consider the constant factor and remeber that 2*10^8 is the end.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you have a complexity n*(n*logn+const) Remeber that that const is multiplied by n so it matters and reducing it can let the 
+problem AC instead of TL.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
