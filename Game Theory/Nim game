@@ -1,0 +1,187 @@
+Source: mostafa saad 2 videos.
+-Nim Game:
+you have N piles of stones and there is some Ai stones in the ith pile and there is two players take turns each can move any positive number
+of stones from one pile and the last one who play will win.
+Solution:
+Xor all the Ai if the result is Zero then the first one who play will lose else the first one will win.
+CODE
+----
+void solve_Nim(vector<int> &piles)
+{
+    int Xor=0;
+    for(int i=0;i<sz(piles);i++)
+    {
+        Xor^=piles[i];
+    }
+    if(Xor!=0)
+    {
+        cout<<"first will win"<<endl;
+
+        for(int i=0;i<sz(piles);i++)
+        {
+            if(piles[i]> (Xor^piles[i]))
+            {
+                cout<<"first move "<<(piles[i]-(Xor^piles[i]))<<endl;
+                break;
+            }
+        }
+    }
+    else
+        cout<<"First will lose"<<endl;
+}
+Notes
+1- note that it is granted that if the Xor is not zero then there is a pile greater than the xor of the remaining ones.
+-----------------------------------------------------------------------------------------------------------------------------------------------
+-Misere Wining startegy:
+it is the same as Nim game but the last one who will play will lose.
+Solution:
+if the number of stones in each pile is less than or equal to one then Xor all the numbers if the result is zero then the first one will
+win else the second will win but if the numbers of stones has at least one greater than one then Do Nim normally.
+CODE
+----
+void solve_Nim(vector<int> &piles)
+{
+    int Xor=0;
+    bool special=0;
+    for(int i=0;i<sz(piles);i++)
+    {
+        Xor^=piles[i];
+        if(piles[i]>1)
+            special=1;
+    }
+    if(special==0)
+    {
+        if(Xor==0)
+            cout<<"first win";
+        else
+            cout<<"second win";
+        return;
+    }
+    if(Xor!=0)
+    {
+        cout<<"first win"<<endl;
+    }
+    else
+        cout<<"second win"<<endl;
+}
+---------------------------------------------------------------------------------------------------------------------------------------------
+Moore's Nim-K:
+it is a generalization of Nim game the same as nim game but each turn the player can take any number of stones from K piles and who play
+last will win.
+Solution:
+Express every number of stones in every pile in to binary and then list then below each other and every column if the sum of ones is 
+divisiable by (K+1) then the first will lose else the first will win.
+---------------------------------------------------------------------------------------------------------------------------------------------
+Move Cancelation strategy:
+it is like will you will move back k steps i will move forward k steps to cancel the effect of your move and return to the case before you
+played that move.
+---------------------------------------------------------------------------------------------------------------------------------------------
+Examples:
+1- Nim with skipping moves: it is the same as normal Nim but player 1 have A number of skips where he can do nothing in his turn for A times
+and player 2 have B number.
+Solution: by cancelling strategy i can always skip if he skip so if
+-A=B, then it is normal nim.
+-A>B, first will win.
+-B>A, second will win.
+
+2-Dividing a number N: you have a number N and 2 players each can divide it with some prime or prime to the power of some number iff
+it is divisable by it.
+Solution: every integer can be expressed as a multiple of some primes, eg 18000= 3^2 * 2^4 * 5^3 so you can take 5 or 5^2 or 5^3
+and so on, so you can map that to 3 piles haveing (2,4,3) and solve it like nim.
+
+3-Stair Case Nim: you have a stair from zero level to N-1 at each step there is number of coins and 2 players each can take any number 
+of coins from a step to the left step except step number zero can't make move from it, the player that can't make move
+(which means all the coins at step zero) will lose.
+Solution: Xor all the number of stones at the odd index stairs if result is zero then first will lose else first will win.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+Notes
+- To map any problem to Nim Game some properties have to exist:
+1- the indepentacy.
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
