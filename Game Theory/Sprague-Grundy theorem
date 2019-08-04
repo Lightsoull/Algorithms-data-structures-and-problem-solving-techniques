@@ -1,0 +1,216 @@
+Source: mostafa saad first 2 videos.
+-Impartial games:
+1- 2 players take turns, there is no difference between the two players except that one play at first and the other at second, So both
+players have the same allowed moves.
+2- the moves are known for both players doesn't depend on a chance or something and each player can see the move of the other.
+3- the game ends when there is a player can't make move and he loses.
+
+Misere Game:
+A game that ends when a player make a last move and he loses.
+
+Mex: 
+mex of a vector is the smallest non-negative number that doesn't exist in the vector.
+
+-Nimuber-grundy number:
+if the state is losing then grundy number is zero else grundy number is the mex of the grundy numbers of the possible moves, but if 
+a move generate more than one state then grundy number of that move is the Xor of the grundy number of the states, when grundy number
+equal to zero means losing else means wining.
+
+-Grundy theorem:
+is used only at Impartial games and can't be used at misere games, it solves the following problem:
+given NxN chess board and k knights where each one can move only to four cells if it is at (r,c) in can go to (r+1,c-2),(r-1,c-2),
+(r-2,c-1),(r-2,c+1). and each player select one knight from the k knights and make a move by it and so on players take turns.
+If you think in normal Dp games you will have to choose one from the knights and choose a move to do it using it and that can
+be TL because you will need the current location of every knight of the k knights, so here come grundy to solve the most annoying
+thing that i have many indepentant problems each knight is an indepentant problem so i will start from one knight and move and 
+move till the end calculating the result graundy number corresponds to that knight and do the same for every knight then Xor the result.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+Example 1:
+Having n piles and 2 players take turns the move is to choose one pile and take from it 1 or 2 or 3 and the one that couldn't make a move
+will lose.
+Solution:
+CODE
+----
+int grundy[100009],a[100009];
+int mex(vector<int>&v)
+{
+    sort(all(v));
+    if(v[0]!=0)
+        return 0;
+    for(int i=1;i<sz(v);i++)
+        if(v[i]-v[i-1]>1)
+         return v[i-1]+1;
+    return v.back()+1;
+}
+int solve(int n)
+{
+    if(n==0)
+        return 0;
+    int &ret=grundy[n];
+    if(ret!=-1)
+        return ret;
+    vector<int> v;
+    for(int i=1;i<=3;i++)
+    {
+        v.pb(solve(n-i));
+    }
+    return ret=mex(v);
+}
+int main()
+{
+    int n;
+    cin>>n;
+    for(int i=1;i<=n;i++)
+        cin>>a[i];
+    int ans=0;
+    for(int i=1;i<=n;i++)
+    {
+        ans^=solve(a[i]);
+    }
+    if(ans!=0)
+        cout<<"first win"<<endl;
+    else
+        cout<<"second win"<<endl;
+}
+---------------------------------------------------------------------------------------------------------------------------------------------
+Example 2:
+You have chocholate bar NxN, 2 players take turns the move is 
+1- remove last row and eat it.
+2- remove last column and eat it.
+3- split it into 2 parts from some column or some row.
+Solution:
+take care here the 1st and 2nd move will lead to one state so no problem but the third move will lead to 2 states so i have to xor them
+first.
+CODE
+----
+// note the code may contain bugs but the idea is true.
+int grundy[1009][1009];
+int mex(vector<int>&v)
+{
+    sort(all(v));
+    if(v[0]!=0)
+        return 0;
+    for(int i=1;i<sz(v);i++)
+        if(v[i]-v[i-1]>1)
+         return v[i-1]+1;
+    return v.back()+1;
+}
+int solve(int r,int c)
+{
+    if(r==0||c==0)
+        return 0;
+    int &ret=grundy[r][c];
+    if(ret!=-1)
+        return ret;
+    
+    vector<int> v;
+    v.pb(solve(r,c-1));
+    v.pb(solve(r-1,c));
+    
+    // vertical split
+    for(int i=1;i<c;i++)
+    {
+        v.pb(solve(r,i)^solve(r,c-i));
+    }
+    // horizonatal split
+    for(int i=1;i<r;i++)
+    {
+        v.pb(solve(i,c)^solve(r-i,c));
+    }
+    
+    return ret=mex(v);
+}
+int main()
+{
+    int n;
+    cin>>n;
+    int ans=solve(n,n);
+    if(ans!=0)
+        cout<<"first win"<<endl;
+    else
+        cout<<"second win"<<endl;
+}
+---------------------------------------------------------------------------------------------------------------------------------------------
+Big constrains:
+sometimes the constrains may prevent us from making Dp eg one pile of length 2^60, at that case solve the problem for smaller
+constrains and then try to get a pattern and generlize to the bigger constrains.
+---------------------------------------------------------------------------------------------------------------------------------------------
+Minimizing with grundy:
+Problem i have one pile and 2 players take turns each can only remove 2 or 4 or 6 stones and want to know who is the winner and the min 
+number of stones he removes.
+int grundy[100009],a[4],inf=1000000,steps[100009];
+int mex(vector<int>&v)
+{
+    sort(all(v));
+    if(v[0]!=0)
+        return 0;
+    for(int i=1;i<sz(v);i++)
+        if(v[i]-v[i-1]>1)
+         return v[i-1]+1;
+    return v.back()+1;
+}
+int solve(int n)
+{
+    if(n==0)
+        return 0;
+    int &ret=grundy[n];
+    if(ret!=-1)
+        return ret;
+    vector<int> v;
+    steps[n]=inf;
+    for(int i=0;i<3;i++)
+    {
+        if(n<a[i])
+            continue;
+
+        int res=solve(n-a[i]);
+        if(res==0)
+        {
+            steps[n]=min(steps[n],steps[n-a[i]]+a[i]);
+        }
+        v.pb(res);
+    }
+    if(steps[n]==inf)
+        steps[n]=0;
+
+    return ret=mex(v);
+}
+int main()
+{
+    int n;
+    cin>>n;
+    a[0]=2;
+    a[1]=4;
+    a[2]=6;
+    int ans=0;
+    ans=solve(n);
+    if(ans!=0)
+        cout<<"first win"<<endl;
+    else
+        cout<<"second win"<<endl;
+}
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
