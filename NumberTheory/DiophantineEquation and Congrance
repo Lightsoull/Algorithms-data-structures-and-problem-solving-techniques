@@ -66,7 +66,9 @@ vector<ll> modularEquation(ll a,ll b,ll n)
     
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Note
+1-the congrance equation ax+b = c  (mod p) could be rearranged and could be multiplied both sides and take to the power both sides.
+2-(x+y)*(x-y) = (x^2-y^2).
 ----------------------------------------------------------------------------------------------------------------------------------------
 
 
