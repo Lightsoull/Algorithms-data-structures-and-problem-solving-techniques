@@ -50,6 +50,10 @@ in the form  ( x+k*(b/g) ), (y+k*(a/g) )  where x,y are the solutions from the e
 Among all the solutions for bezout's coffients (x and y) exactly one solution
 |x| < b/g    |y| < a/g  and this solution is the solution produced by extended eculdian algo
 --------------------------------------------------------------------------------------------------------------------------------------
+Note:
+-gcd(a,b)=gcd(a-b,b), for a>=b.
+-g= gcd(a,b), a= n*g and b= m*g where n and m are co-primes.
+--------------------------------------------------------------------------------------------------------------------------------------
 
 
 
