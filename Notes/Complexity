@@ -162,6 +162,9 @@ problem AC instead of TL.
 If there is some variable can be declared as const like the size of the array or the mod value, declare it as const that's decrease
 the complexity.
 ----------------------------------------------------------------------------------------------------------------------------------------
+Every use of mod costs logn so minmize the use of every single mod and if ans=(ans+val)%mod note the value of answer increases 
+gradually so instead of using mod you can use if(ans>=mod) ans-=mod every time.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
