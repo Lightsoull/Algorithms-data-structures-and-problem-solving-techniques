@@ -1,0 +1,102 @@
+- Problem: codechef EXPTPROD.
+-If you have a Dp consists of for example three loops:
+for(int i=0;i<k;i++)
+{
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            dp[(i*j)%n]=dp[i]*P[j];
+        }
+    }
+}
+where n is 10^3 and k is 10^9, this is sure TLE because of k but what if the k is equal to log2(k) then it won't be TLE
+but how the k can be reduced to log2(k), that can be done by binary expontiation.
+
+Binary expontiation:
+if you want to calcutate a^k then it is a^(k/2)*a^(k/2) if k is even and it is a^(k/2)*a^(k/2)*a if k is odd, the same for the 
+k loop, to move to k you have moved from k/2, k/2 steps so you can calculate the result till k by knowing the result till k/2.
+
+CODE
+----
+const int mod=1000000007;
+int n;
+void go(vector<int> &a,vector<int> &b,vector<int> &c)
+{
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            int id=(i*j)%n;
+            c[id]=(c[id]+(1ll*a[i]*b[j]))%mod;
+        }
+    }
+}
+int power(int b,int p)
+{
+    if(p==0)
+        return 1;
+
+    ll y=power(b,p/2);
+    y=(y*y)%mod;
+    if(p&1)
+        y=(y*b)%mod;
+    return y;
+}
+vector<int> power2(vector<int> &v,int p)
+{
+    if(p==0)
+    {
+        // the base case of Dp
+        vector<int> ss(n,0);
+        ss[1]=1;
+        return ss;
+    }
+    vector<int> y=power2(v,p/2);
+    vector<int> F;
+    F.resize(n);
+    go(y,y,F);
+    if(p&1)
+    {
+        vector<int> G;
+        G.resize(n);
+        go(F,v,G);
+
+        return G;
+    }
+    else
+    return F;
+}
+int main()
+{
+    int T;
+    scanf("%d",&T);
+
+    while(T--)
+    {
+
+       int k;
+       scanf("%d",&n);
+       scanf("%d",&k);
+       int no;
+       vector<int> p(n,0);
+       for(int i=0;i<n;i++)
+       {
+           scanf("%d",&no);
+           p[no]++;
+       }
+       int t=power(n,mod-2);
+       for(int i=0;i<n;i++)
+       {
+           p[i]=(1ll*p[i]*t)%mod;
+       }
+       p=power2(p,k);
+       int ans=0;
+       for(int i=0;i<n;i++)
+       {
+           ans=(ans+(1ll*i*p[i]))%mod;
+       }
+       printf("%d\n",ans);
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
