@@ -13,3 +13,8 @@ Note: I can't make mod inverse with little fermat theorem bec the mod won't be p
 if i want a^-1 % m and m is not prime then power(a,m-2) won't work, if gcd(m,a)=1 then a^(phi(m)) = 1 (mod m)
 multiply a^-1 both sides , a^(phi(m)-1) = a^-1  (mod m).
 --------------------------------------------------------------------------------------------------------------------------------------
+Getting a^(-h) (mod m) can be done by getting a^(-1) (mod m), 
+inv[1]= a^-1 % m
+for(int i=2;i<=h;i++)
+ inv[i]=(inv[i-1]*inv[1])%m.
+--------------------------------------------------------------------------------------------------------------------------------------
