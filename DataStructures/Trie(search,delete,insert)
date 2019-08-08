@@ -142,3 +142,35 @@ struct trie
             insertt(root,bin,0);
             del(root,bin,0);
     }
+----------------------------------------------------------------------------------------------------------------------------------------
+Notes about complexity:
+There is no fixed memory space for trie because it is according to the prefix of the strings you insert, it is worest case can be
+N*siz where N is the number of strings and siz is the max string length, so trie is not designed to store the strings in less memory
+but it is designed to store the strings with common prefix in common nodes and that's not to reduce memory but to answer the 
+prefix questions in order of prefix length instead of prefix length * N.
+Example: how many strings starts with ABC ? with trie we can just move on the trie on those chars in order and see how many string 
+passed with this prefix to be the answer.
+with out trie we will loop on each string prefix to see if that prefix will match and count and that (length of prefix * N).
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
