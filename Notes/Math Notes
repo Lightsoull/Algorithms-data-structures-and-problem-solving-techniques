@@ -202,7 +202,15 @@ Let x double number , 0<= x <=1 taking x^(inf) = 0, just like taking probability
 ----------------------------------------------------------------------------------------------------------------------------------------
 2^i = 2^(i-1) + 2^(i-1) = 2^(i-2) + 2^(i-2) + 2^(i-2) + 2^(i-2).
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Multiplication Function:
+is a property that some functions may have F[a*b]= f[a]*f[b], there is two kinds of multiplicative functions
+1- completely multiplicative where a and b doesn't have to be co-prime.
+2- conditional multimplacative where a and b have to be co-prime to be multiplicative.
+In number theory usually a and b have to be co-prime to be multiplicative eg phi function.
+----------------------------------------------------------------------------------------------------------------------------------------
+Bi-jection (one to one correspondance):
+a relation where i have 2 sets where each element from first set is mapped to exactly one element from the other set and vice versa.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
