@@ -194,6 +194,10 @@ in the local scope targetting to change the value in the global variable only th
 ----------------------------------------------------------------------------------------------------------------------------------------
 Take care the long long may over flow and you have to use double, so check.
 ----------------------------------------------------------------------------------------------------------------------------------------
+When you have several test cases in a problem and you are using array a[N] and each test case you have n and you need a[n+1] be zero
+so for the first test case it is sure zero but if you have some test case with n greater than your current value then it won't
+be zero so intialize it by zero for every case.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
