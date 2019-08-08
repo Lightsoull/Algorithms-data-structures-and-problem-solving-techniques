@@ -182,6 +182,9 @@ when you do a cmp function to sort don't write return a<=b write return a<b.
 When you want something with a certain value equal k and your approach is greedy to max the value to be able to reach k takecare as it 
 may exceeds k.
 ----------------------------------------------------------------------------------------------------------------------------------------
+When you add two decimal numbers don't forget the the reminder at the end of the longest one.
+eg 1234 + 9812.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
