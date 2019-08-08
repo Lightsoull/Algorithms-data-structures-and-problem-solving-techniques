@@ -44,7 +44,10 @@ When the problem says in the output format : accurate to 2 fractional digits.
 means approximated to the nearest 2 digits, eg 5.5555 = 5.56 .
 ans= (round(ans*100.0))/100.0
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Exist something(place) means enter place, Exist from something(place) means get out from place.
+-------------------------------------------------------------------------------------------------------------------------------------------
+Subset means doesn't have to be conscutive.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
