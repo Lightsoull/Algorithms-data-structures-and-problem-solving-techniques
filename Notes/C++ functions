@@ -138,6 +138,8 @@ if you want it for pairs just put instead of int pair<int,int> or whatever.
 erase in vector Complexity:
 the number of elements erased + the number of elements after the last erased element.
 ----------------------------------------------------------------------------------------------------------------------------------------
+cout<< (s==0?1:0), must be in brackets.
+--------------------------------------------------------------------------------------------------------------------------------------
 
 
 
