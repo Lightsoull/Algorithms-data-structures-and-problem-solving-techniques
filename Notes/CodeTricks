@@ -441,7 +441,10 @@ bitset<N> b(X);
 for(int i=0;i<30;i++)
   b[i] // is the ith bit of the decimal number X, it is in the right order when i=0 means the bit 2^0.
 ----------------------------------------------------------------------------------------------------------------------------------------
- 
+ Takecare dfs on a tree differs from a graph even if it is DAG, at tree you will never visit the same node except by
+ moving to the parent, but at DAG you will visit the same node using forward/cross edges, so at graph you have to use vis array.
+----------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 
