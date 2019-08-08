@@ -1,0 +1,28 @@
+Sources: 
+https://threads-iiith.quora.com/Centroid-Decomposition-of-a-Tree
+https://petr-mitrichev.blogspot.com/2015/03/this-week-in-competitive-programming_22.html
+https://www.quora.com/q/threadsiiithyderabad/Centroid-Decomposition-of-a-Tree
+-------------------------------------------------------------------------------------------------------------------------------------------
+Centriod Decomposition: 
+is a kind of D&C on trees, if i have a tree i can get some node that is the centriod of the tree which means that it is the node
+that will make each child to it have a sub tree size less than or equal (total tree size/2).
+-------------------------------------------------------------------------------------------------------------------------------------------
+Why should i use centriod decompostion?
+because if i get the centriod of the tree and each child of that centriod will have a sub tree if i get the centriod of that subtree
+and do the same recursively the level of the centriods that will be build is log2(n) so here is the benefit that i could do O(n)
+operations each level and the overall complexity still n*log2(n).
+-------------------------------------------------------------------------------------------------------------------------------------------
+Centriod tree: is a tree where the root is the centriod of the orginal tree and its children is the centriods of the sub tree
+of the orginal tree children that node and so on, take care the structure of the centriod tree differs from the orginal tree 
+so some node A could be child of other node B in the orginal tree and in the centriod tree A may be parent of B.
+-------------------------------------------------------------------------------------------------------------------------------------------
+Notes
+1- the center of the tree differ than the centriod of the tree.
+2- At centriod decomposion if want the min distance between two nodes it is okay to consider the same subtree you are in becuse
+you are minminzing so if by deafult you considered a node from the same subtree there will be a distance sure minimium than that.
+3- At centriod decomp If you are caluclating the sum of paths between two nodes or max distance take care to don't take from the subtree 
+you are in because that will cause duplication in the sum case and wrong answer in the max case.
+4- why we take centriod at n/2 and not n/3 or any other value? because at n/2 sure there will be a centriod but at any other value
+there may not.
+5- for each tree sure there will be exactly one centriod.
+-------------------------------------------------------------------------------------------------------------------------------------------
