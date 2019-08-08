@@ -165,6 +165,12 @@ the complexity.
 Every use of mod costs logn so minmize the use of every single mod and if ans=(ans+val)%mod note the value of answer increases 
 gradually so instead of using mod you can use if(ans>=mod) ans-=mod every time.
 ----------------------------------------------------------------------------------------------------------------------------------------
+Calculating gcd(a,b) works in log(max(a,b)) but if:
+for(int i=0;i<n;i++)
+ ans=gcd(ans,a[i]);
+this not working in n*log(n), because i am using the same variable ans so gcd over all works in logn so the total complexity is
+n+logn.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
