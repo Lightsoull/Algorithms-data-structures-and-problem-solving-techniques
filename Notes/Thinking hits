@@ -199,6 +199,17 @@ and get relations/equations what ever.
 ----------------------------------------------------------------------------------------------------------------------------------------
 If you want to max or min something and it can be written in the form of a fraction write it in that form and see.
 --------------------------------------------------------------------------------------------------------------------------------------
+Think brudeforce before greedy and take time verfiy that if it could be brudeforce or not before switching to greedy
+because greedy is harder.
+--------------------------------------------------------------------------------------------------------------------------------------
+When you think Dp think memorization and iteration(as a equation relation).
+--------------------------------------------------------------------------------------------------------------------------------------
+Greedy notes: 
+-if some observation works on some kinds of examples then that doesn't mean it works for all.
+-to verfiy some greedy solution try to get examples where it doesn't work.
+--------------------------------------------------------------------------------------------------------------------------------------
+when you think Dp think in different recurrances not only in fixed one.
+--------------------------------------------------------------------------------------------------------------------------------------
 
 
 
