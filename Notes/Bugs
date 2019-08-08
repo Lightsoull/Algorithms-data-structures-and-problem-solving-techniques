@@ -189,6 +189,10 @@ vec, last is a reserved word.
 ----------------------------------------------------------------------------------------------------------------------------------------
 Don't declare something inside a condition (compilation error).
 ----------------------------------------------------------------------------------------------------------------------------------------
+When you define a global variable with the name of some variable in some local scope when you change the value of the variable
+in the local scope targetting to change the value in the global variable only the local will change.
+----------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 
