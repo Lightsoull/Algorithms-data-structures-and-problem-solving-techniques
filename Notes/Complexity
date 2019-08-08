@@ -159,7 +159,9 @@ and consider the constant factor and remeber that 2*10^8 is the end.
 If you have a complexity n*(n*logn+const) Remeber that that const is multiplied by n so it matters and reducing it can let the 
 problem AC instead of TL.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If there is some variable can be declared as const like the size of the array or the mod value, declare it as const that's decrease
+the complexity.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
