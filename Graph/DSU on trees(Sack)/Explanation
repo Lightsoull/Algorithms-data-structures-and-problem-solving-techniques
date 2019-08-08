@@ -1,0 +1,86 @@
+sources:
+https://codeforces.com/blog/entry/44351
+-----------------------------------------------------------------------------------------------------------------------------------------
+CODE
+----
+int cnt[maxn];
+bool big[maxn];
+int sz[maxn];
+void getsz(int v, int p){
+    sz[v] = 1;  // every vertex has itself in its subtree
+    for(auto u : g[v])
+        if(u != p){
+            getsz(u, v);
+            sz[v] += sz[u]; // add size of child u to its parent(v)
+        }
+}
+void add(int v, int p, int x){
+    cnt[ col[v] ] += x;
+    for(auto u: g[v])
+        if(u != p && !big[u])
+            add(u, v, x)
+}
+void dfs(int v, int p, bool keep){
+    int mx = -1, bigChild = -1;
+    for(auto u : g[v])
+       if(u != p && sz[u] > mx)
+          mx = sz[u], bigChild = u;
+    for(auto u : g[v])
+        if(u != p && u != bigChild)
+            dfs(u, v, 0);  // run a dfs on small childs and clear them from cnt
+    if(bigChild != -1)
+        dfs(bigChild, v, 1), big[bigChild] = 1;  // bigChild marked as big and not cleared from cnt
+    add(v, p, 1);
+    //now cnt[c] is the number of vertices in subtree of vertex v that has color c. You can answer the queries easily.
+    if(bigChild != -1)
+        big[bigChild] = 0;
+    if(keep == 0)
+        add(v, p, -1);
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+Notes
+-At dsu on trees the big child subtree can't be retraversed again because that will damage the concept that we build our complexity on
+and the new complexity will be n^2*logn again and instead we try to move the small childs themselfs to the big child with out 
+traversing the big child again but only traversing the small childs.
+-when i am dealing with paths it doesn't matter which root you choose for the tree bacause the path between each pair of nodes will
+remain the same.
+----------------------------------------------------------------------------------------------------------------------------------------
+Obtimization: in dsu on tree code the HLD style looping on the children to get the bigchild is not nessary and it is a waste of
+time since we can construct an array called big_of[vertex] = big child for every vertex, that could help for not getting TLE.
+----------------------------------------------------------------------------------------------------------------------------------------
+Observations to understand the complexity:
+The dfs function visits each node exactly once.
+The problem might seem with the add function. You might think that it is making the algorithm n^2. 
+Note that in the add function, we only go down from a vertex to its children if the edge connecting 
+the vertex to the child is a light edge.
+You can think of it in this way, each vertex v will be visited by a call to the add function for any 
+ancestor of v that is connected to a light edge. Since there are at most log(n) light edges going up from 
+any vertex to the root, each vertex will be visited at most log(n) times.
+So the algorithm is: Say you are at a vertex v, first you find the bigchild, then you run dfs on small childs, 
+passing the value of keep as 0. Why? So they are cleared from cnt. Then you run a dfs on bigchild, and you do not 
+clear it from cnt. Now, cnt stores the results for all vertices in the subtree of bigchild (since we cleared cnt for 
+small childs and didn't do so for the bigchild), so we call the add function to "add" the information of children of 
+current vertex that are connected to it via a light edge. Now we are ready to compute the answer.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
