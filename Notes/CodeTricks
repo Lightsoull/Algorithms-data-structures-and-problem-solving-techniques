@@ -432,6 +432,8 @@ When you are uniqe a vector it is better to use resize than erase bec erase may 
 sort(all(vec));
 vec.resize(unique(all(vec))-vec.begin());
 ----------------------------------------------------------------------------------------------------------------------------------------
+If you are comparing between values that may overflow, a>= x*y , where x*y may overflow so write a/x >= y 
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
