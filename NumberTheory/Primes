@@ -118,6 +118,7 @@ bool isprime(ll n)
  ux = uy (mod p)
  we can cancel u from both sides but iff u and p are relatively prime
  
+ 4- for N<=10^9 the gab between the primes is <= 300.
  ---------------------------------------------------------------------------------------------------------------------------------------
  
  
