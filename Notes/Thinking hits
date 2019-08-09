@@ -216,6 +216,10 @@ Don't think on one exmaple.
 ----------------------------------------------------------------------------------------------------------------------------------------
 Don't try to match directly a problem to old one.
 ----------------------------------------------------------------------------------------------------------------------------------------
+Sum of number of divisors of numbers from 1 to 10^5 is not <= sqrt(10^5) bec yes for each number from them will loop at most sqrt(10^5)
+to get its divisors but i will sum up them, so the number of dintinct divisors of elements from 1 to 10^5 is 10^5 simply
+bec each number is the divisor of itself.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
