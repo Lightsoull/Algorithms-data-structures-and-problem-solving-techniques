@@ -1,0 +1,18 @@
+/*
+- dp[i][j] is the sum of cells in the rectangle whose down right corner is (i,j) till upper
+left corner (1,1).
+-(r1,c1) is upper left corner of the rectangle and (r2,c2) is down right corner
+of the rectangle .
+*/
+int get_rect_sum(int r1,int c1,int r2,int c2)
+{
+    return dp[r2][c2]-dp[r2][c1]-dp[r1][c2]+dp[r1][c1];
+}
+for(int i=1;i<=n;i++)
+{
+    for(int j=1;j<=n;j++)
+    {
+        dp[i][j]=dp[i][j-1]+dp[i-1][j]-dp[i-1][j-1]+arr[i][j];
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------------------
