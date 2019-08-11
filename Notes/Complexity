@@ -171,6 +171,25 @@ for(int i=0;i<n;i++)
 this not working in n*log(n), because i am using the same variable ans so gcd over all works in logn so the total complexity is
 n+logn.
 ----------------------------------------------------------------------------------------------------------------------------------------
+/*
+the complexity of the following code is sigma n^2/i^2
+take n^2 common factor = n^2 sigma 1/i^2 = 1/2+1/4+1/9+... = PI^2/6.
+*/
+for(int i=1;i<=m;i++)
+{
+    for(int j=0;j<n;j+=i)
+    {
+        for(int k=0;k<n;k+=i)
+        {
+            ;
+        }
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 
 
 
