@@ -1,0 +1,4 @@
+- Slope of a line ab of two points a(x1,y1) and b(x2,y2) is (y2-y1)/(x2-x1) 
+Take care of the horizonatal and vertical lines because the difference between Y-axis and X-axis can be zero.
+- Different lines can have the same slope.
+------------------------------------------------------------------------------------------------------------------------------------------
