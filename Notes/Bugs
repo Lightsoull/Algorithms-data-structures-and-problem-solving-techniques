@@ -198,6 +198,11 @@ When you have several test cases in a problem and you are using array a[N] and e
 so for the first test case it is sure zero but if you have some test case with n greater than your current value then it won't
 be zero so intialize it by zero for every case.
 ----------------------------------------------------------------------------------------------------------------------------------------
+When you sort using cmp function and you are doing upper/lower_bound on the sorted vector you have to send the cmp function to
+the lower/upper_bound.
+eg
+upper_bound(all(st1),mp(mp(d[i],vc[i]),i),cmp);
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
