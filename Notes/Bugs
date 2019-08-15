@@ -203,8 +203,11 @@ the lower/upper_bound.
 eg
 upper_bound(all(st1),mp(mp(d[i],vc[i]),i),cmp);
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
+If you have a grid take care it is NxN or NxM.
+----------------------------------------------------------------------------------------------------------------------------------------
+If you have a grid contain k coins at some co-ordinates and you start from buttom left cell and you can move up ,left ,right 
+take care that after the last row contain coins there is no benefit to go after that.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
