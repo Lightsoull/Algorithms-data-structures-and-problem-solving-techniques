@@ -1,0 +1,5 @@
+- distance = velocity * time
+-------------------------------------------------------------------------------------------------------------------------------------------
+- If you are moving in a direction with velocity v1 and there is a resistant wind with velocity v2 in opposite direction so, it is as 
+if you are moving with velocity v1-v2. 
+-------------------------------------------------------------------------------------------------------------------------------------------
