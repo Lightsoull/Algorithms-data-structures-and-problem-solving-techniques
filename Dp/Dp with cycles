@@ -1,0 +1,62 @@
+Problem link: https://csacademy.com/contest/round-75/task/escape-the-matrix/
+-Problem:
+you have a grid nxm where each cell contain a letter 'U','D','L','R' means that if you reached that cell you have to move up,down,left,
+right and you have to count the number of cells to start from to go out of the grid.
+Solution:
+it is clear that it is Dp but the problem that there might be cycles which means i may go right,down,left,up,right and so on ok how
+to deal with that? first put the answer as if it is impossible to go out of grid bec if i cycled to a cell the answer to it won't be 
+calculated yet so putting the answer at first will make this cell have answer and will return without going more into the cycle.
+
+CODE
+int n,m,mem[509][509];
+string v[509];
+int solve(int r,int c)
+{
+    if(r<0||r>=n||c<0||c>=m)
+        return 1;
+
+    int &ret=mem[r][c];
+    if(ret!=-1)
+        return ret;
+
+    ret=0;
+
+    if(v[r][c]=='D')
+    {
+       ret|= solve(r+1,c);
+    }
+    else if(v[r][c]=='U')
+    {
+       ret|= solve(r-1,c);
+    }
+    else if(v[r][c]=='L')
+    {
+       ret|= solve(r,c-1);
+    }
+    else if(v[r][c]=='R')
+    {
+       ret|= solve(r,c+1);
+    }
+    return ret;
+}
+int main()
+{
+    cin>>n>>m;
+    for(int i=0;i<n;i++)
+    {
+        cin>>v[i];
+    }
+    clr(mem,-1);
+    int cnt=0;
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        {
+            if(solve(i,j))
+                cnt++;
+        }
+    }
+    cout<<cnt<<endl;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
