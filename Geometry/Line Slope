@@ -48,4 +48,42 @@ pair<int,int> get_slope(int i,int j)
         return mp(up,dw);
     }
 }
-------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------
+- To distingue between 2 line segments they have to have the same slope but this condition is not enough as it might have the same
+slope but they are parallel and not the same line segment but if it has the same slope and the same cutting point from the y-axis
+then sure it is the same line in other words at that case they will have the same stright line equation so they are equal.
+
+-Stright line equation
+y= m*x + C, m is the slope between the two points representing the line, (x,y) are some point on the line, C is the point that the
+line cut the y-axis at.
+
+This equation can be transformed to 
+C = y1-m*x1
+m= (y2-y1)/(x2-x1)
+C= y1-((y2-y1)/(x2-x1))*x1
+y = m*x + C (multiply by (x2-x1) both sides)
+(x2-x1)*y1= (y2-y1)*x1 + (x2-x1)*y1-(y2-y1)*x1 =
+(a*x1 + b*y1 = C),
+a= (y2-y1)
+b= (x2-x1)
+C= (y1*x2-y2*x1)
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
