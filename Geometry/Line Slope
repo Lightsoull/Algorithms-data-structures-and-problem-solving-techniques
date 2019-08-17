@@ -1,4 +1,48 @@
+-Meaning of slope: the slope from some point let it A means the ratio between the change in the Y-axis and X-axis during each point 
+we move from A in a stright line.
+
+-Calucalting slope: if i have a line and point A on the line and point B above point A in y-axis and point C below point A in y-axis
+then the slope of point B with respect to point A is the same as the point C with respect to point A because
+let A(x1,y1) B(x2,y2) C(x3,y3), A-B slope (y2-y1)/(x2-x1) and slope of B-C slope is the same but the nomerator * -1 and denmenator *-1
+so the -1 will be cancelled and become the same value, but there is a special case at the horizonatal and vertical lines because the 
+when the nomerator or denemenator is zero then the -1 won't be cancelled so you have to handel it.
+
 - Slope of a line ab of two points a(x1,y1) and b(x2,y2) is (y2-y1)/(x2-x1) 
 Take care of the horizonatal and vertical lines because the difference between Y-axis and X-axis can be zero.
+
 - Different lines can have the same slope.
+
+CODE
+// i and j are indexes of points
+pair<int,int> get_slope(int i,int j)
+{
+    if(x[j]-x[i]==0)
+    {
+        int g=__gcd(abs(x[j]-x[i]),abs(y[j]-y[i])),up,dw;
+        up=abs(y[j]-y[i]);  dw=(x[j]-x[i]); up/=g; dw/=g;
+        return mp(up,dw);
+    }
+    else if(y[j]-y[i]==0)
+    {
+        int g=__gcd(abs(x[j]-x[i]),abs(y[j]-y[i])),up,dw;
+        up=(y[j]-y[i]); dw=abs(x[j]-x[i]); up/=g; dw/=g;
+        return mp(up,dw);
+    }
+    else
+    {
+        int g=__gcd(abs(x[j]-x[i]),abs(y[j]-y[i])),up,dw;
+        up=(y[j]-y[i]); dw=(x[j]-x[i]); up/=g; dw/=g;
+        if(up<0&&dw<0)
+        {
+            up*=-1;
+            dw*=-1;
+        }
+        else if(dw<0)
+        {
+            dw*=-1;
+            up*=-1;
+        }
+        return mp(up,dw);
+    }
+}
 ------------------------------------------------------------------------------------------------------------------------------------------
