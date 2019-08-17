@@ -12,6 +12,9 @@ Take care of the horizonatal and vertical lines because the difference between Y
 
 - Different lines can have the same slope.
 
+- if two lines are parallel then they have the same slope.
+- if two lines are prependicular then if first have slope a/b second will have -b/a.
+
 CODE
 // i and j are indexes of points
 pair<int,int> get_slope(int i,int j)
