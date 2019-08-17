@@ -67,6 +67,7 @@ y = m*x + C (multiply by (x2-x1) both sides)
 a= (y2-y1)
 b= (x2-x1)
 C= (y1*x2-y2*x1)
+// take care calculate C after fixing a and b, handeling horizontal/vertical lines.
 ----------------------------------------------------------------------------------------------------------------------------------------
 
 
