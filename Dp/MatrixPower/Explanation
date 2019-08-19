@@ -5,7 +5,7 @@ Idea: when you have some recurrance equation f[n]= f[n-1]+f[n-2] so you can expr
 -------------------------------------------------------------------------------------------------------------------------------------
 CODE
 ----
-typedef vector<ll> row;
+typedef vector<int> row;
 typedef vector<row> matrix;
 ll power(ll b,ll p)
 {
@@ -120,7 +120,7 @@ rules
 r1xc1 and r2xc2, c1=r2.
 the result matrix will have r1xc2.
 */
-matrix multipliy_matrix(matrix a,matrix b)
+matrix multipliy_matrix(matrix &a,matrix &b)
 {
     matrix c=zero_matrix(sz(a),sz(b[0]));
     for(int i=0;i<sz(a);i++)
@@ -129,7 +129,9 @@ matrix multipliy_matrix(matrix a,matrix b)
         {
             for(int j=0;j<(sz(b[0]));j++)
             {
-                c[i][j]=(c[i][j]+ (a[i][k]*b[k][j])%mod2)%mod2;
+                c[i][j]=(c[i][j]+ (1ll*a[i][k]*b[k][j])%mod);
+                if(c[i][j]>=mod)
+                   c[i][j]-=mod;
             }
 
         }
@@ -173,3 +175,34 @@ matrix sumPows(matrix a, int k) { // Return a^1+a^1+a^2+.....a^k    in O(k)
     else
         return multipliy_matrix(sumPows(a,k/2),plus_one_matrix(power_matrix(a,k/2)));
 }
+----------------------------------------------------------------------------------------------------------------------------------------
+Avoid TLE with matrix power:
+complexity of matrix power is n^3*log2(p) , n is the size of the matrix and p is the power.
+So the complexity itself is high here is some tips to pass time:
+- use integer if you can.
+- decrease the usage of mod.
+- pass the matrixes to multiply matrix function with reference.
+- fast input/output.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
