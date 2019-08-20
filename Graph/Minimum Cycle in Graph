@@ -1,0 +1,94 @@
+-Minimum length Cycle in a weighted Graph:
+simply consider the the cycle starts from node i and passes through node j to the length will be the shortest path from
+i to j and then block all the edges used in that path to don't use them a gain to be a cycle and again get the shortest path
+from node j to i and then the sum will be the length of the cycle.
+-Complexity: n^3*log(E).
+
+code for a graph all weights are ones so i used bfs if the weights are not one then simply use dijkstra instead.
+ll bfs(int node,int T,int rec)
+{
+    clr(vis,0);
+    queue<pair<int,int>> q;
+    q.push(mp(node,0));
+    vis[node]=1;
+    while(sz(q)>0)
+    {
+        int cur=q.front().first;
+        int co=q.front().second;
+        q.pop();
+
+        if(cur==T)
+        {
+            return co;
+        }
+
+        for(int i=0;i<sz(v[cur]);i++)
+        {
+            int nw=v[cur][i].first;
+            int edge_id=v[cur][i].second;
+            if(blk[edge_id]||vis[nw])
+                continue;
+            vis[nw]=1;
+            if(rec)
+            par[nw]=mp(cur,se);
+            q.push(mp(nw,co+1));
+        }
+    }
+    return inf;
+}
+void update(int S,int T,int fl)
+{
+    if(fl==1)
+    {
+        while(T!=S)
+        {
+
+            blk[par[T].second]=fl;
+            T=par[T].first;
+        }
+    }
+    else
+    {
+        while(T!=S)
+        {
+            blk[par[T].second]=fl;
+            T=par[T].first;
+        }
+    }
+
+}
+int main()
+{
+    ll mi=inf;
+    for(int i=1;i<id;i++)
+    {
+        for(int j=1;j<id;j++)
+        {
+            if(i==j)
+                continue;
+
+            ll d1=bfs(i,j,1);
+            if(d1==inf)
+                continue;
+
+            update(i,j,1);
+
+            ll d2=bfs(j,i,0);
+
+            update(i,j,0);
+
+            if(d2!=inf)
+             mi=min(mi,d1+d2);
+        }
+    }
+    // mi=inf means there is no any cycle.
+    if(mi==inf)
+        cout<<"-1"<<endl;
+    else
+        cout<<mi<<endl;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
