@@ -1,0 +1,48 @@
+Binary search: the idea is that i have a range from L to R and at the middle of it i can decide which way i could move so
+each time the size of the range will be halfed that's why its complexity is log2(size of range), But note that once i move 
+to a certain part of the range that means that i will never need to move to the other part again.
+
+Binary search with integers
+int BS(int l,int r)
+{
+    int ans=0;
+    while(l<=r)
+    {
+        int mid=(l+r)/2;
+        if(check(mid))
+        {
+            ans=mid;
+            r=mid-1;
+        }
+        else
+        {
+            l=mid+1;
+        }
+    }
+    return ans;
+}
+
+Binary search with doubles
+double BS(double l,double r)
+{
+    int T=100;
+    double ans=0;
+    while(T--)
+    {
+        double mid=(l+r)/2;
+        if(check(mid))
+        {
+            ans=mid;
+            r=mid;
+        }
+        else
+        {
+            l=mid;
+        }
+    }
+    return ans;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
