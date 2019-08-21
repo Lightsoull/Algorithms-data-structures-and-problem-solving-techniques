@@ -2,6 +2,9 @@ Notes:
 - dfs gets any path which may be the longer one and that could affect the reachablility to some cell or node if the reachablility
 depends on a number of steps or cost, So here you have to use bfs to move through the shortest path first.
 
+- If you have some cells of grid, it will differ if you will branch from them all at the same time or from one after another, if you 
+will branch from them all at the same time so you have to enter them to queue at the same time if not then enter each node after
+the other.
 ----------------------------------------------------------------------------------------------------------------------------------------
 // the par array to store the path from node (node) to node (T) and the edge connecting them.
 CODE
