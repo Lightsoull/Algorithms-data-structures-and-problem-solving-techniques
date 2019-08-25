@@ -78,7 +78,9 @@ vector<int> computeprefix(string pat)
     
     return longestprefix;
 }
-  
+Notes about fail function:
+-if you want to get the fail function of two concatenated strings A and B and don't want to overlap then run fail function on
+a new string = a + "#" + b.
 ----------------------------------------------------------------------------------------------------------------------------------------
  Some Applictions on KMP and failture Function
  ---------------------------------------------
