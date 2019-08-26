@@ -46,4 +46,97 @@ int main()
          lengthofpath=treediameter(n);
 
 }
+----------------------------------------------------------------------------------------------------------------------------------------
+Two ways to get the tree diameter:
+1- run a dfs from some node let it be n1 then get the max distance node from n1 let it be n2 then run dfs from n2 and get
+the max distance node from n2 let it be n3 then the tree diameter is from n2 to n3.
+
+CODE
+----
+int mxi;
+void dfs(int node,int p,int l)
+{
+    if(l>mxi)
+    {
+        mxi=l;
+        N1=node;
+    }
+    for(int i=0;i<sz(tv[node]);i++)
+    {
+        int nw=tv[node][i];
+        if(nw==p)
+            continue;
+        dfs(nw,node,l+1);
+    }
+}
+// node is some node in the tree.
+int get_D(int node)
+{
+    mxi=-1;
+    dfs(node,0,0);
+    mxi=-1;
+    dfs3(N1,0,0);
+    return mxi;
+}
+-----------------------------------------------------------------------------------------------------------
+2- if i have a tree the path of the tree diameter whether will pass by the some root or not if yes then the tree diamter is the
+sum of the 2 max paths from that root, if not then we will move to each child and do the same, the idea is the same as D&C.
+
+CODE
+----
+pair<int, int> go(int v,int p)
+{
+	int an = 0, mx1 = 0, mx2 = 0;
+	for(int i=0;i<sz(tr[v]);i++)
+	{
+		int u = tr[v][i];
+		if(u==p)
+            continue;
+		pair<int, int> t = go(u,v);
+		an = max(an, t.first);
+		++t.second;
+		if (t.second > mx1)mx2 = mx1, mx1 = t.second;
+		else if (t.second > mx2) mx2 = t.second;
+	}
+	an = max(an, mx1 + mx2);
+	return make_pair(an, mx1);
+}
+int get_D(int node)
+{
+    return go(node,0);
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
