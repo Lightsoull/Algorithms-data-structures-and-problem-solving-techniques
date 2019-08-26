@@ -145,7 +145,8 @@ In C++, log2(num) means log for base 2, log(num) means log in base 10.
 In C++, string st;  st.substr(index) returns a subtring starts from index till the end of the string st. 
 in time of the length of the returned subtring.
 --------------------------------------------------------------------------------------------------------------------------------------
-
+In C++, div is a reserved word use Div instead
+--------------------------------------------------------------------------------------------------------------------------------------
 
 
 
