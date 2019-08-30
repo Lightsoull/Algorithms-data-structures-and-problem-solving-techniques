@@ -47,3 +47,40 @@ ll sumPows(ll a, int k) { // Return a^1+a^1+a^2+.....a^k    in O(k)
 }
 
 --------------------------------------------------------------------------------------------------------------------------------------
+GCD application:
+if you have two nested circles at the same center the radius of outer is bigger the outer is divdided by m 
+sectors(lines) and the inner by n sectors, sectors are numbered from one for each circle i want to know the 
+min number of sector of inner circle let it a and the min number of sector of the outer circle let it b to meet at the same point.
+
+Sol:
+you want to find the smallest a, b such that a/n = b/m.
+am = bn
+a = b * n / m
+for  a to be an integer, b * n must divide m. 
+So b equals m / gcd(n, m). And a equals n / gcd. 
+gcd is the number of meetings not the periodicity of the meetings.
+a = b * n / m
+since we want to minimize a. b should be the minimal integer that divides m when multiplied by n. b = m is a solution 
+(which might be non optimal). how many factors of it can we remove and keep the product divisible by m? 
+These are the common factors between m and n. 
+Since removing them from b won't affect the divisibility because these factors are already present in n.
+
+so after a sectors from inner circle and b from outer they will meet.
+--------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
