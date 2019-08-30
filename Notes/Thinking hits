@@ -226,7 +226,8 @@ can be made by the orginal and you can get the orginal array from it. eg prefix 
 When you have n and you want to choose i (i from 0 to m) every time and you summing up the number of ways to choose for each i
 , that sum is 2^n like for every one from n you will decide whether to choose it or not.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+List the unknowns and the unknowns infront of you on the drawing to observe.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
