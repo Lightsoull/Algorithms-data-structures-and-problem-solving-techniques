@@ -1,0 +1,53 @@
+/*
+Note that if i have the array A of n elements at ith index i will only care about the values that are smaller than or equal to a[i] and 
+coming before me so as i am moving on the array from left to right if i will update the value a[i] with the longest increaseing 
+subsequence it has, segement tree is on values of the array.
+*/
+CODE
+----
+int query(int a,int b,int s=0,int e=id,int p=1)
+{
+    if(b<s||a>e)
+        return 0;
+    if(s>=a&&e<=b)
+    {
+        return tree[p];
+    }
+    int m=(s+e)/2;
+    return max(query(a,b,s,m,p*2),query(a,b,m+1,e,p*2+1));
+}
+void update(int idx,int val,int s=0,int e=id,int p=1)
+{
+    if(s==e)
+    {
+        tree[p]=val;
+        return;
+    }
+    int m=(s+e)/2;
+    if(idx<=m)
+    update(idx,val,s,m,p*2);
+    else
+    update(idx,val,m+1,e,p*2+1);
+ 
+    tree[p]=max(tree[p*2],tree[p*2+1]);
+}
+// the elements of the array from 0 to id.
+// returns the LIS of the array B.
+int solve()
+{
+    for(int i=0;i<sz(B);i++)
+    {
+        int L=0;
+        int R=B[i];
+        int ret=0;
+        ret=query(L,R);
+ 
+        update(B[i],ret+1);
+        
+    }
+    return query(0,id-1);
+}
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+ 
