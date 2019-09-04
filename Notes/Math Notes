@@ -224,7 +224,11 @@ ceil and floor differs with -ve values than from +ve.
 ----------------------------------------------------------------------------------------------------------------------------------------
 4^(x) != 2^(2^x), so the base doesn't divide but only the power, 4^6 = 4^2^3  (2*3=6).
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+if you want to compare a*b*c to some number and a*b*c could overflow just take log for any base both sides bec log(a*b*c)=
+log(a)+log(b)+log(c) which won't over flow and also take log the other side.
+-log(a*b)=log(a)+log(b).
+-log(a/b)=log(a)-log(b).
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
