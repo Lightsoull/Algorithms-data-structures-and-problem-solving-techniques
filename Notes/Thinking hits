@@ -228,7 +228,9 @@ When you have n and you want to choose i (i from 0 to m) every time and you summ
 ----------------------------------------------------------------------------------------------------------------------------------------
 List the unknowns and the unknowns infront of you on the drawing to observe.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+When you have a range of numbers from L to R and you want the count of pairs between L and R such that a certain condition holds for 
+both numbers then you can think of the relation between the pairs and the conditions.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
