@@ -229,7 +229,10 @@ log(a)+log(b)+log(c) which won't over flow and also take log the other side.
 -log(a*b)=log(a)+log(b).
 -log(a/b)=log(a)-log(b).
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+if i have a set of numbers A1,A2,A3 and i want get the sum of the multiplication of all the combinations of them 
+which is A1A2+A1A3+A2A3+1 = (A1+1)*(A2+1)*(A3+1).
+the same applied to the three elements treat '+' as or and '*' as and.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
