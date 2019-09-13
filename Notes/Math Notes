@@ -233,7 +233,8 @@ if i have a set of numbers A1,A2,A3 and i want get the sum of the multiplication
 which is A1A2+A1A3+A2A3+1 = (A1+1)*(A2+1)*(A3+1).
 the same applied to the three elements treat '+' as or and '*' as and.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you want to keep some range of bits as it is and cancel the rest you can do that by anding the mask with (1<<(range))-1.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
