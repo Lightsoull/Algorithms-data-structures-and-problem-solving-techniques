@@ -57,6 +57,8 @@ int main()
 At a NxN grid if you want to put knights such that there is 2 kinds of them black and white and you want the max number of pairs 
 of black and white to attack each other, the solution is to colour the grid like the chess board.
 ----------------------------------------------------------------------------------------------------------------------------------------
+Any substring [i,j] palindrome the subtring [i+1,j-1] must be palindrome too.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
