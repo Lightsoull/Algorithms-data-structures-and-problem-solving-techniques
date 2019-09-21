@@ -235,6 +235,10 @@ the same applied to the three elements treat '+' as or and '*' as and.
 ----------------------------------------------------------------------------------------------------------------------------------------
 If you want to keep some range of bits as it is and cancel the rest you can do that by anding the mask with (1<<(range))-1.
 ----------------------------------------------------------------------------------------------------------------------------------------
+if you have N blocks each contain 2 numbers each one block conmbine with two blocks and add to answer the 2 complete blocks
+how many complete blocks you can form?
+ans= N-(N-(ceil(N/3.0))
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
