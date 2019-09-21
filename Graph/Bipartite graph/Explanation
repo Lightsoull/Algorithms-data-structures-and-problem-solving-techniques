@@ -3,6 +3,7 @@ Notes about the bipartite graphs
 -At the chess board the kight move in 2 steps in direction A then 1 step in direction B where A and B must be perpendicular 
 to each other, so it always attack the colour which is the opposite to it so all the edges from it goes to the other colour and never 
 goes to the same colour So the knight graph is a bipartite where the black cells are in a side and the white ones in the other side.
+- Any graph doesn't contain any odd cycle is can be converted to bipartite graph.
 ---------------------------------------------------------------------------------------------------------------------------------------
 Bipartite graph check
 Explanation: to check if the given graph is Bipartite or not move on its levels level by level and assign a colour for each level
