@@ -210,7 +210,8 @@ take care that after the last row contain coins there is no benefit to go after 
 ----------------------------------------------------------------------------------------------------------------------------------------
 Zero number is the only number that is shifted to the left will stay the same zero<<X = zero<<(X-1) = zero
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Take care when you print cout<<sqrt(num)<<endl; bec you are printing double in its general form 1e009 for example.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
