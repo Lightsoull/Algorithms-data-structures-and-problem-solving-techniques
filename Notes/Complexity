@@ -188,7 +188,9 @@ for(int i=1;i<=m;i++)
 ----------------------------------------------------------------------------------------------------------------------------------------
 Once the memory exceeds 10^8 then it is MLE even it is 10^8+some_const.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+when you have an array of N values and the range of the values can go till 10^9 then if you are doing dp and keeping the range of
+values in the mem array then the complexity of that is N*(2^N).
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
