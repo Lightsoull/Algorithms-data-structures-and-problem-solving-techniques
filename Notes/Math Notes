@@ -239,6 +239,12 @@ if you have N blocks each contain 2 numbers each one block conmbine with two blo
 how many complete blocks you can form?
 ans= N-(N-(ceil(N/3.0))
 ----------------------------------------------------------------------------------------------------------------------------------------
+If you have a list of n bulbs each have two parameters ai and bi where each one toggle at ai and every bi seconds in time
+then i want the max number of bulbs that will light at the same time then the max time they can meet at asumming that all starts
+with zero is the product of all the bi then if they reach the same point then they will actually shifted by the a[i] then again to 
+meet all at the same point it is enough to move till the product of all the a[i].
+----------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 
