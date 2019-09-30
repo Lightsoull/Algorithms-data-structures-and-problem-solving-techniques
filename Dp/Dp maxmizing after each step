@@ -1,0 +1,37 @@
+/*
+problem: you have n coins each with ai value numbered from 1 to n each with a certain value and you want to start moving 
+from left to right to give each coin weather to the first person or to the second person and after each assignment there
+will be a difference between them i want to minminze the max difference between them.
+
+Solution: by Dp we can move from the left to the right assigning and the state will be (cur_position,the_cur_balance) then when i return 
+i will minminze on the answer and max with the previous state answer to return to the previous state with the min answer you can get.
+
+code
+----
+const int N=109;
+int a[N];
+int n,mem[102][10002];
+int solve(int id,int cnt){
+ 
+    if(id==n+1){
+        return cnt;
+    }
+    int &ret=mem[id][cnt];
+    if(ret!=-1)
+        return ret;
+    int ans=cnt;
+    ans=max(ans,min(solve(id+1,abs(cnt+a[id])),solve(id+1,abs(cnt-a[id]))));
+    return ret=ans;
+}
+int main(){
+    int T;
+    scanf("%d",&T);
+    while(T--){
+        scanf("%d",&n);
+        for(int i=1;i<=n;i++){
+            scanf("%d",&a[i]);
+        }
+        clr(mem,-1);
+        printf("%d\n",solve(1,0));
+    }
+}
