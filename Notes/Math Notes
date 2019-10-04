@@ -244,6 +244,9 @@ then i want the max number of bulbs that will light at the same time then the ma
 with zero is the product of all the bi then if they reach the same point then they will actually shifted by the a[i] then again to 
 meet all at the same point it is enough to move till the product of all the a[i].
 ----------------------------------------------------------------------------------------------------------------------------------------
+Mixed numbers: (integer division)((numerator mod denmenator)/denmenator).
+----------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 
