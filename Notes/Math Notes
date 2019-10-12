@@ -246,7 +246,31 @@ meet all at the same point it is enough to move till the product of all the a[i]
 ----------------------------------------------------------------------------------------------------------------------------------------
 Mixed numbers: (integer division)((numerator mod denmenator)/denmenator).
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+if you want to compare two numbers a^b and c^d you can multiply log both sides but take care that the log for zero is undefined to 
+handel this case alone.
+code
+        int a,b,c,d;
+        cin>>a>>b>>c>>d;
+        if(a==0){
+            if(c==0) cout<<"Equal";
+            else  cout<<"c^d > a^b";
+        }
+        else if(c==0){
+            if(a==0) cout<<"Equal";
+            else cout<<"a^b > c^d";
+        }
+        else{
+        double f= b*log2(a);
+        double s= d*log2(c);
+        int ret=dcmp(f,s);
+        if(ret==0)
+            cout<<"Equal";
+        else if(ret==1)
+            cout<<"a^b > c^d";
+        else
+            cout<<"c^d > a^b";
+        }
+ ---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
