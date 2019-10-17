@@ -1,0 +1,6 @@
+-Problem: getting the number of paths between two nodes of k steps where each step the node can go to another node including itself
+if there is an edge between it and itself, so given n nodes and a matrix of edges nxn Aij = 1 if there is edge between node i and j
+and Aij = 0 if there is no edge between i and j.
+
+Solution: put the edges matrix to the power of k, then the result matrix Aij represent the number of paths of k steps between nodes
+i and j.
