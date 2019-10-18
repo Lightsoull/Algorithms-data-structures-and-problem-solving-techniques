@@ -92,3 +92,79 @@ int main(){
     }
 
 }
+---------------------------------------------------------------------------------------------------------------------------------------
+-Another obtimized code with bitset.
+const int N = 500500;
+const int Inf = 1e8;
+const int K = 22;
+int a[N];
+int Min[N][K];
+vector <int> p[N];
+vector <int> v[N];
+int Fun(int x,int upto)    /// count the number of elements 'y' that GCD(x,y) != 1 up to upto
+{
+    int Res = 0;
+    int w = p[x].size();
+    for(int Mask=1;Mask<(1<<w);Mask++)
+    {
+        int prod = 1;
+        int cnt = 0;
+        for(int i=0;i<w;i++)
+            if(Mask&(1<<i))
+                prod *= p[x][i] , cnt++;
+
+        int cur = upper_bound(v[prod].begin(),v[prod].end(),upto) - v[prod].begin();
+        cnt&1 ? Res += cur : Res -= cur;
+    }
+    return Res;
+}
+int main()
+{
+    for(int i=2;i<N;i++)
+        if(p[i].empty())
+            for(int j=i;j<N;j+=i)
+                p[j].push_back(i);
+
+    int n,m; cin>>n>>m;
+
+    for(int i=1;i<=n;i++)
+    {
+        int& x = a[i];  scanf("%d",&x);
+
+        int w = p[x].size();
+
+        for(int Mask=1;Mask<(1<<w);Mask++)
+        {
+            int prod = 1;
+
+            for(int i=0;i<w;i++)
+                if(Mask&(1<<i))
+                    prod *= p[x][i];
+
+            v[prod].push_back(i);
+        }
+    }
+
+    for(int i=1;i<=n;i++)
+    {
+        Min[i][0] = Inf;
+
+        int low = i , high = n;
+
+        while(low<=high)
+        {
+            int mid = (low+high)>>1;
+
+            int ch = Fun(a[i],mid) - Fun(a[i],i-1);
+
+            ch = ( mid - i + 1 ) - ch;
+
+            if(ch>0) Min[i][0] = mid , high = mid - 1;
+            else     low = mid + 1;
+        }
+    }
+}
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
