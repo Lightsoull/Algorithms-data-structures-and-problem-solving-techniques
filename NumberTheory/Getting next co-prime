@@ -1,0 +1,94 @@
+Problem: given an array of n numbers and for each number of index i get the last position before ith position that is co-prime
+with ith number.
+
+code
+const int N=500009;
+int n,m,id,lim,lf[N];
+vector<int> v1[N],v2[N];
+int tree[N];
+int solve(int idx,int cnt,ll lcm){
+
+     if(idx==sz(v2[id])){
+        if(lcm==0) return 0;
+        if(cnt&1){
+            return upper_bound(all(v1[lcm]),lim)-v1[lcm].begin();
+        }
+        else{
+            return -(upper_bound(all(v1[lcm]),lim)-v1[lcm].begin());
+        }
+     }
+
+     int ret=0;
+     ll nlcm;
+     if(lcm==0) nlcm=v2[id][idx];
+     else
+        nlcm=Lcm(lcm,1ll*v2[id][idx]);
+
+     ret+= solve(idx+1,cnt,lcm);
+     ret+= solve(idx+1,cnt+1,nlcm);
+
+    return ret;
+}
+int geT(int a,int b){
+  lim=b;
+  id=a;
+  return solve(0,0,0);
+}
+void go(int no,int id){
+
+    for(int i=1;i*i<=no;i++){
+        if(no%i==0){
+            v1[i].pb(id);
+            if(i*i!=no){
+                v1[no/i].pb(id);
+            }
+        }
+    }
+    for(int i=2;i*i<=no;i++){
+
+        if(no%i==0){
+            while(no%i==0){
+                no/=i;
+            }
+            v2[id].pb(i);
+        }
+    }
+    if(no>1)
+        v2[id].pb(no);
+    sort(all(v2[id]));
+}
+
+int main(){
+    GO();
+    cin>>n>>m;
+    for(int i=0;i<n;i++){
+        int no;
+        cin>>no;
+        go(no,i);
+    }
+    for(int i=0;i<n;i++){
+        int num=geT(i,i-1);
+        if(num==i){
+            lf[i]=-1;
+        }
+        else{
+            int l=0,r=i-1;
+            int ans=0;
+            while(l<=r){
+                int m=(l+r)/2;
+                int len=(i-1)-m+1;
+                int x=num-geT(i,m-1);
+                x=len-x;
+                if(x){
+                    l=m+1;
+                    ans=m;
+                }
+                else{
+                    r=m-1;
+                }
+            }
+            lf[i]=ans;
+        }
+    }
+
+}
