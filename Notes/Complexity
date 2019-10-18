@@ -193,7 +193,8 @@ values in the mem array then the complexity of that is N*(2^N).
 ----------------------------------------------------------------------------------------------------------------------------------------
 -Using of bitset instead of normal integers makes all the operations complexity divided by 32.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+if you have n numbers each at most has value k, you can get the prime factors of each in order klog(k) by sieve.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
