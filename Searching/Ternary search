@@ -1,0 +1,53 @@
+Ternary search: to do ternary search the function should be stricyly increasing then strictly decreasing or the opposite 
+but not increasing then decreasing then increasing and not having a constant value at some range of the graph of the function
+and this range may not be the optimal answer, but if it has a constant value at the 
+----------------------------------------------------------------------------------------------------------------------------------------
+with intergers
+ll BS(ll l,ll r){
+   ll ans=1000000000+7;
+   while(r-l > 1){
+    ll mid1=l+(r-l)/3;
+    ll mid2=r-(r-l)/3;
+    ll p1=check(mid1);
+    ll p2=check(mid2);
+    if(p1<=p2){
+        r=mid2-1;
+        ans=mid2;
+    }
+    else{
+        l=mid1+1;
+        ans=mid1;
+    }
+   }
+   return min(check(l),check(r));
+}
+------------------------------------------------------------------------------------------------------------------------------------------
+with doubles
+double TS(double l,double r){
+   double ans=0;
+   int T=300;
+   while(T--){
+    double mid1=l+(r-l)/3;
+    double mid2=r-(r-l)/3;
+    double p1=check(mid1);
+    double p2=check(mid2);
+    
+    if(p1<=p2){
+        r=mid2;
+        ans=mid2;
+    }
+    else{
+        l=mid1;
+        ans=mid1;
+    }
+   }
+   return min(check(l),check(r));
+  }
+------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
