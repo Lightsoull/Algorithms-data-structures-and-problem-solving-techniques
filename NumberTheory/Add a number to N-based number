@@ -1,0 +1,38 @@
+Problem: add K to 11 based number.
+-------------------------------------------------
+vector<int> v;
+const int N=1000+20;
+char arr[]={'A', 'H', 'I', 'M', 'O', 'T', 'U', 'V', 'W', 'X', 'Y'};
+int ans[N];
+int ass(char ch){
+  for(int i=0;i<11;i++){
+    if(ch==arr[i])
+        return i;
+  }
+}
+int main(){
+    int T;
+    cin>>T;
+    while(T--){
+        int k;
+        string st;
+        cin>>k>>st;
+        clr(ans,-1);
+        for(int i=0;i<sz(st);i++){
+            ans[N-1-i]=ass(st[sz(st)-1-i]);
+        }
+        int rem=0;
+        ans[N-1]+=k;
+        for(int i=N-1;i>=0;i--){
+            ans[i-1]+=(ans[i]/11);
+            ans[i]%=11;
+        }
+
+        for(int i=0;i<N;i++){
+            if(ans[i]==-1)
+                continue;
+            cout<<arr[ans[i]];
+        }
+        cout<<endl;
+    }
+}
