@@ -73,3 +73,27 @@ pair<int,vector<edge>> mst(vector<edge> v,int n,edge e)
        }
     return mp(mi,edges);
 }
+----------------------------------------------------------------------------------------------------------------------------------------
+disconnected MST(min spanning tree)
+Problem: CF 1245D.
+given n nodes and m edges and c[i] where it is the cost of making node i disconnected from the tree and want the total
+min cost to make each node connected to a node the cost of it to be sepreated is paid.
+solution: make a dummy node zero and put edges from zero to every node with the cost of disconnecting a node and run normal
+MST.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
