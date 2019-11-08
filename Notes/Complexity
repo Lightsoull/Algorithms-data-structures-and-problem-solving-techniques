@@ -195,7 +195,9 @@ values in the mem array then the complexity of that is N*(2^N).
 ----------------------------------------------------------------------------------------------------------------------------------------
 if you have n numbers each at most has value k, you can get the prime factors of each in order klog(k) by sieve.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+the complexity of the backtracking for finding one answer could be reduced alot even it is 10^25 by trying to 
+avoid the answers that will cause the function to return without finding an answer.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
