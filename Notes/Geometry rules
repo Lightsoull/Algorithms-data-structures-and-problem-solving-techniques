@@ -1,1 +1,12 @@
 sheet:http://mathguy.us/Handbooks/GeometryHandbook.pdf
+Cos(90-theta) = sin(theta)
+sin(90-theta) = cos(theta)
+tan(90-theta) = cot(theta)
+cot(90-theta) = tan(theta)
+sec(90-theta) = cosec(theta)
+cosec(90-theta) = sec(theta)
+
+cot(theta) = 1/tan(theta)
+sec(theta) = 1/cos(theta)
+cosec(theta) = 1/sin(theta)
+-----------------------------------------------------------------------------------------------------------------------------------------
