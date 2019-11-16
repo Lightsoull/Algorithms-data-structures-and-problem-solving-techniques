@@ -1,0 +1,22 @@
+-Given a string s and for every suffix answer whether that suffix is balanced bracket sequence or not.
+Balanced bracket sequence: 
+1- the sum of the bracket sequence is zero.
+2- there is no negative summation at any index of the string starting from left to right where ( is +1 and ) is -1.
+
+code for answering for each suffix i whether it is balanced bracket sequence or not.
+for(int i=0;i<sz(s);i++){
+   if(s[i]=='(')
+     bal++,sum++;
+   else
+     bal--,sum--;
+   bal=max(0,bal);
+   if(bal<0||sum!=0){
+     ans[i]=0  // not balanced;
+   }
+   else{
+     ans[i]=1;
+   }
+}
+------------------------------------------------------------------------------------------------------------------------------------------
+
+   
