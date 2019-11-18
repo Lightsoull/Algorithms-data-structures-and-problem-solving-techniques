@@ -240,7 +240,10 @@ try to divide the problem into parts eg at step i s[i]= "B" + s[i-1] + "p" + s[i
 begining is 1 then there is remaing "B" if it is more then whether i will go to the first s[i-1] or to the next s[i-1] or i will have
 the complete range and so on and that will cost a comlexity O(steps).
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+when you have a grid and want the number of valid grids that could be generated given some property so it is dp or simulation
+1- try dp if can't.
+2- simulation write brude force and then observe.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
