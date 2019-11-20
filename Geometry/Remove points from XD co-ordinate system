@@ -1,0 +1,13 @@
+-Problem: given n points in X-dimension co-ordinate system, n is even you are required to do n/2 steps each time you will remove 2 points 
+but to remove two points there must be no point have co-ordinates strictly between the co-ordinates of the two points
+eg if point P(x,y) x>=min(x1,x2) && x<=max(x1,x2) for all co-ordinates (x,y,z,..) then point p is inside the co-ordinates of the
+two points.
+
+solution:
+try to fix one co-ordinate and work on the other for example if the co-ordinate system is 3-D then for all points that shares x and y
+erase the points from the smaller z to bigger then after that there won't be points who have the same x,y so do the same 
+fix one co-ordinate let it be x then for all points who share same x remove points in order from smaller y to bigger after that 
+the remaining points won't have the same x so just sort on x and erase them.
+
+the same can be applied if it is 4-D or any co-ordinate system.
+------------------------------------------------------------------------------------------------------------------------------------------
