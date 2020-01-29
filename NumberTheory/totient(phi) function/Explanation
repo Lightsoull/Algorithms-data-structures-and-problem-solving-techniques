@@ -15,26 +15,40 @@ phi(n) is even for n>2.
 7- let d(i) be the ith divisor of n , sigma (phi( d(i) ))=n.
 
 Getting phi(n) CODE
-int phi(int n)
-{
-    int ans=1;
-    for(int i=2;i*i<n;i++)
-    {
-        int cnt=0;
-        while(n%i==0)
-        {
-            n/=i;
-            cnt++;
-        }
-        if(cnt>0)
-            ans*= cnt*(i-1);
-    }
-    if(n>1)
-    {
-        ans*=n;
-    }
-    return ans;
-}
+#include <stdio.h> 
+int phi(int n) 
+{ 
+    int result = n; // Initialize result as n 
+  
+    // Consider all prime factors of n and subtract their 
+    // multiples from result 
+    for (int p = 2; p * p <= n; ++p) { 
+          
+        // Check if p is a prime factor. 
+        if (n % p == 0) { 
+              
+            // If yes, then update n and result 
+            while (n % p == 0) 
+                n /= p; 
+            result -= result / p; 
+        } 
+    } 
+  
+    // If n has a prime factor greater than sqrt(n) 
+    // (There can be at-most one such prime factor) 
+    if (n > 1) 
+        result -= result / n; 
+    return result; 
+} 
+  
+// Driver program to test above function 
+int main() 
+{ 
+    int n; 
+    for (n = 1; n <= 10; n++) 
+        printf("phi(%d) = %d\n", n, phi(n)); 
+    return 0; 
+} 
 ------------------------------------------------------------------------
 Getting phi(i) for every i<=n CODE
 void Phi_inrange(int n)
