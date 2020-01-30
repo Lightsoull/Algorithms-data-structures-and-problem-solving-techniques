@@ -14,6 +14,11 @@ phi(n) is even for n>2.
 6- phi(n^k) = n^(k-1) * phi(n).
 7- let d(i) be the ith divisor of n , sigma (phi( d(i) ))=n.
 
+Note 
+- if you want the number of numbers i that gcd(i,n) = some certain gcd let it be X then this is equivalent to gcd(k,n/X) = 1,
+which is phi(n/X).
+
+
 Getting phi(n) CODE
 #include <stdio.h> 
 int phi(int n) 
