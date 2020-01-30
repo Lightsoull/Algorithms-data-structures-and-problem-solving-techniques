@@ -2,7 +2,7 @@
 some gcd/lcm properties
 Link: http://www.cut-the-knot.org/arithmetic/GcdLcmProperties.shtml
 */
-
+Notes about gcd: gcd(a+x,b)=gcd((a+x)%b,b)
 
 int gcd(int a, int b) 
 {
