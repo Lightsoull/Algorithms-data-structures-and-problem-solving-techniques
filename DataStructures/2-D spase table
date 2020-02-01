@@ -1,0 +1,51 @@
+-source: https://codeforces.com/blog/entry/45485
+-2-D range min query.
+-Explanation
+Problem:Given a matrix[n][m] and Q queries. Each query asks for minimum in submatrix[ (x1,y1), (x2,y2) ]
+x1,y1 is the top left-most point and x2,y2 is bottom right-most point of the submatrix.Assume 0-based indexing.
+
+building : O(n*m*logn*logm)
+
+we create a table[ 1+logn ][ n ][ 1+logm ][ m ]
+Each box of the table[ 1+logn ][ n ] is a sparse table of size [ 1+logm ][ m ]
+Let us see what table[ jr ][ ir ][ jc ][ ic ] actually contains:
+It contains the minimum element from column ic to ic-1+2^jc of all rows from ir to ir-1+2^jr
+In other words, it contain the minimum element in the submatrix [ (ir,ic), (ir-1+2^jr , ic-1+2^jc) ]
+where submatrix [ (x1,y1),(x2,y2) ] denotes the submatrix with x1,y1 as its top left-most and x2,y2 as its bottom right-most point.
+Now you can easily conclude that, table[ 0 ][ ir ][ jc ][ ic ] is nothing but the 1D RMQ table if we take our array as row ir.
+
+code
+----
+void build(){
+   for(int ir=0;ir<n;ir++){
+    for(int ic=0;ic<m;ic++){
+        table[0][ir][0][ic]=arr[ir][ic];
+    }
+    for(int jc=1;jc<=log2(m);jc++){
+ 
+        for(int ic=0;ic+(1<<(jc-1))<m;ic++){
+             table[0][ir][jc][ic]=  min(table[0][ir][jc-1][ic],table[0][ir][jc-1][ic+(1<<(jc-1))]);
+        }
+    }
+   }
+ 
+ for(int jr=1;jr<=log2(n);jr++)
+  for(int ir=0;ir+(1<<(jr-1))<n;ir++)
+    for(int jc=0;jc<=log2(m);jc++)
+      for(int ic=0;ic<m;ic++)
+        table[jr ][ir ][jc ][ic ] = min(table[jr-1 ][ir ][jc ][ic ],table[jr-1 ][ir+(1<<(jr-1)) ][jc ][ic ]);
+}
+
+int query(int x1,int y1,int x2,int y2){
+ 
+    int lenx=x2-x1+1;
+    int kx=log2(lenx);
+    int leny=y2-y1+1;
+    int ky=log2(leny);
+ 
+    int min_R1 = min ( table[kx ][x1 ][ky ][y1 ] , table[kx ][x1 ][ky ][ y2+1-(1<<ky) ] ) ;
+    int min_R2 = min ( table[kx ][x2+1-(1<<kx) ][ky ][y1 ], table[kx ][x2+1-(1<<kx) ][ky ][y2+1-(1<<ky) ] );
+    return min ( min_R1, min_R2 ) ;
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------
