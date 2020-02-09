@@ -1,5 +1,14 @@
-Source: https://www.youtube.com/watch?v=TcnIF6RUEw0
+Similarity between polyons:
+source: https://simple.wikipedia.org/wiki/Similarity_(geometry)
+
+In Euclidean geometry, two objects are similar if they both have the same shape, or one has the same shape as the mirror image
+of the other. More precisely, one can be obtained from the other by uniformly scaling (enlarging or reducing),
+possibly with additional translation, rotation and reflection.
+
+----------------------------------------------------------------------------------------------------------------------------------------
 Point of symmetry in polygon (central point) :
+Source: https://www.youtube.com/watch?v=TcnIF6RUEw0
+
 if the polygon have odd number of vertexes then there is no point of symmetry in that polygon,
 point of symmetry occurs when there is a point in polygon which spilts it in two parts each part have a matching
 part with the same distance from that point and in opposite direction, in other words for each vertex there is another
