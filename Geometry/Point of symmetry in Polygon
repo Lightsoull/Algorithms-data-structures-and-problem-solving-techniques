@@ -1,0 +1,33 @@
+Source: https://www.youtube.com/watch?v=TcnIF6RUEw0
+Point of symmetry in polygon (central point) :
+if the polygon have odd number of vertexes then there is no point of symmetry in that polygon,
+point of symmetry occurs when there is a point in polygon which spilts it in two parts each part have a matching
+part with the same distance from that point and in opposite direction, in other words for each vertex there is another
+vertex opposite to it and the symmetry point is the mid point of it.
+
+code to check if there is a symmetry point in a polygon or not. (points given in counter-clockwise) 
+const int N=100000+9;
+ll x[N],y[N];
+int main(){
+    int n;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>x[i]>>y[i];
+    }
+    if(n%2!=0){
+        cout<<"there is no symmetry point\n";
+        return 0;
+    }
+    ll px=(x[0]+x[n/2]),py=(y[0]+y[n/2]);
+    for(int i=0;i<n/2;i++){
+        int current_point=i;
+        int opposite_point=i+n/2;
+
+        if((y[current_point]+y[opposite_point]!=py)||(x[current_point]+x[opposite_point]!=px)){
+            cout<<"there is no symmetry point\n";
+            return 0;
+        }
+
+    }
+    cout<<"there is symmetry point\n";
+}
