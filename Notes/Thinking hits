@@ -244,7 +244,11 @@ when you have a grid and want the number of valid grids that could be generated 
 1- try dp if can't.
 2- simulation write brude force and then observe.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+if there is O(n^2) way to get the solution and you try to make in O(n) so you move from the left to the right calculating the answer 
+for the first sub array and try to calculate the answer for the second sub array from the first one this way can be done but also
+can't be done sometimes so in that case try the opposite move from the right to the left and calculate the answer for the last subarray
+and from it calculate the answer for the one before it and so on.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
