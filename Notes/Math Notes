@@ -275,6 +275,19 @@ F1*a + F2*b = F3*gcd(a,b) , if F1 and F2 are non-negative integers only.
 ---------------------------------------------------------------------------------------------------------------------------------------
 Monotonic Function: a function that whether increase only or decrease only.
 ---------------------------------------------------------------------------------------------------------------------------------------
+Any polynomial of one variable when you equates it to zero means that the Xs that satisify the equation will be the intersection of
+polynomial function with x-axis (which called the roots of the polynomial).
+Example: y= x^3+2*x^2+x+3, 0=x^3+2*x^2+x+3, there is 3 roots which means 3 values of x that will locate at y equal to zero which
+means it is the intersection of the graph with x-axis.
+You can get the function from the roots it there is a polynomial with roots 3,4,6 then it is (x-3)*(x-4)*(x-5).
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 
 
 
