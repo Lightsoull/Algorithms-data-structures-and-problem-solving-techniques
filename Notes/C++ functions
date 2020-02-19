@@ -147,7 +147,9 @@ in time of the length of the returned subtring.
 --------------------------------------------------------------------------------------------------------------------------------------
 In C++, div is a reserved word use Div instead
 --------------------------------------------------------------------------------------------------------------------------------------
-
+next_permutation: if you started with the last permutation then it will break directly so if you want to move on all the permuations
+sort ascendingly first.
+--------------------------------------------------------------------------------------------------------------------------------------
 
 
 
