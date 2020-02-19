@@ -8,6 +8,11 @@ different sets then there is no answer else the answer should be xor of val of x
 the idea of augumenting the dsu is at getpar function i will not only assign the parent i will also assign the xor value from root till 
 this Node.
 
+Complexity of dsu it general:
+- To get the parent it is over all O(n).
+- if you are storing for each connected component some map or set or vector when you are merging the two components merging the smaller
+in the bigger (iterating only on the smaller) will make the comlexity overall O(nlogn).
+-------------------------------------------------------------------------------------------------------------------------------------
 CODE
 ----
 pair<int,int> mb[10009];  // pair( parent of current node, xor val from root till current node )
