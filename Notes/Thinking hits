@@ -249,7 +249,8 @@ for the first sub array and try to calculate the answer for the second sub array
 can't be done sometimes so in that case try the opposite move from the right to the left and calculate the answer for the last subarray
 and from it calculate the answer for the one before it and so on.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Think of the general form of the problem.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
