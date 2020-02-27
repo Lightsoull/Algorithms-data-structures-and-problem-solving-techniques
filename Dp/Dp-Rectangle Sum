@@ -5,7 +5,8 @@ left corner (1,1).
 of the rectangle .
 */
 int get_rect_sum(int r1,int c1,int r2,int c2)
-{
+{   r1--;
+    c1--;
     return dp[r2][c2]-dp[r2][c1]-dp[r1][c2]+dp[r1][c1];
 }
 for(int i=1;i<=n;i++)
