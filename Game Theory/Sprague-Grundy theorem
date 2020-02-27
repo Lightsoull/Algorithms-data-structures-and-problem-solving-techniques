@@ -33,20 +33,20 @@ Solution:
 CODE
 ----
 int grundy[100009],a[100009];
-int mex(vector<int>&v)
-{
-    sort(all(v));
-    if(v[0]!=0)
-        return 0;
-    for(int i=1;i<sz(v);i++)
-        if(v[i]-v[i-1]>1)
-         return v[i-1]+1;
-    return v.back()+1;
+int mex(vector<int> &v){
+  sort(all(v));
+  v.resize(unique(all(v))-v.begin());
+  if(sz(v)==0) return 0;
+  if(v[0]!=0) return 0;
+  for(int i=1;i<sz(v);i++){
+    if(v[i]!=v[i-1]+1) return v[i-1]+1;
+  }
+  return v.back()+1;
 }
 int solve(int n)
 {
     if(n==0)
-        return 0;
+        return 0;   // this is the answer for the current state.
     int &ret=grundy[n];
     if(ret!=-1)
         return ret;
@@ -86,15 +86,15 @@ CODE
 ----
 // note the code may contain bugs but the idea is true.
 int grundy[1009][1009];
-int mex(vector<int>&v)
-{
-    sort(all(v));
-    if(v[0]!=0)
-        return 0;
-    for(int i=1;i<sz(v);i++)
-        if(v[i]-v[i-1]>1)
-         return v[i-1]+1;
-    return v.back()+1;
+int mex(vector<int> &v){
+  sort(all(v));
+  v.resize(unique(all(v))-v.begin());
+  if(sz(v)==0) return 0;
+  if(v[0]!=0) return 0;
+  for(int i=1;i<sz(v);i++){
+    if(v[i]!=v[i-1]+1) return v[i-1]+1;
+  }
+  return v.back()+1;
 }
 int solve(int r,int c)
 {
@@ -140,15 +140,15 @@ Minimizing with grundy:
 Problem i have one pile and 2 players take turns each can only remove 2 or 4 or 6 stones and want to know who is the winner and the min 
 number of stones he removes.
 int grundy[100009],a[4],inf=1000000,steps[100009];
-int mex(vector<int>&v)
-{
-    sort(all(v));
-    if(v[0]!=0)
-        return 0;
-    for(int i=1;i<sz(v);i++)
-        if(v[i]-v[i-1]>1)
-         return v[i-1]+1;
-    return v.back()+1;
+int mex(vector<int> &v){
+  sort(all(v));
+  v.resize(unique(all(v))-v.begin());
+  if(sz(v)==0) return 0;
+  if(v[0]!=0) return 0;
+  for(int i=1;i<sz(v);i++){
+    if(v[i]!=v[i-1]+1) return v[i-1]+1;
+  }
+  return v.back()+1;
 }
 int solve(int n)
 {
