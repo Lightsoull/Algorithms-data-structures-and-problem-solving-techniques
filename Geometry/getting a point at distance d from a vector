@@ -1,0 +1,55 @@
+- Getting a point at distance d from the point A on a vector AB.
+code
+----
+#define   vec(a,b)       ((b)-(a))
+#define   normalize(a)      (a)/(length(a))
+#define     point                    complex<double>
+int main(){
+   int d;
+   cin>>d;
+   int x,y;
+   cin>>x>>y;
+   point A;
+   point B;
+   
+   A=point(x,y);
+   cin>>x>>y;
+   B=point(x,y);
+   
+   point v1=vec(A,B);
+   point v2=normalize(v1);
+   point v3=point(real(v2)*d,imag(v2)*d);
+   ans_point= A+v3;
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------
+-Getting the area of the triangle from the given three 2-D co-ordinate points.
+code
+----
+double get_area(point a,point b,point c){
+ 
+    return fabs((a.real()*(b.imag()-c.imag()) + b.real()*(c.imag()-a.imag()) + c.real()*(a.imag()-b.imag()))/2.0);
+}
+------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
