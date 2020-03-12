@@ -281,6 +281,9 @@ Example: y= x^3+2*x^2+x+3, 0=x^3+2*x^2+x+3, there is 3 roots which means 3 value
 means it is the intersection of the graph with x-axis.
 You can get the function from the roots it there is a polynomial with roots 3,4,6 then it is (x-3)*(x-4)*(x-5).
 ---------------------------------------------------------------------------------------------------------------------------------------
+Any number could be expressed in base 2 (binary) but not any number can be expressed in other bases for example base 3 number 2 
+couldn't be expressed in base 3.
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
