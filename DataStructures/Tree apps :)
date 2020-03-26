@@ -1,0 +1,84 @@
+application 1:
+problem: given tree of n nodes and each node has an colour from 1 to n delete all the nodes of a given colour after that how many paths 
+in the tree between two different nodes.
+
+Solution: after deteting the nodes of a given colour there will be disjoint blocks of nodes the answer is the sum of the (pi*(pi-1))/2
+where pi is the number of nodes of block i, for each node i will make a map which maps the colour to the sum of the subtress where its
+root is that colour where those subtrees is the nearest ones to the current node it can be the current node, why i calculate this 
+because i will get the blocks size by if the current node has colour x then its siz[child]-mb[child][x] is a block size where siz[i]
+is the size of the subtree where i is its root.
+colplexity:
+O(n*log(n)*log(n)) because i use map and small to big strategy in the dfs.
+
+code
+----
+
+const int N=200000+9;
+ll arr[N],siz[N];
+map<int,ll> mb[N];
+ll ans[N],vis[N];
+ll mb2[N];
+vector< vector<int> > v(N);
+void I(int n){
+   for(int i=1;i<=n;i++) vis[i]=0,mb[i].clear(),ans[i]=0,mb2[i]=0;
+   v.clear();
+   v.resize(n+3);
+
+}
+void dfs(int no,int p){
+
+   for(int i=0;i<sz(v[no]);i++){
+    int nw=v[no][i];
+    if(nw==p) continue;
+
+    dfs(nw,no);
+
+
+   ll pp= siz[nw]-(mb[nw].find(arr[no])==mb[nw].end()?0:mb[nw][arr[no]]);
+   ans[arr[no]]+= (pp*(pp-1))/2;
+
+
+    if(sz(mb[nw])>sz(mb[no])) swap(mb[no],mb[nw]);
+
+    for(auto it=mb[nw].begin();it!=mb[nw].end();it++){
+        mb[no][(*it).first]+=(*it).second;
+    }
+
+   }
+   mb[no][arr[no]]=siz[no];
+
+
+
+}
+void dfs_siz(int no,int p){
+   siz[no]=1;
+   for(int i=0;i<sz(v[no]);i++){
+    int nw=v[no][i];
+    if(nw==p) continue;
+
+    dfs_siz(nw,no);
+    siz[no]+=siz[nw];
+   }
+}
+
+int main(){
+    GO();
+    ll n;
+    cin>>n;
+    I(n);
+    for(int i=1;i<=n;i++) cin>>arr[i],vis[arr[i]]++;
+    for(int i=0;i<n-1;i++){
+        int a,b;
+        cin>>a>>b;
+        v[a].pb(b);
+        v[b].pb(a);
+    }
+    dfs_siz(1,0);
+    dfs(1,0);
+    for(auto it=mb[1].begin();it!=mb[1].end();it++){
+        ll pp= n-(*it).second;
+        if((*it).first==arr[1]) continue;
+        ans[(*it).first]+= (pp*(pp-1))/2;
+    }
+}
+----------------------------------------------------------------------------------------------------------------------------------------
