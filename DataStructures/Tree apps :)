@@ -81,4 +81,107 @@ int main(){
         ans[(*it).first]+= (pp*(pp-1))/2;
     }
 }
-----------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------
+there is another solution by segment tree.
+code
+const int N=200000+9;
+vector< vector<int> > v;
+int id=1,dep[N],siz[N],str[N],en[N];
+ll tree[4*2*N];
+vector<int> arr[N];
+ll ans=0;
+bool cmp(int a,int b){
+   return (dep[a]>dep[b]);
+}
+void I(int n){
+  v.clear();
+  v.resize(n+3);
+  id=1;
+  for(int i=1;i<=n;i++) arr[i].clear();
+  for(int i=0;i<=4*2*n;i++) tree[i]=0;
+}
+void dfs(int no,int p,int lv){
+    dep[no]=lv;
+    siz[no]=1;
+    str[no]=id++;
+    for(int i=0;i<sz(v[no]);i++){
+        int nw=v[no][i];
+        if(nw==p) continue;
+        dfs(nw,no,lv+1);
+        siz[no]+=siz[nw];
+    }
+    en[no]=id-1;
+}
+void update(int pos,ll val,int s=1,int e=id,int p=1){
+    if(s==e){
+        tree[p]=val;
+        return ;
+    }
+    int mid=(s+e)/2;
+    if(pos<=mid) update(pos,val,s,mid,p*2);
+    else
+        update(pos,val,mid+1,e,p*2+1);
+    tree[p]=tree[p*2]+tree[p*2+1];
+}
+ll query(int a,int b,int s=1,int e=id,int p=1){
+
+    if(b<s||a>e) return 0;
+    if(s>=a&&e<=b) return tree[p];
+    int mid=(s+e)/2;
+    return query(a,b,s,mid,p*2)+query(a,b,mid+1,e,p*2+1);
+}
+int go(int no){
+   ll sz=0;
+   for(int i=0;i<sz(v[no]);i++){
+    int nw=v[no][i];
+    if(dep[nw]<dep[no]) continue;
+
+    ll num= query(str[nw],en[nw]);
+    ans+= (num*(num-1))/2;
+
+    sz+= num;
+   }
+   update(str[no],-sz);
+}
+int main(){
+    GO();
+    int cs=1;
+    int n;
+    while(cin>>n){
+        I(n);
+        for(int i=1;i<=n;i++){
+            int no;
+            cin>>no;
+            arr[no].pb(i);
+        }
+        for(int i=0;i<n-1;i++){
+            int a,b;
+            cin>>a>>b;
+            v[a].pb(b);
+            v[b].pb(a);
+        }
+        dfs(1,0,0);
+        for(int i=1;i<=n;i++) update(i,1);
+        ll fans=0;
+        for(int i=1;i<=n;i++){
+            if(sz(arr[i])==0) continue;
+            sort(all(arr[i]),cmp);
+            ans=0;
+            for(int j=0;j<sz(arr[i]);j++){
+                int no=arr[i][j];
+                go(no);
+
+            }
+            ll num=query(str[1],en[1]);
+            ans+= (num*(num-1))/2;
+            for(int j=0;j<sz(arr[i]);j++){
+                int no=arr[i][j];
+                update(str[no],1);
+
+            }
+            fans+= (1ll*n*(n-1))/2-ans;
+        }
+        cout<<"Case #"<<cs++<<": "<<fans<<endl;
+    }
+}
+---------------------------------------------------------------------------------------------------------------------------------------
