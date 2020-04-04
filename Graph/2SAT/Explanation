@@ -90,8 +90,9 @@ void dfs(int no)
             comp.back().pb(x);
             nodecomp[x]=sz(comp)-1;
         }
+        comp_root[ nodecomp[no] ] = no;
     }
-    comp_root[ nodecomp[no] ] = no;
+    
 
 }
 int Not(int x)
