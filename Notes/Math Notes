@@ -284,7 +284,9 @@ You can get the function from the roots it there is a polynomial with roots 3,4,
 Any number could be expressed in base 2 (binary) but not any number can be expressed in other bases for example base 3 number 2 
 couldn't be expressed in base 3.
 ---------------------------------------------------------------------------------------------------------------------------------------
-
+if you are given some intervals [l,r] and if segment a ends at t and segment b starts at t then they don't intersect , and
+we want to deal normally as if it intersects then subtract from the end of each segment one.
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
