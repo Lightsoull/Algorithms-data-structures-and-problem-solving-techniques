@@ -4,6 +4,9 @@ proof
 imagine 6 students and i want to chooose k student but the first one is choosen anyway so it is n-1 choose k-1
 +
 imagine that the first student is not allowed to be choosen at all so its n-1 choose k
+-Notes
+-c[r][c] means (r choose c). 
+-sum of all elements in the rth row is (2^r) ,rows and columns are zero based.
 -------------------------------------------------------------------------------------------------------
 code
 // don't worry it works if k is > n 
