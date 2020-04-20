@@ -287,7 +287,9 @@ couldn't be expressed in base 3.
 if you are given some intervals [l,r] and if segment a ends at t and segment b starts at t then they don't intersect , and
 we want to deal normally as if it intersects then subtract from the end of each segment one.
 ---------------------------------------------------------------------------------------------------------------------------------------
-
+given polynomial p of degree n, its coffients are {a0,a1,..,an} if the gcd of all its coffients is one called primative polynomial,
+if two primative polynomials multiplied the result is also a primative polynomial.
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
