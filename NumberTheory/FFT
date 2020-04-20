@@ -8,6 +8,8 @@ Notes:
 to the coffient of the x^i starting from zero at the result poly.
 3- input is given starting from coff of x^0.
 4- multiply_mod means the result poly coffients are taken mod some number.
+5- complexity nlogn
+6- if you are afraid of precision use multiply with mod if you can.
 */
 code
 namespace fft
