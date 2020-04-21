@@ -212,8 +212,8 @@ Zero number is the only number that is shifted to the left will stay the same ze
 ----------------------------------------------------------------------------------------------------------------------------------------
 Take care when you print cout<<sqrt(num)<<endl; bec you are printing double in its general form 1e009 for example.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
+if the function supposed to be void but you make it some other data type like integer without returning it may cause TLE.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
