@@ -290,6 +290,9 @@ we want to deal normally as if it intersects then subtract from the end of each 
 given polynomial p of degree n, its coffients are {a0,a1,..,an} if the gcd of all its coffients is one called primative polynomial,
 if two primative polynomials multiplied the result is also a primative polynomial.
 ---------------------------------------------------------------------------------------------------------------------------------------
+The solution to the problem may be randomized solution if the probabilty of failture is some like 2^(-20) you assume it to be zero 
+so we can always find the  correct answer.
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
