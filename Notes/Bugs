@@ -214,6 +214,8 @@ Take care when you print cout<<sqrt(num)<<endl; bec you are printing double in i
 ----------------------------------------------------------------------------------------------------------------------------------------
 if the function supposed to be void but you make it some other data type like integer without returning it may cause TLE.
 ----------------------------------------------------------------------------------------------------------------------------------------
+Don't name the variables with names you don't use to.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
