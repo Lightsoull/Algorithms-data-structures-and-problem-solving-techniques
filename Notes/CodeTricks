@@ -446,7 +446,10 @@ for(int i=0;i<30;i++)
 ----------------------------------------------------------------------------------------------------------------------------------------
 trick to switch between the values of flag F which is 1 or 2 is F = 3-F.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you have from 1 to n nodes each have an edge to all the other nodes (from 1 to n) with a fixed cost so there is
+a trick to reduce the number of total edges put a virtual node and connect it by a direct edge to from 1 to n nodes and connect each
+of the nodes from 1 to n to it by a direct edge with that fixed cost.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
