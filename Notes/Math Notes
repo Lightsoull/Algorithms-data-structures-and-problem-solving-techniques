@@ -295,7 +295,10 @@ so we can always find the  correct answer.
 ---------------------------------------------------------------------------------------------------------------------------------------
 the first number the hundred th digit is zero is 1000 till 1000+99=1099
 ---------------------------------------------------------------------------------------------------------------------------------------
-
+if you want to get the number of ways to choose n conscutive segments of length L such that non of them intersect from an array
+of length H is :
+Combination( H-(L-1)*n , n).
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
