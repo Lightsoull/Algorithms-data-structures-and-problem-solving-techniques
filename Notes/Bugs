@@ -216,7 +216,9 @@ if the function supposed to be void but you make it some other data type like in
 ----------------------------------------------------------------------------------------------------------------------------------------
 Don't name the variables with names you don't use to.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+to get the angle of a vector (X,Y) by atan2(X,Y) it returns the angle in rad and it may be negative so to get the real angle first
+if it is negative add to it 2*PI (which is 360 degree in rad) then you will have the angle in rad.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
