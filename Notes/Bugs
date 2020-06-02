@@ -219,6 +219,19 @@ Don't name the variables with names you don't use to.
 to get the angle of a vector (X,Y) by atan2(X,Y) it returns the angle in rad and it may be negative so to get the real angle first
 if it is negative add to it 2*PI (which is 360 degree in rad) then you will have the angle in rad.
 ----------------------------------------------------------------------------------------------------------------------------------------
+if you want to get the digits of a certain number then you will use the following code but here there is a problem if the number
+is zero it won't enter the loop so this is a special case you have to handel it.
+bool V(int num){
+  if(num==0) return 0;
+  while(num){
+    int d=num%10;
+    num/=10;
+  }
+  return 1;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 
 
