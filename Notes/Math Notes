@@ -299,7 +299,8 @@ if you want to get the number of ways to choose n conscutive segments of length 
 of length H is :
 Combination( H-(L-1)*n , n).
 ---------------------------------------------------------------------------------------------------------------------------------------
-
+If number A is divisable by number B then it is divisable by each prime factor in B.
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
