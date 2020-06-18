@@ -1,0 +1,42 @@
+An algorithsm that you can use to know whether a substring [l,r] is palindrome or not in O(1) complexity.
+CODE
+int odd[3000000];
+int even[3000000];
+
+void manacher(string t)
+{
+    string s = "#";
+    for (int i=0;i<t.size();i++)
+        s+=t[i],s+="#";
+    vector<int> ans(s.size(),0);
+    int maxi = 0;
+    for(int i=1; i<s.size(); i++)
+    {
+        int k = 0;
+        if(maxi+ans[maxi]>=i)
+            k = min(ans[maxi]+maxi-i,ans[2*maxi-i]);
+            
+        for(; s[i+k]==s[i-k] && i-k>=0 && i+k<s.size(); k++);
+        ans[i] = k-1;
+        if(i+ans[i]>maxi+ans[maxi])
+            maxi = i;
+    }
+    for (int i=1; i<s.size(); i+=2)
+        odd[i/2]=ans[i];
+    for (int i=2; i+1<s.size(); i+=2)
+        even[(i-2)/2]=ans[i];
+}
+bool isPal(int l,int r)
+{
+    int len = (r-l+1);
+    int center = (l+r)/2;
+    if (len%2) return odd[center]>=len;
+    else return even[center]>=len;
+}
+int main(){
+   string st;
+   cin>>st;
+   manacher(st);
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+
