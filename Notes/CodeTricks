@@ -450,6 +450,38 @@ If you have from 1 to n nodes each have an edge to all the other nodes (from 1 t
 a trick to reduce the number of total edges put a virtual node and connect it by a direct edge to from 1 to n nodes and connect each
 of the nodes from 1 to n to it by a direct edge with that fixed cost.
 ----------------------------------------------------------------------------------------------------------------------------------------
+If you have some open brackets and some colsed brackets and i want to grantee that all the open ones are closed by close bracket
+coming after and it is okay to have extra closed brackets.
+answer
+the righmost open bracket should have one closed bracket after it
+the pre rightmost should have two closed brackets after it
+.
+.
+.
+the ith rightmost should have i closed brackets after it.
+----------------------------------------------------------------------------------------------------------------------------------------
+If you have some elements in an array and you want to mark them starting from the element that is located the rightmost
+with one and the element before it with 2 and so on but they are located in different indexes in the array,
+Answer
+so for each element position mark starting from the begining of the array till that position with one, at the end the elements 
+that comes in order will be marked correctly.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
