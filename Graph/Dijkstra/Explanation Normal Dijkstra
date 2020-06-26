@@ -8,6 +8,8 @@ Notes
    weights but also depends the length of the path.
 3- if the result in the bfs will depend on the direction that lead to the current node so the direction must be in the state too
 not only the node and its weight so the vis array must include the node,weight,direction.
+4- To let the priority queue work in minmizing instead of maximizing there is two ways to use struct as above or to use
+priority_queue<int, vector<int> , greater<int> > pq,  but using the struct take less complexity that may help get AC instead of TL.
 
 struct node
 {
