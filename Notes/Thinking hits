@@ -251,7 +251,9 @@ and from it calculate the answer for the one before it and so on.
 ----------------------------------------------------------------------------------------------------------------------------------------
 Think of the general form of the problem.
 ----------------------------------------------------------------------------------------------------------------------------------------
-If the solution is greedy try simbolic thinking.
+If the solution is greedy try simbolic thinking, for example if you are given n persons from [1 to n] and want to order them so that
+some conditions must occur so you could think what if they are already ordered as a permutation p1, p2,...,pn and start thinking from 
+here.
 ----------------------------------------------------------------------------------------------------------------------------------------
 
 
