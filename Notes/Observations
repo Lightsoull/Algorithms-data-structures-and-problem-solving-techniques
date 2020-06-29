@@ -59,7 +59,9 @@ of black and white to attack each other, the solution is to colour the grid like
 ----------------------------------------------------------------------------------------------------------------------------------------
 Any substring [i,j] palindrome the subtring [i+1,j-1] must be palindrome too.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+if i have a string of zeros and ones only and in one operations choose 2 adjacent cells of different values and delete them then
+the total number of operations i could do is min(no of zeros,no of ones).
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
