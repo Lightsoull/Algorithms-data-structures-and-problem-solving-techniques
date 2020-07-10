@@ -1,4 +1,10 @@
 /*
+Inclusion and Exclusion Complexity:
+sometimes it is complexity could be linear and sometimes it can be expontional (2^n), the idea is that let the whole set is A and have N cells and i want to 
+get the union of the N cells so at first i will add the whole set then i will subtract all the intersections to get the intersections itself add all the odd number
+combination of cells and subtract all the even number combination of cells, some times i will need to iteratite on all the combinations and sometimes i don't need to
+if i don't need it could be in linear time.
+
 explanation : 
 
 if i have n sets okay the ( A(i) U A(i+1) U A(i+2) U A(i+3) ... U A(n) ) equal what ??
@@ -33,4 +39,28 @@ implementation using masks
     }
     cout<<sol<<endl;
 
--------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
