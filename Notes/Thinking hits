@@ -258,7 +258,9 @@ here.
 If you have a simulation problem, try to understand that simulation deeply and to do that simulate it on examples from the begining
 to the end and from the end to the begining.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+IF you can take k points by paying x coins and can take 1 point paying y coins, if y <= x then ignore the first kind (k points by x coins)
+because the second kind is always better.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
