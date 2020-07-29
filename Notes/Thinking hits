@@ -261,7 +261,9 @@ to the end and from the end to the begining.
 IF you can take k points by paying x coins and can take 1 point paying y coins, if y <= x then ignore the first kind (k points by x coins)
 because the second kind is always better.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+if you have a tree and every node have a cost for doing some operation on the nodes of its subtree then moving from root to leafs each
+node cost is the min of its cost and its parent cost.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
