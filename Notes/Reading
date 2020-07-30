@@ -50,7 +50,9 @@ Subset means doesn't have to be conscutive.
 ----------------------------------------------------------------------------------------------------------------------------------------
 Takecare of input and output format.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If in the problem statement he said that the length of the segment [L,R] is R-L then the intersection between two segments can't
+be the touch between two segments.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
