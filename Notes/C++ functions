@@ -160,8 +160,10 @@ int rand(int a,int b){
    return (1ll*rand()*rand()*rand())%(b-a+1);
 }
 --------------------------------------------------------------------------------------------------------------------------------------
-
-
+-int mi= *min_element(all(vector));
+-int mx= *max_element(arr,arr+n);
+-function returns an iterator on the min/max element among a vector or an array. 
+--------------------------------------------------------------------------------------------------------------------------------------
 
 
 
