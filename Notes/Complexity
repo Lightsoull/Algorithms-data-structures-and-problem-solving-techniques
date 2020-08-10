@@ -198,7 +198,8 @@ if you have n numbers each at most has value k, you can get the prime factors of
 the complexity of the backtracking for finding one answer could be reduced alot even it is 10^25 by trying to 
 avoid the answers that will cause the function to return without finding an answer.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Searching in a mab of key string complexity equal to log(siz of map)*(max len of string).
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
