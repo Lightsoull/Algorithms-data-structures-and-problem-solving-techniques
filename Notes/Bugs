@@ -230,8 +230,16 @@ bool V(int num){
   return 1;
 }
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
+At precalculating the Factorial or the inverse factorial remember to calculate Factorial of zero or inverse factorial of zero
+F[0]=1;
+for(int i=1;i<=n;i++){
+   F[i]=(F[i-1]*i)%mod;
+}
+IF[n]=power(F[n],mod-2);
+for(int i=n-1;i>=0;i--){
+   IF[i]=(IF[i+1]*(i+1))%mod;
+}
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
