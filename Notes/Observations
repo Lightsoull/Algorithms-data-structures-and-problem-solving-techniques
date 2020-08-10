@@ -62,6 +62,8 @@ Any substring [i,j] palindrome the subtring [i+1,j-1] must be palindrome too.
 if i have a string of zeros and ones only and in one operations choose 2 adjacent cells of different values and delete them then
 the total number of operations i could do is min(no of zeros,no of ones).
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+the array that start at increasing then at decreasing the peak must be the max element of the array and the we can pick any elements
+to be the first increasing part and the rest of the elements will be at the other part sorted from bigger to smaller.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
