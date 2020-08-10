@@ -1,0 +1,33 @@
+Explanation:
+
+-tree[node][ch] stores the node that holds the char ch from the parent node.
+-we start from id=1 and the increament if needed, at the end the total number of nodes will be id.
+code
+----
+const int N=200000+5;
+int tree[N][30];
+bool isleaf[N];
+int id=1;
+void insert(string word,int chh){
+
+   int node=1;
+   for(int i=0;i<sz(word);i++){
+    int ch=word[i]-'a';
+    if(tree[node][ch]==0){
+        tree[node][ch]=++id;
+    }
+    node = tree[node][ch];
+   }
+   isleaf[node]++;
+}
+bool search(string word){
+
+   int node=1;
+   for(int i=0;i<sz(word);i++){
+    int ch=word[i]-'a';
+    if(tree[node][ch]==0) return false;
+    node= tree[node][ch];
+   }
+   return true;
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------
