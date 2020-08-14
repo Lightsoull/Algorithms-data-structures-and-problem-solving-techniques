@@ -65,5 +65,7 @@ the total number of operations i could do is min(no of zeros,no of ones).
 the array that start at increasing then at decreasing the peak must be the max element of the array and the we can pick any elements
 to be the first increasing part and the rest of the elements will be at the other part sorted from bigger to smaller.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Rhmbous shape in a 2d grid is like --> 1cell then in the next row 3cells then in the next row 5cells then it will start decreasing so in the
+next row will be 3cells again then in next row 1cell, this is a rhmbous of 5cells height.
+----------------------------------------------------------------------------------------------------------------------------------------
 
