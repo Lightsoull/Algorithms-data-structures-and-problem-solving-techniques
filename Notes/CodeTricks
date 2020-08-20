@@ -466,6 +466,14 @@ Answer
 so for each element position mark starting from the begining of the array till that position with one, at the end the elements 
 that comes in order will be marked correctly.
 ----------------------------------------------------------------------------------------------------------------------------------------
+If you have some queries of remove and add elements and you want to get the sum of smallest T items each time then, you can build 2
+segment trees one that stores the data according to its ascending order between all possible values that may appear in the queries
+the order of data will be the index of segment tree and the value will be the data and then the other segment tree the index will be
+the order of data and the value will be boolean represents wether it exists or not, then if i want the sum of smallest k values then
+i will do binary search to get the first position of first segment tree that stores k values and then query from first to that position
+to get the sum of data.
+----------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 
