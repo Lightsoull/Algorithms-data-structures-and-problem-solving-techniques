@@ -239,9 +239,10 @@ IF[n]=power(F[n],mod-2);
 for(int i=n-1;i>=0;i--){
    IF[i]=(IF[i+1]*(i+1))%mod;
 }
+-----------------------------------------------------------------------------------------------------------------------------------------
+At calculating the Least Prime factor by seive, don't forget to intialize all the least prime factors array by itself at the begining because 
+if there is a prime factor greater than the square root of the given number then it won't be assigned.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
 
 
 
