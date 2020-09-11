@@ -264,7 +264,9 @@ because the second kind is always better.
 if you have a tree and every node have a cost for doing some operation on the nodes of its subtree then moving from root to leafs each
 node cost is the min of its cost and its parent cost.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Generalize the simbols in simpolic thinking for example if there is a number multiple of n then don't write it F*n where F stands for
+Factor write it.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
