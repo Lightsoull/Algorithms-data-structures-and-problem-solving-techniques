@@ -26,5 +26,5 @@ you are in because that will cause duplication in the sum case and wrong answer 
 there may not.
 5- for each tree sure there will be exactly one centriod.
 6- the max size of a subtree of we removed the centroid decomposition is n/2.
-7- at most there is two centroids of a tree. 
+7- at most there is two centroids of a tree, and the two centroids must be connected by a direct edge. 
 -------------------------------------------------------------------------------------------------------------------------------------------
