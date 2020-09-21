@@ -25,4 +25,6 @@ you are in because that will cause duplication in the sum case and wrong answer 
 4- why we take centriod at n/2 and not n/3 or any other value? because at n/2 sure there will be a centriod but at any other value
 there may not.
 5- for each tree sure there will be exactly one centriod.
+6- the max size of a subtree of we removed the centroid decomposition is n/2.
+7- at most there is two centroids of a tree. 
 -------------------------------------------------------------------------------------------------------------------------------------------
