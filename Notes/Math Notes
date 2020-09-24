@@ -301,7 +301,9 @@ Combination( H-(L-1)*n , n).
 ---------------------------------------------------------------------------------------------------------------------------------------
 If number A is divisable by number B then it is divisable by each prime factor in B.
 ---------------------------------------------------------------------------------------------------------------------------------------
-
+If you want to minimize the max(X,F-X) then the obtimal value for X is F/2 and if F/2 is positive and not divisbale by 2 the add one to the 
+integer division of F/2.
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
