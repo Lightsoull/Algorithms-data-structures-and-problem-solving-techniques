@@ -247,6 +247,8 @@ when you want to ceil some decimal number take care whether it is positive or ne
 its ceil is 5 but if it is negative for example -4.5 then it is ceil is -5 so if it is positive add 1 to the integer division but if 
 it is negative subtract one from the integer division.
 ----------------------------------------------------------------------------------------------------------------------------------------
+When you write the function of combination C(n,r), n choose r write a condition if r>n return zero.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
