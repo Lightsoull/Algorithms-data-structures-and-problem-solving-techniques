@@ -267,7 +267,8 @@ node cost is the min of its cost and its parent cost.
 Generalize the simbols in simpolic thinking for example if there is a number multiple of n then don't write it F*n where F stands for
 Factor write it.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+Think brudeForce First then think greedy.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
