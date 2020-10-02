@@ -308,7 +308,11 @@ If I have a range L and R and they can be positive or negative and i will add di
 here if you did L=min(L+d,R) will work only if R is positive but if it is negative then L=max(L-d,R) so take care if the values are positive
 or negative.
 ---------------------------------------------------------------------------------------------------------------------------------------
-
+If you have a permutation of n numbers from 1 to n and you want to count the number of permuations such that 2 before 3 then 
+note that for every combination of 2 choose n such that the two positions are 2 then 3 there is Factorial[n-2] ways to put the other 
+elements and if we put 3 then 2 there is also Factorial[n-2] ways so the number of ways to let 2 before 3 equal to the number of ways to
+put 3 before 2 and the sum of them equal to the total number of ways which is equal to Factorial[n].
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
