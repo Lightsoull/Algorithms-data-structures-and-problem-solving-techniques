@@ -1,9 +1,12 @@
 Ternary search: to do ternary search the function should be stricyly increasing then strictly decreasing or the opposite 
 but not increasing then decreasing then increasing and not having a constant value at some range of the graph of the function
 and this range may not be the optimal answer, but if it has a constant value at the 
+Notes:
+1- the intial ternary search range (l,r) must be the real boundries for searching so don't but such a max value for r and a min value
+for l with out the need for them.
 ----------------------------------------------------------------------------------------------------------------------------------------
 with intergers
-ll BS(ll l,ll r){
+ll TS(ll l,ll r){
    ll ans=1000000000+7;
    while(r-l > 1){
     ll mid1=l+(r-l)/3;
