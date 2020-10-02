@@ -304,7 +304,10 @@ If number A is divisable by number B then it is divisable by each prime factor i
 If you want to minimize the max(X,F-X) then the obtimal value for X is F/2 and if F/2 is positive and not divisbale by 2 the add one to the 
 integer division of F/2.
 ---------------------------------------------------------------------------------------------------------------------------------------
-
+If I have a range L and R and they can be positive or negative and i will add distance (d) to L but if it exceeds R then it will be with R
+here if you did L=min(L+d,R) will work only if R is positive but if it is negative then L=max(L-d,R) so take care if the values are positive
+or negative.
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
