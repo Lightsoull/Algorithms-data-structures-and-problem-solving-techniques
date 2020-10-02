@@ -16,10 +16,14 @@ int main(){
    cin>>x>>y;
    B=point(x,y);
    
+   point ans;
    point v1=vec(A,B);
-   point v2=normalize(v1);
-   point v3=point(real(v2)*d,imag(v2)*d);
-   ans_point= A+v3;
+   if(same(A,B)) ans=A;
+   else{
+     point v2=normalize(v1);
+     point v3=point(real(v2)*d,imag(v2)*d);
+     ans= A+v3;
+    }
 }
 
 ------------------------------------------------------------------------------------------------------------------------------------------
