@@ -2,8 +2,11 @@
 code
 ----
 #define   vec(a,b)       ((b)-(a))
+#define   length(a)      hypot( (a.imag()),(a.real()) )
 #define   normalize(a)      (a)/(length(a))
 #define     point                    complex<double>
+#define    dp(a,b)          (((conj(a))*(b)).real())
+#define     same(p1,p2)               ( dp(  vec(p1,p2),vec(p1,p2)) < eps )
 int main(){
    int d;
    cin>>d;
