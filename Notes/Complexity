@@ -200,7 +200,8 @@ avoid the answers that will cause the function to return without finding an answ
 ----------------------------------------------------------------------------------------------------------------------------------------
 Searching in a mab of key string complexity equal to log(siz of map)*(max len of string).
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you are not sure that the complexity will fit in time calculate it strictly to know.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
