@@ -313,7 +313,9 @@ note that for every combination of 2 choose n such that the two positions are 2 
 elements and if we put 3 then 2 there is also Factorial[n-2] ways so the number of ways to let 2 before 3 equal to the number of ways to
 put 3 before 2 and the sum of them equal to the total number of ways which is equal to Factorial[n].
 ---------------------------------------------------------------------------------------------------------------------------------------
-
+if i have a set S the average of this set is (s1+s2+..+sn)/n, if i subtracted the average from each number of S the resulted sum of elements
+will be zero, So formally segma(i=1 to i=n) (si-average_number) = zero. 
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
