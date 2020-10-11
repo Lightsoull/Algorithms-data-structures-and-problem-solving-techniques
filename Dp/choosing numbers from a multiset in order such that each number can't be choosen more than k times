@@ -1,10 +1,9 @@
-Problem: if you have a set of numbers from 1 to n and you want to count the number of times you can make a certain sum out of elements from 1 to i such that each element can't
-be choosen more than k times.
-Solution: the Top Down recursive solution will work in O(n*k*(max_sum = ((n*(n+1))/2)*k) ) which is too much and can't be obtimized more, but the Dp buttom up approach can have a
-complexity O(n*max_sum) which is better the difference that i can do a trick to remove the k from the complexity at buttom up i can't do it at top down which is when i add new 
+Problem: if you have a set of numbers from 1 to n and you want to count the number of times you can make a certain sum out of elements taking them in order (as a subsequence)
+from 1 to i such that each element can't be choosen more than k times.
+Solution: the normal native dp will be in O(n*k*(max_sum(n*(n+1)/2*k))), but i can do a trick to remove the k from the complexity which is when i add new 
 number i remove all the ways that will make this addition the (k+1)th addition of that number (see the code).
 
-code
+code buttom up dp
 /*
 dp[i][j] equals to the number of ways to make the sum = j using numbers from 1 to i such that there is no number occur more than k times.
 */
@@ -23,7 +22,34 @@ dp[i][j] equals to the number of ways to make the sum = j using numbers from 1 t
 		}
 	}
   
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  
+  code top down dp
+  ll solve(int num,int sum){
+
+     if(num<1){
+        if(sum==0) return 1;
+        return 0;
+     }
+     ll &ret=mem[num][sum];
+     if(ret!=-1) return ret;
+     ll ans=0;
+     if(sum>=num){
+        ans+=solve(num,sum-num);
+        if(sum>=(k+1)*num){
+         ans-= solve(num-1,sum-(k+1)*num);
+        }
+        ans%=m;
+        ans+=m;
+        ans%=m;
+     }
+
+     ans+= solve(num-1,sum);
+     if(ans>=m) ans-=m;
+
+    return ret=ans;
+
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   
   
   
