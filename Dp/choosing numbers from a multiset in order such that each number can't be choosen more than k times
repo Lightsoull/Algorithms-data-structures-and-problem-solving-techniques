@@ -1,0 +1,45 @@
+Problem: if you have a set of numbers from 1 to n and you want to count the number of times you can make a certain sum out of elements from 1 to i such that each element can't
+be choosen more than k times.
+Solution: the Top Down recursive solution will work in O(n*k*(max_sum = ((n*(n+1))/2)*k) ) which is too much and can't be obtimized more, but the Dp buttom up approach can have a
+complexity O(n*max_sum) which is better the difference that i can do a trick to remove the k from the complexity at buttom up i can't do it at top down which is when i add new 
+number i remove all the ways that will make this addition the (k+1)th addition of that number (see the code).
+
+code
+/*
+dp[i][j] equals to the number of ways to make the sum = j using numbers from 1 to i such that there is no number occur more than k times.
+*/
+
+  int n, k; 
+  cin >> n >> k;
+	int s = n * (n + 1) / 2 * k;
+	vector dp(n + 1, vector<mint>(s + 1));
+	dp[0][0] = 1;
+	for (int i = 1; i <= n; i++) {
+		int t = i;
+		for (int j = 0; j <= s; j++) {
+			dp[i][j] = dp[i - 1][j];
+			if (j - t >= 0) dp[i][j] += dp[i][j - t];
+			if (j - (k + 1) * t >= 0) dp[i][j] -= dp[i - 1][j - (k + 1) * t];
+		}
+	}
+  
+  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
