@@ -316,6 +316,10 @@ put 3 before 2 and the sum of them equal to the total number of ways which is eq
 if i have a set S the average of this set is (s1+s2+..+sn)/n, if i subtracted the average from each number of S the resulted sum of elements
 will be zero, So formally segma(i=1 to i=n) (si-average_number) = zero. 
 ---------------------------------------------------------------------------------------------------------------------------------------
+if you want to construct any simple quad of n sides and you have the n sides lengths only and you want to know whether i can construct 
+this quad using sides with the given lengths in any order, to construct this quad every n-1 sides must be greater than the remaining side
+if that's happened so the quad can be constructed.
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
