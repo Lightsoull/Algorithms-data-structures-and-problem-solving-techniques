@@ -320,6 +320,18 @@ if you want to construct any simple quad of n sides and you have the n sides len
 this quad using sides with the given lengths in any order, to construct this quad every n-1 sides must be greater than the remaining side
 if that's happened so the quad can be constructed.
 ---------------------------------------------------------------------------------------------------------------------------------------
+If you have array of n elements and you can decrease or increase any element by one in one operation so that all the elements become the same what is the
+value that every element should reach so that it minimize the total number of operations ? this number is not the average because here is an example
+n=4 {1 8 9 9} the average is 6.75 so because the value should be integer so the obtimal value according to the average is 6 or 7 and the no
+of operations to make all values equal to 6 is 13 and for 7 equal to 11 but if the value equal to 9 then the number of operations is 9 which is the
+obtimal okay that's why ? because if the value is 6 or 7 if we go right one step to 8 for example the distance from 8,9,9 to value will decrease and from
+1 will increase so the difference is -3+1 which is 2 so the overall answer will decrease by 2 so i should keep going till the number of elements on the right is
+equal to or greater than the elements on the left.
+So finally To know the proper value to make all numbers equal to in obtimal number of operations is:
+1- sort all the elements increasingly then the value is the value of the middle element if the number
+of elements is odd else try the two values at the center.
+---------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 
