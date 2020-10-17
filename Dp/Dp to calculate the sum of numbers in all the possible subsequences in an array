@@ -1,0 +1,39 @@
+Problem: you are given an array of n elements and we want to get the sum of all the elements in all the possible subsequences.
+Solution: here the normal dp that will return an integer reprsent the sum of the taken elements will not work i need to know the
+number of the paths to know if i will take the current number how many times should i take it, so i will need to return a pair
+the first for the sum of the taken elements and the other for the number of paths.
+
+CODE
+pair<ll,ll> mem[N];
+int n,a[N];
+
+pair<ll,ll> solve(int id){
+
+   if(id==n){
+    return mp(1,0);
+   }
+
+   pair<ll,ll> &ret=mem[id];
+   if(ret.first!=-1) return ret;
+   pair<ll,ll> p1=solve(id+1);
+   p1.second+= p1.first*a[id];
+
+   pair<ll,ll> p2= solve(id+1);
+
+   return ret=mp(p1.first+p2.first,p1.second+p2.second);
+
+}
+int main(){
+    run();
+    int T=1;
+   // cin>>T;
+    while(T--){
+        cin>>n;
+        for(int i=0;i<n;i++){
+            cin>>a[i];
+        }
+        clr(mem,-1);
+        cout<<solve(0).second<<"\n";
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
