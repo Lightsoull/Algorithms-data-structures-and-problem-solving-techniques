@@ -1,3 +1,7 @@
+/*
+Note this code for only checking whether there is a cycle in a given directed graph or not, it may not get all the cycles exists.
+*/
+
 void dfs_EdgeClassification(int node)
 {
 	start[node] = timer++;
