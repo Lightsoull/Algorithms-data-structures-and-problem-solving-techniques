@@ -68,4 +68,24 @@ to be the first increasing part and the rest of the elements will be at the othe
 Rhmbous shape in a 2d grid is like --> 1cell then in the next row 3cells then in the next row 5cells then it will start decreasing so in the
 next row will be 3cells again then in next row 1cell, this is a rhmbous of 5cells height.
 ----------------------------------------------------------------------------------------------------------------------------------------
+if I have a complete binary tree of N levels starting from zero so the last level have 2^N nodes numbered from zero to 2^N-1, if we want
+to calculate for each leaf from zero to 2^N-1 the number of lefts i should take to reach it from the root, to calculate this the binary 
+tree of N levels is just like the binary numbers of N bits at every level i have two choices zero or one the Left for zero and the right 
+for one so to reach the leaf node number zero you have to move every level to the left if we translate that to bits then it will be all zeros
+which is equal in decimal to zero.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
