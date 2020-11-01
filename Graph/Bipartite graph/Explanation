@@ -315,6 +315,13 @@ int main()
         cout<<MISright[i]<<endl;
 
 }
+
+/*
+Applications:
+1- if you have some connected component in a 2d grid and you want to choose some cells such that no 2 cells are neighbours ( two cells are neigbours if they share
+a side), so that means that if i put an edge between a cell and the calls that can't be choosed with it, i will put always an edge between row+column odd and row+column 
+even so here a bipartite graph could be genearted and getting the max independant set means to get the max cells such that no two cells are connected which is what i need.
+*/
 ----------------------------------------------------------------------------------------------------------------------------------------
 Min Edge Cover: Min Number of edges To Cover every node at least one time in bipartite graph. 
 -How to get that ?
