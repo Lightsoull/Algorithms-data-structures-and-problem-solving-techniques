@@ -249,7 +249,9 @@ it is negative subtract one from the integer division.
 ----------------------------------------------------------------------------------------------------------------------------------------
 When you write the function of combination C(n,r), n choose r write a condition if r>n return zero.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
+If you are calculating the answer mod some number and if the answer contains an expression that contains divided and the result of that expression 
+is always less than the mod you can't just put it, you have to do the mod for the division by the power. 
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
