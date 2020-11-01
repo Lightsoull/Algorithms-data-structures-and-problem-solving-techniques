@@ -331,7 +331,10 @@ So finally To know the proper value to make all numbers equal to in obtimal numb
 1- sort all the elements increasingly then the value is the value of the middle element if the number
 of elements is odd else try the two values at the center.
 ---------------------------------------------------------------------------------------------------------------------------------------
-
+Let F(x) = x*x , if i have a number x then F(x) > F(x/2) + F(x/2) so dividing the number in to more partitions will decrease the total sum 
+of F function for each part and to get the min sum the best thing is  to divide it into equal partions but there is a fact that 
+( F(x)- (F(x/2)+F(x/2)) ) > ( F(x/2) - (F(x/4) + F(x/4)) ) .
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
