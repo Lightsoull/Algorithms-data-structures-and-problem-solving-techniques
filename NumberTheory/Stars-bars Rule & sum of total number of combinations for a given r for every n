@@ -2,3 +2,7 @@ Problem: x1+x2+x3+x4=n, in how many ways the variables x1,x2,x3,x4 can be assign
 Solution: imagine the n is listed in ones (1 1 1 ...) then you will need to divide those ones on 4 partions one for each xi (i from 1 to 4)
 so the number of ways to do so is (n+4-1 choose 4-1) choose means combination.
 -------------------------------------------------------------------------------------------------------------------------------------------
+problem: i want to calulate sigma(i from r to n) C(i,r) , where C is a combination.
+Solution: By Hockey-stick identity sigma(i from r to n) C(i,r) = C(n+1,r+1).
+Link: https://en.wikipedia.org/wiki/Hockey-stick_identity?fbclid=IwAR1WGuoMKTngfNz9jWHksekHIUU0sZ_3hR6u1DlIM3qS40pZIcwIWvPEIWc
+-------------------------------------------------------------------------------------------------------------------------------------------
