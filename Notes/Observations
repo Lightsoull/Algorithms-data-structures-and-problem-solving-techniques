@@ -74,6 +74,14 @@ tree of N levels is just like the binary numbers of N bits at every level i have
 for one so to reach the leaf node number zero you have to move every level to the left if we translate that to bits then it will be all zeros
 which is equal in decimal to zero.
 ----------------------------------------------------------------------------------------------------------------------------------------
+if you have a grid consists of nxm cells of . or # and there is a polygon from #s given that the rows 1 and n are only dots and the columns
+1 and m are only dots then what is the min number of sides this polygon have.
+
+Solution: the number of the sides equal to the number of the corners(vertexes) so we can know the number of the corners by imaging that you 
+have an 2x2 small grid and you are moving from cell (1,1) where cell (1,1) is the top left courner of the 2x2 grid the vertexes can be in that
+2x2 grid in one of two cases the grid contain only one # or contain 3 #s so simply for each 2x2 part of the grid if it contain 3 #s or 1 # then 
+add to the vertexes count 1.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
