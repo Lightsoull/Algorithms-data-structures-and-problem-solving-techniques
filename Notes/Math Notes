@@ -335,6 +335,8 @@ Let F(x) = x*x , if i have a number x then F(x) > F(x/2) + F(x/2) so dividing th
 of F function for each part and to get the min sum the best thing is  to divide it into equal partions but there is a fact that 
 ( F(x)- (F(x/2)+F(x/2)) ) > ( F(x/2) - (F(x/4) + F(x/4)) ) .
 ---------------------------------------------------------------------------------------------------------------------------------------
+the sum of digits of any multiple of 3 is also multiple of 3.
+---------------------------------------------------------------------------------------------------------------------------------------
 
 
 
