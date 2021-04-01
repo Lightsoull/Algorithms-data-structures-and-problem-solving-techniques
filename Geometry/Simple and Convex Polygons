@@ -8,7 +8,11 @@ First of all if in the problem he don't state the type of polygon so this means 
 ---------------------------------------------------------------------------------------------------------------------
 Regular polygon
 - all its sides are equal 
-- all its angles are equal  ( ((n-2)*180)/n )
+- all its angles are equal and each equal to ( ((n-2)*180)/n )
+- if you have the radius of that polygon you can get the length of its side (radius of the polygon is half the length of its diameter 
+which is the length of a stright line passing by the polygon center)
+length of side = 2*(radius of polygon)*sin(180/n)
+where n is the number of polygon sides.
 -----------------------------------------------------------------------------------------------------------------------
 - The total sum of angles of a polygon of n sides is (n-2)*180
 - Polygon Implementation 
