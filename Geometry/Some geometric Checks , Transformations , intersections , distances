@@ -14,6 +14,7 @@
 1- rotation
   - from about orgin : point can be expressed as r*e^(ceta i), so if you want to rotate it with alpha and its orginal angle is ceta so
   you want the final angle to be ceta+alpha .
+  - the angle should be given by rad and it will rotate counter clock wise
 CODE
 #define    rotate0( a,ang)    ((a)*exp( point(0,ang) )) where a is the point its orginally at and ang is ceta + alpha   ( about orgin )
 #define    rotateA(about,p,ang)   (rotate0(vec(about,p),ang)+about)   ( about another point )
