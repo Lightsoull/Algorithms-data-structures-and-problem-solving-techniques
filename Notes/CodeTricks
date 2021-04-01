@@ -473,6 +473,13 @@ the order of data and the value will be boolean represents wether it exists or n
 i will do binary search to get the first position of first segment tree that stores k values and then query from first to that position
 to get the sum of data.
 ----------------------------------------------------------------------------------------------------------------------------------------
+If you have an array of n numbers and you want to divide it in to one or more continues subarrays and you want to brude force doing that
+trying all the possible ways?
+
+solution: imagine that there is n-1 bars, one bar after each cell in the array so you have 2^(n-1) ways to activate the bars and use them 
+to divide the array.
+
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
