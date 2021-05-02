@@ -13,6 +13,8 @@ not only the node and its weight so the vis array must include the node,weight,d
 priority_queue<int, vector<int> , greater<int> > pq,  but using the struct take less complexity that may help get AC instead of TL.
 5- at dijkstra or (0/1) bfs you have to use the dist array but only at normal bfs there is no need but use vis array instead.
 6- the node which as a lower cost will be visited first which means that if the same node appeared again it will have a strictly greater cost.
+7- most probably the state of the visited array in dijkstra is the same as the state of the distance array.
+
 struct node
 {
     ll no,w;
