@@ -340,6 +340,10 @@ the sum of digits of any multiple of 3 is also multiple of 3.
 colouring the grid in the chess colours will divide the cells in to groups (white and black) where no two cells of different groups share
 a side with the other.
 ------------------------------------------------------------------------------------------------------------------------------------------
+if you want to get the number of pairs of segments that intersect each other where the segments can be in 4 types where [ this braket means 
+included and this braket ( means excluded then if the bracket is ( at the start of the segment add some eps and if it is ) at the end subtract 
+some eps and then check for each pair whether there is intersection or not.
+------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
