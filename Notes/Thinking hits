@@ -276,8 +276,9 @@ tried all the possible combinations it will be in 2^n which is large but there i
 all the possible sums for each part in 2^(n/2) which is okay and then fix one side and get the max allowed answer in the other side to add 
 up.
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-
+if you have for example an array of values consists of fixedvalue+num_i if you want to compare between them you can compare by the difference
+between them because the difference remove the fixed value.
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
