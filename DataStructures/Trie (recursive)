@@ -152,7 +152,22 @@ Example: how many strings starts with ABC ? with trie we can just move on the tr
 passed with this prefix to be the answer.
 with out trie we will loop on each string prefix to see if that prefix will match and count and that (length of prefix * N).
 ----------------------------------------------------------------------------------------------------------------------------------------
+Delete Trie memory
 
+void del(trie* cur){
+		
+	for(int i=0;i<26;i++){
+		if(cur->child[i]!=0){
+			del(cur->child[i]);
+		}
+	}
+	
+	delete(cur);
+}
+
+// at main
+del(root)
+----------------------------------------------------------------------------------------------------------------------------------------
 
 
 
