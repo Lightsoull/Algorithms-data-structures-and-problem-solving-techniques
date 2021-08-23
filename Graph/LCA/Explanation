@@ -42,7 +42,7 @@ void build_RMQ()
 
     for(int i=1;(1<<i)<id;i++)
     {
-        for(int j=0;(j+i-1)<id;j++)
+        for(int j=0;(j+(1<<i)-1)<id;j++)
         {
             if(L[sp[j][i-1]]<= L[sp[j+(1<<(i-1))][i-1]])
                 sp[j][i]=sp[j][i-1];
