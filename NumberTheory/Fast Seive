@@ -1,0 +1,16 @@
+vector<int> lp(N);
+vector<int> pr;
+void solve(int n){
+  
+  for (int i=2; i <= n; ++i) {
+    if (lp[i] == 0) {
+        lp[i] = i;
+        pr.push_back(i);
+    }
+    for (int j=0; j < (int)pr.size() && pr[j] <= lp[i] && i*pr[j] <= N; ++j) {
+        lp[i * pr[j]] = pr[j];
+    }
+  }
+}
+
+// lp[i] contain the smallest prime factor of number i and contain zero if i is prime
