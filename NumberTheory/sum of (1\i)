@@ -1,0 +1,4 @@
+sum of 1/i for i from L to R can be handeled by:
+if R-L is small brude force 
+if R-L is big it is equal to ln(r)-ln(l-1) becuase sum of 1/i i from 1 to n is equal to ln(n)+const , const = 0.577215664901532860. (distance from L to R here have
+to be big)
