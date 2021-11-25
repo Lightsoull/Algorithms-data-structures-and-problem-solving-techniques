@@ -1,0 +1,2 @@
+- if n is odd sum from 0 to n-1 is multiple of n.
+- if n is even sum from 0 to n-1 is mod n equal to n/2, which means it equals to F*n + n/2 , where F is non-negative integer.
