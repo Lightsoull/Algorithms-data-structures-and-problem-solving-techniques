@@ -344,7 +344,9 @@ if you want to get the number of pairs of segments that intersect each other whe
 included and this braket ( means excluded then if the bracket is ( at the start of the segment add some eps and if it is ) at the end subtract 
 some eps and then check for each pair whether there is intersection or not.
 ------------------------------------------------------------------------------------------------------------------------------------------
-
+if you have a red cards and b blue cards and want to form lists of those cards each list have exactly 7 cards but there must be at least one
+red card and at least one blue card so what is the max number of lists that can be formed ?  answer = min( min( r, b), (r+b)/7 )
+------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
