@@ -1,0 +1,6 @@
+Source: https://www.geeksforgeeks.org/sum-xor-possible-subsets/
+problem : given some array A of length n and we want to compute the sum of xor of all the subsequences of array A.
+solution : for every bit i if there is at least one value in the array that have this bit equal to one then
+this bit will present in the answer half the total number of subsequences and the total number of subsequences is (2^n)
+so half the number of subsequences is (2^n)/2 = (2^(n-1) so we will add (2^(n-1)*(2^i) = (2^(n-1+i)).
+---------------------------------------------------------------------------------------------------------------------------------------------------------
