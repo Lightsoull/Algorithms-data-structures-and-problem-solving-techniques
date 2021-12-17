@@ -347,8 +347,9 @@ some eps and then check for each pair whether there is intersection or not.
 if you have a red cards and b blue cards and want to form lists of those cards each list have exactly 7 cards but there must be at least one
 red card and at least one blue card so what is the max number of lists that can be formed ?  answer = min( min( r, b), (r+b)/7 )
 ------------------------------------------------------------------------------------------------------------------------------------------
-
-
+if you have a number X and you can choose any positive number Y, What numbers you could achieve ?  
+solution : if Y>X then you will get X otherwise you can get all the numbers from 0 to n/2 (integer division)
+------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
