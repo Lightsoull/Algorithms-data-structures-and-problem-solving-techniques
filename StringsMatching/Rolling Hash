@@ -8,6 +8,13 @@ how to generate the hash code for a string/array
 for(int i=0;i<str.size();i++)
 code=( code*BASE+(str[i]-'a') )%MOD;
 
+----------------------------------------------------------------------------
+--> it is better to make the base random to avoid hacking and collision 
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+ll BASE = uniform_int_distribution <int> (2, MOD - 1)(rng);
+where MOD is the MOD you will use.
+----------------------------------------------------------------------------
+
 BASE= 311
 MOD= 1000000007
 this may cause a collosion which may cause WA but rarely if this happened change the MOD and/or the BASE but if you will change the MOD 
