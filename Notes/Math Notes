@@ -350,7 +350,10 @@ red card and at least one blue card so what is the max number of lists that can 
 if you have a number X and you can choose any positive number Y, What numbers you could achieve ?  
 solution : if Y>X then you will get X otherwise you can get all the numbers from 0 to n/2 (integer division)
 ------------------------------------------------------------------------------------------------------------------------------------------
-
+let an array P is a permutation of n integers from 1 to n, if you will be given intially an array q such that q[i]=i for every i from
+1 to n then at each step the array q is permuatated based on the array P which means new_q[i]= q[p[i]], so we can say that we start with q={1,2,..,n}
+then q=P[i] then q= P[P[i]] then q= P[P[P[i]]] and so on.
+------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
