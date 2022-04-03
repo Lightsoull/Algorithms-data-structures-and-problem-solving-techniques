@@ -354,7 +354,9 @@ let an array P is a permutation of n integers from 1 to n, if you will be given 
 1 to n then at each step the array q is permuatated based on the array P which means new_q[i]= q[p[i]], so we can say that we start with q={1,2,..,n}
 then q=P[i] then q= P[P[i]] then q= P[P[P[i]]] and so on.
 ------------------------------------------------------------------------------------------------------------------------------------------
-
+the result that you get from shifting some array some steps to the left you can also get from shifting the array (size of array - left_steps) 
+to the right and vice versa.
+------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
