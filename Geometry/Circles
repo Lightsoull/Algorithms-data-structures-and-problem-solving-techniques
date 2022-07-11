@@ -127,7 +127,7 @@ inf if the two circles have same center and same radius
 c1 center of first circle c2 center of the second circle r1 radius of the first circle r2 radius of the second circle
 to do function getAngle_A_abc which return in rad
 rules
-1- cosA= ( b^2+c^2+a^2 ) / 2*bc  
+1- cosA= ( b^2+c^2-a^2 ) / 2*bc  
 
 vector<point> intersectCircleCircle(point c1, double r1, point c2, double r2) 
 {
@@ -137,7 +137,7 @@ vector<point> intersectCircleCircle(point c1, double r1, point c2, double r2)
     return vector<point>(3, c1);    // infinity 2 same circles (not points)
                                                                               
      // Compute 2 intersection case and handle 0, 1, 2 cases
-    double ang1 = angle(c2 - c1), ang2 = getAngle_A_abc(r2, r1, length(c2 - c1));
+    double ang1 = angle(c2 - c1), ang2 = getAngle_A_abc(r2, r1, length(c2 - c1)); // a=r2, b=r1
 
   if(::isnan(ang2))                     // if r1 or d = 0 => nan in getAngle_A_abc (/0)
     ang2 = 0;                           // fix corruption
@@ -154,6 +154,20 @@ vector<point> intersectCircleCircle(point c1, double r1, point c2, double r2)
     v.pop_back();
   return v;
 }
+
+// if you want just check for intersection you can use this
+bool is_intersect(ll x1, ll y1, ll x2,ll y2, ll r1, ll r2){
+    ll distSq = 1ll*(x1 - x2) * (x1 - x2) +
+                 1ll*(y1 - y2) * (y1 - y2);
+    
+	ll sub = 1ll*(r1-r2)*(r1-r2);
+	ll radSumSq = 1ll*(r1 + r2) * (r1 + r2);
+	if(distSq<=radSumSq&&distSq>sub){ // means it is not completely inside each other or outside each other, there is intersection
+		return 1;
+	}
+    return 0;
+}
+
 ----------------------------------------------------------------------------------------------------------------------------------------
 MEC ( Min Enclosing Circle )
 
